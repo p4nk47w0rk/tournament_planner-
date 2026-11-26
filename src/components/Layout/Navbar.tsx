@@ -11,6 +11,8 @@ import { isLocalDevAuth } from "@/lib/supabase/client";
 
 export default function Navbar() {
   const { user, isAuthenticated, isLoading, signOut } = useAuth();
+  const pathname = usePathname();
+  const isActive = (href: string) => pathname === href;
   const [editMode, setEditMode] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -77,8 +79,12 @@ export default function Navbar() {
           {/* Desktop Nav Items */}
           <div className="hidden md:flex items-center gap-1">
             <NavItem href="/" label="Home" />
-            <NavItem href="/turniere" label="Meine Turniere" />
-            <NavItem href="/neues-turnier" label="Neues Turnier" />
+            {isAuthenticated && (
+              <>
+                <NavItem href="/turniere" label="Meine Turniere" />
+                <NavItem href="/neues-turnier" label="Neues Turnier" />
+              </>
+            )}
           </div>
 
           {/* Right side */}
@@ -106,7 +112,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu */}
-        {mobileMenuOpen && <MobileMenu />}
+        {mobileMenuOpen && <MobileMenu isAuthenticated={isAuthenticated} />}
       </div>
     </nav>
   );
@@ -208,7 +214,7 @@ function MenuIcon({ open }: { open: boolean }) {
   );
 }
 
-function MobileMenu() {
+function MobileMenu({ isAuthenticated }: { isAuthenticated: boolean }) {
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href;
 
@@ -216,18 +222,22 @@ function MobileMenu() {
     <div className="md:hidden pb-4">
       <div className="flex flex-col gap-1">
         <NavItem href="/" label="Home" mobile active={isActive("/")} />
-        <NavItem
-          href="/turniere"
-          label="Meine Turniere"
-          mobile
-          active={isActive("/turniere")}
-        />
-        <NavItem
-          href="/neues-turnier"
-          label="Neues Turnier"
-          mobile
-          active={isActive("/neues-turnier")}
-        />
+        {isAuthenticated && (
+          <>
+            <NavItem
+              href="/turniere"
+              label="Meine Turniere"
+              mobile
+              active={isActive("/turniere")}
+            />
+            <NavItem
+              href="/neues-turnier"
+              label="Neues Turnier"
+              mobile
+              active={isActive("/neues-turnier")}
+            />
+          </>
+        )}
       </div>
     </div>
   );
