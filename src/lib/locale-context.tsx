@@ -1,45 +1,46 @@
-'use client'
+"use client";
 
-import {createContext, useContext, useState, useCallback, useEffect} from 'react'
-import {useTranslations} from 'next-intl'
+import { createContext, useContext, useState, useCallback } from "react";
 
-export type Locale = 'de' | 'cs'
+export type Locale = "de" | "cs";
 
 interface LocaleContextType {
-  locale: Locale
-  setLocale: (locale: Locale) => void
+  locale: Locale;
+  setLocale: (locale: Locale) => void;
+  // Wird vom Server übergeben → initialer SSR-Look
+  initialLocale: Locale | null;
 }
 
 const LocaleContext = createContext<LocaleContextType>({
-  locale: 'de',
+  locale: "de",
   setLocale: () => {},
-})
+  initialLocale: null,
+});
 
-export function LocaleProvider({children}: {children: React.ReactNode}) {
-  const [locale, setLocaleState] = useState<Locale>('de')
+interface LocaleProviderProps {
+  children: React.ReactNode;
+  initialLocale: Locale;
+}
 
-  // Load from localStorage on mount
-  useEffect(() => {
-    const stored = localStorage.getItem('locale') as Locale
-    if (stored === 'de' || stored === 'cs') {
-      setLocaleState(stored)
-    }
-  }, [])
+export function LocaleProvider({
+  children,
+  initialLocale,
+}: LocaleProviderProps) {
+  // Server-Wert verwenden (vermeidet Hydration-Mismatch)
+  const [locale, setLocaleState] = useState<Locale>(initialLocale);
 
   const setLocale = useCallback((newLocale: Locale) => {
-    setLocaleState(newLocale)
-    localStorage.setItem('locale', newLocale)
-    // No reload needed — client-side re-renders with new locale
-    // Server components pick up locale from NEXT_LOCALE cookie via middleware
-  }, [])
+    setLocaleState(newLocale);
+    localStorage.setItem("locale", newLocale);
+  }, []);
 
   return (
-    <LocaleContext.Provider value={{locale, setLocale}}>
+    <LocaleContext.Provider value={{ locale, setLocale, initialLocale }}>
       {children}
     </LocaleContext.Provider>
-  )
+  );
 }
 
 export function useLocale() {
-  return useContext(LocaleContext)
+  return useContext(LocaleContext);
 }
