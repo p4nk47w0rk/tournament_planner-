@@ -7,10 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "setup:local": "node src/scripts/setup-local.js",
     "supabase:start": "docker compose up -d",
     "supabase:stop": "docker compose down",
-    "supabase:reset": "docker compose down -v && docker compose up -d"
+    "supabase:reset": "docker compose down -v && docker compose up -d",
+    "prepare": "husky"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
@@ -23,13 +26,20 @@
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "4.3.3",
+    "@testing-library/jest-dom": "^8.0.0",
+    "@testing-library/react": "^16.3.3",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "^19.3.3",
+    "@types/react-dom": "^19.3.0",
     "babel-plugin-react-compiler": "^19.0.0-beta-624b8a5-20250421",
     "eslint": "^9",
     "eslint-config-next": "16.4.6",
+    "husky": "^9.1.7",
+    "jsdom": "^31.0.1",
+    "lint-staged": "^17.6.2",
+    "prettier": "^3.10.1",
     "tailwindcss": "4.3.3",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^5.1.2"
   }
 }
