@@ -96,63 +96,60 @@ ALTER TABLE goals FORCE ROW LEVEL SECURITY;
 -- ============================================
 
 -- Anyone can read matches and standings
-CREATE POLICY IF NOT EXISTS "Anyone can read matches"
-  ON matches FOR SELECT USING (true);
+DO $$ BEGIN
+  CREATE POLICY "Anyone can read matches" ON matches FOR SELECT USING (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
-CREATE POLICY IF NOT EXISTS "Anyone can read standings"
-  ON standings FOR SELECT USING (true);
+DO $$ BEGIN
+  CREATE POLICY "Anyone can read standings" ON standings FOR SELECT USING (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
--- Only authenticated users can update matches
-CREATE POLICY IF NOT EXISTS "Authenticated users can update matches"
-  ON matches FOR UPDATE
-  TO authenticated
-  USING (auth.uid() IS NOT NULL)
-  WITH CHECK (auth.uid() IS NOT NULL);
+DO $$ BEGIN
+  CREATE POLICY "Authenticated users can update matches" ON matches FOR UPDATE TO authenticated USING (auth.uid() IS NOT NULL) WITH CHECK (auth.uid() IS NOT NULL);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
-CREATE POLICY IF NOT EXISTS "Authenticated users can insert matches"
-  ON matches FOR INSERT
-  TO authenticated
-  WITH CHECK (auth.uid() IS NOT NULL);
+DO $$ BEGIN
+  CREATE POLICY "Authenticated users can insert matches" ON matches FOR INSERT TO authenticated WITH CHECK (auth.uid() IS NOT NULL);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
--- Only authenticated users can update standings
-CREATE POLICY IF NOT EXISTS "Authenticated users can update standings"
-  ON standings FOR UPDATE
-  TO authenticated
-  USING (auth.uid() IS NOT NULL)
-  WITH CHECK (auth.uid() IS NOT NULL);
+DO $$ BEGIN
+  CREATE POLICY "Authenticated users can update standings" ON standings FOR UPDATE TO authenticated USING (auth.uid() IS NOT NULL) WITH CHECK (auth.uid() IS NOT NULL);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
-CREATE POLICY IF NOT EXISTS "Authenticated users can insert standings"
-  ON standings FOR INSERT
-  TO authenticated
-  WITH CHECK (auth.uid() IS NOT NULL);
+DO $$ BEGIN
+  CREATE POLICY "Authenticated users can insert standings" ON standings FOR INSERT TO authenticated WITH CHECK (auth.uid() IS NOT NULL);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
--- Authenticated users can read edits (audit log)
-CREATE POLICY IF NOT EXISTS "Authenticated users can read edits"
-  ON edits FOR SELECT
-  TO authenticated
-  USING (auth.uid() IS NOT NULL);
+DO $$ BEGIN
+  CREATE POLICY "Authenticated users can read edits" ON edits FOR SELECT TO authenticated USING (auth.uid() IS NOT NULL);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
--- Only service role can write edits (auto-generated)
-CREATE POLICY IF NOT EXISTS "Service role can write edits"
-  ON edits FOR INSERT
-  TO service_role
-  WITH CHECK (true);
+DO $$ BEGIN
+  CREATE POLICY "Service role can write edits" ON edits FOR INSERT TO service_role WITH CHECK (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
--- Anyone can read goals
-CREATE POLICY IF NOT EXISTS "Anyone can read goals"
-  ON goals FOR SELECT USING (true);
+DO $$ BEGIN
+  CREATE POLICY "Anyone can read goals" ON goals FOR SELECT USING (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
--- Only authenticated users can insert goals
-CREATE POLICY IF NOT EXISTS "Authenticated users can insert goals"
-  ON goals FOR INSERT
-  TO authenticated
-  WITH CHECK (auth.uid() IS NOT NULL);
+DO $$ BEGIN
+  CREATE POLICY "Authenticated users can insert goals" ON goals FOR INSERT TO authenticated WITH CHECK (auth.uid() IS NOT NULL);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
--- Only authenticated users can delete goals
-CREATE POLICY IF NOT EXISTS "Authenticated users can delete goals"
-  ON goals FOR DELETE
-  TO authenticated
-  USING (auth.uid() IS NOT NULL);
+DO $$ BEGIN
+  CREATE POLICY "Authenticated users can delete goals" ON goals FOR DELETE TO authenticated USING (auth.uid() IS NOT NULL);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- ============================================
 -- Trigger: auto-update updated_at
@@ -165,11 +162,13 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER IF NOT EXISTS matches_updated_at
+DROP TRIGGER IF EXISTS matches_updated_at ON matches;
+CREATE TRIGGER matches_updated_at
   BEFORE UPDATE ON matches
   FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
-CREATE TRIGGER IF NOT EXISTS standings_updated_at
+DROP TRIGGER IF EXISTS standings_updated_at ON standings;
+CREATE TRIGGER standings_updated_at
   BEFORE UPDATE ON standings
   FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
