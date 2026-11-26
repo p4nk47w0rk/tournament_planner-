@@ -1,0 +1,27 @@
+[db]
+# Port used by the database dashboard to talk with the Rest api
+port = 54323
+
+[db.pooler.enabled]
+enabled = false
+
+[realtime]
+enabled = false
+
+[studio]
+port = 3001
+
+[inbucket]
+enabled = false
+
+[storage]
+enabled = false
+
+[auth]
+enabled = false
+
+[functions]
+enabled = false
+
+[analytics]
+enabled = false
