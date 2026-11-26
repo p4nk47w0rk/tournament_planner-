@@ -3,11 +3,30 @@
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useTournament } from "@/lib/tournament-context";
+import { useAuth } from "@/lib/supabase/hooks";
 import TournamentCard from "@/components/Tournament/TournamentCard";
+import { useEffect } from "react";
 
 export default function TurnierePage() {
   const t = useTranslations("turniere");
   const { tournaments } = useTournament();
+  const { isAuthenticated, isLoading } = useAuth();
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      window.location.href = "/login";
+    }
+  }, [isAuthenticated, isLoading]);
+
+  if (isLoading || !isAuthenticated) {
+    return (
+      <div className="max-w-5xl mx-auto px-4 py-16 text-center">
+        <p className="text-slate-stone dark:text-dark-text-secondary">
+          {t("title")}...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

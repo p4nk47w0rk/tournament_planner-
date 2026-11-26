@@ -4,8 +4,9 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useTournament } from "@/lib/tournament-context";
+import { useAuth } from "@/lib/supabase/hooks";
 import TournamentTabs from "@/components/Tournament/TournamentTabs";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 
 interface SubNav {
   href: string;
@@ -28,10 +29,31 @@ export default function TournamentLayout({
   const params = useParams();
   const slug = params?.slug as string;
   const { tournaments } = useTournament();
+  const { isAuthenticated, isLoading } = useAuth();
 
   const tournament = tournaments.find((t) => t.slug === slug);
 
   const t = useTranslations("turniere");
+
+  // Auth guard
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      window.location.href = "/login";
+    }
+  }, [isAuthenticated, isLoading]);
+
+  // Loading / not authenticated state
+  if (isLoading || !isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-paper dark:bg-dark-bg flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-slate-stone dark:text-dark-text-secondary">
+            Laden...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (!tournament) {
     return (

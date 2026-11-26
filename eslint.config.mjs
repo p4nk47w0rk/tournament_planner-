@@ -7,13 +7,7 @@ const eslintConfig = defineConfig([
   ...nextVitals,
 
   // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
+  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
 
   // ============================================
   // KISS — Keep It Simple, Stupid
@@ -22,16 +16,16 @@ const eslintConfig = defineConfig([
     files: ["**/*.{ts,tsx}"],
     plugins: { sonarjs },
     rules: {
-      // Cognitive complexity > 15 signals complexity that hurts readability
+      // Cognitive complexity > 15 — signals complexity that hurts readability
       "sonarjs/cognitive-complexity": ["error", 15],
 
-      // Max nesting depth to keep code readable
-      "max-depth": ["error", 4],
+      // Max nesting depth — beyond 3 levels, extract a function
+      "max-depth": ["error", 3],
 
-      // Max lines per function — warn initially, can tighten to error later
+      // Max lines per function — warn (JSX-Componenten sind natürlicht länger)
       "max-lines-per-function": [
         "warn",
-        { max: 50, skipComments: true, skipBlankLines: true },
+        { max: 80, skipComments: true, skipBlankLines: true },
       ],
 
       // Max lines per file — error
@@ -40,8 +34,11 @@ const eslintConfig = defineConfig([
         { max: 300, skipComments: true, skipBlankLines: true },
       ],
 
-      // Max statement complexity per line
-      complexity: ["error", 10],
+      // Max statement complexity per line — keep branches simple
+      complexity: ["error", 8],
+
+      // Max parameters — if > 4, use an options object
+      "max-params": ["error", 4],
     },
   },
 
@@ -72,6 +69,12 @@ const eslintConfig = defineConfig([
 
       // Prefer top-level await over .then() chains
       "unicorn/prefer-top-level-await": "error",
+
+      // No redundant catch — catch error variable is always useful
+      "unicorn/no-useless-fallback-in-spread": "error",
+
+      // Prefer the spread operator over Array.from when just transforming
+      "unicorn/prefer-spread": "error",
     },
   },
 
@@ -88,16 +91,19 @@ const eslintConfig = defineConfig([
       // Don't ignore return values
       "sonarjs/no-ignored-return": "error",
 
-      // Switch should not be too small
+      // Switch should not be too small (enough cases to justify it)
       "sonarjs/no-small-switch": "error",
 
       // No inverted boolean checks
       "sonarjs/no-inverted-boolean-check": "error",
+
+      // Duplicate strings hint at DRY violations (warn: strings are common in UI)
+      "sonarjs/no-duplicate-string": "warn",
     },
   },
 
   // ============================================
-  // Type safety
+  // Type Safety (TS-Strict++)
   // ============================================
   {
     files: ["**/*.{ts,tsx}"],
@@ -105,7 +111,10 @@ const eslintConfig = defineConfig([
       // No any — enforce proper types
       "@typescript-eslint/no-explicit-any": "error",
 
-      // Prefer const over var
+      // Prefers const for declarations that are never reassigned
+      "prefer-const": "error",
+
+      // No var
       "no-var": "error",
 
       // No unused expressions (allow short-circuit and ternary)
@@ -114,6 +123,9 @@ const eslintConfig = defineConfig([
         "error",
         { allowShortCircuit: true, allowTernary: true },
       ],
+
+      // No unused labels
+      "no-unused-labels": "error",
     },
   },
 
@@ -123,8 +135,33 @@ const eslintConfig = defineConfig([
   {
     files: ["**/*.{ts,tsx}"],
     rules: {
-      // Allow useState in useEffect for localStorage/mounted patterns
+      // useState in useEffect for localStorage/mounted → warn (common pattern)
       "react-hooks/set-state-in-effect": "warn",
+
+      // Exhaustive deps for hooks — error, prevents stale closure bugs
+      "react-hooks/exhaustive-deps": "error",
+
+      // No unused variables — allow _ prefix for intentionally unused
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          vars: "all",
+          args: "after-used",
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+        },
+      ],
+    },
+  },
+
+  // ============================================
+  // Code Style — consistency
+  // ============================================
+  {
+    files: ["**/*.{ts,tsx}"],
+    rules: {
+      // Prefer for...of over forEach with index
+      "unicorn/no-for-loop": "error",
     },
   },
 ]);

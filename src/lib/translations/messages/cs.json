@@ -63,19 +63,23 @@
       "subtitle": "Všechno, co potřebuješ pro úspěšnou organizaci turnaje.",
       "tournaments": {
         "title": "Správa turnajů",
-        "description": "Vytvářej a spravuj více turnajů najednou. Měj přehled o všech svých akcích na jednom místě."
+        "description": "Vytvářej a spravuj více turnajů najednou. Měj přehled o všech svých akcích na jednom místě.",
+        "details": "Vytvoř svůj první turnaj během několika minut s týmy, skupinami a automatickým rozlosováním."
       },
       "schedule": {
         "title": "Vytvořit rozlosování",
-        "description": "Nastav rozlosování pro skupiny, vyřazovací fáze a časy zápasů. Flexibilně upravuj hřiště a časy."
+        "description": "Nastav rozlosování pro skupiny, vyřazovací fáze a časy zápasů. Flexibilně upravuj hřiště a časy.",
+        "details": "Plánuj hřiště, časy a páry tažením. Všechny změny proběhnou v reálném čase."
       },
       "standings": {
         "title": "Tabulky a statistiky",
-        "description": "Automatický výpočet pořadí ve skupinách – góly, rozdíl a body. Vždy aktuální."
+        "description": "Automatický výpočet pořadí ve skupinách – góly, rozdíl a body. Vždy aktuální.",
+        "details": "Góly, rozdíl, body – vše se aktualizuje automaticky. Zobrazí se i fair-play body."
       },
       "teams": {
         "title": "Správa týmů",
-        "description": "Zadej týmy, přiřaď je ke skupinám a měj všechny informace na jednom místě."
+        "description": "Zadej týmy, přiřaď je ke skupinám a měj všechny informace na jednom místě.",
+        "details": "Zadej hráče, trenéry i trenérky. Přiřaď každému týmu hřiště a tréninkový čas."
       }
     },
     "cta": {
@@ -151,7 +155,7 @@
       },
       "status": {
         "upcoming": "Brzy",
-        "live": "Živě ⚽",
+        "live": "Živě",
         "finished": "Ukončeno"
       }
     }
@@ -245,7 +249,7 @@
     "joinTournament": "Připojte se k turnaji"
   },
   "common": {
-    "fairplayBadge": "Fair play 🤝",
+    "fairplayBadge": "Fair play",
     "loading": "Načítání...",
     "error": "Došlo k chybě",
     "success": "Uloženo úspěšně!",

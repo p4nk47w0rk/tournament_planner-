@@ -63,19 +63,23 @@
       "subtitle": "Alles was du brauchst, um dein Turnier erfolgreich zu organisieren.",
       "tournaments": {
         "title": "Turniere verwalten",
-        "description": "Erstelle und verwalte mehrere Turniere gleichzeitig. Behalte den Überblick über alle deine Events an einem Ort."
+        "description": "Erstelle und verwalte mehrere Turniere gleichzeitig. Behalte den Überblick über alle deine Events an einem Ort.",
+        "details": "Erstelle dein erstes Turnier in wenigen Minuten mit Teams, Gruppen und automatischem Spielplan."
       },
       "schedule": {
         "title": "Spielplan erstellen",
-        "description": "Lege Spielpläne für Gruppen, KO-Phasen und Spielzeiten fest. Passe Felder und Zeiten flexibel an."
+        "description": "Lege Spielpläne für Gruppen, KO-Phasen und Spielzeiten fest. Passe Felder und Zeiten flexibel an.",
+        "details": "Plane Felder, Zeiten und Spielpaare per Drag & Drop. Ändere anything in Echtzeit."
       },
       "standings": {
         "title": "Gruppenstände & Statistiken",
-        "description": "Gruppenstand automatisch berechnen lassen – mit Toren, Differenz und Punkten. Immer aktuell."
+        "description": "Gruppenstand automatisch berechnen lassen – mit Toren, Differenz und Punkten. Immer aktuell.",
+        "details": "Tore, Differenz, Punkte – alles wird automatisch aktualisiert. Fairplay-Punkte werden auch angezeigt."
       },
       "teams": {
         "title": "Mannschaften verwalten",
-        "description": "Trage Teams ein, weise sie Gruppen zu und behalte alle Informationen an einem Ort."
+        "description": "Trage Teams ein, weise sie Gruppen zu und behalte alle Informationen an einem Ort.",
+        "details": "Erfasse Spieler, Trainer und Betreuer. Weise jeder Mannschaft ein Feld und eine Trainingszeit zu."
       }
     },
     "cta": {
@@ -151,7 +155,7 @@
       },
       "status": {
         "upcoming": "Kommt bald",
-        "live": "Live ⚽",
+        "live": "Live",
         "finished": "Beendet"
       }
     }
@@ -245,7 +249,7 @@
     "joinTournament": "Am Turnier teilnehmen"
   },
   "common": {
-    "fairplayBadge": "Fairplay 🤝",
+    "fairplayBadge": "Fairplay",
     "loading": "Laden...",
     "error": "Fehler aufgetreten",
     "success": "Erfolgreich gespeichert!",

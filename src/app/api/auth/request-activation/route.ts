@@ -1,22 +1,20 @@
 /**
- * API Route: Admin Activation Request
+ * API Route: Admin Activation Request (with approval)
  *
  * POST /api/auth/request-activation
  * Body: { email: string }
  *
- * Sends a password setup email via Supabase Magic Link flow.
- * The user clicks the link, sets a password, and is then logged in.
+ * Saves the request to DB as "pending". Admin must approve before email is sent.
  */
 
 import { NextResponse, type NextRequest } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/server";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { email } = body;
 
-    // Validate input
     if (!email || typeof email !== "string") {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
@@ -29,24 +27,41 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
-    // Send magic link for password setup
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/api/auth/verify-activation`,
-      },
-    });
+    // Check if there's already a pending request for this email
+    const { data: existing } = await supabase
+      .from("activation_requests")
+      .select("id")
+      .eq("email", email)
+      .eq("status", "pending")
+      .maybeSingle();
+
+    if (existing) {
+      return NextResponse.json({
+        success: true,
+        message: "Deine Anfrage wurde bereits gespeichert. Wir prüfen sie.",
+        status: "already_pending",
+      });
+    }
+
+    // Save to DB as pending
+    const { error } = await supabase
+      .from("activation_requests")
+      .insert({ email, status: "pending" });
 
     if (error) {
-      console.error("Activation request error:", error.message);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error("Activation request save error:", error.message);
+      return NextResponse.json(
+        { error: "Failed to save request" },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({
       success: true,
-      message: "Activation email sent. Check your inbox.",
+      message:
+        "Deine Anfrage wurde gespeichert. Ein Admin wird sie prüfen und dir ggf. einen Link schicken.",
     });
   } catch (error) {
     console.error("Activation request failed:", error);

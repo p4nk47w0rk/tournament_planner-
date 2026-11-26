@@ -2,9 +2,28 @@
 
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { useAuth } from "@/lib/supabase/hooks";
+import { useEffect } from "react";
 
 export default function NewTournamentPage() {
   const t = useTranslations("newTournament");
+  const { isAuthenticated, isLoading } = useAuth();
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      window.location.href = "/login";
+    }
+  }, [isAuthenticated, isLoading]);
+
+  if (isLoading || !isAuthenticated) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-16 text-center">
+        <p className="text-slate-stone dark:text-dark-text-secondary">
+          Laden...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
