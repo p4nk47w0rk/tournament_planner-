@@ -7,3 +7,28 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Projekt-Workflow: OpenSpec
+
+Dieses Projekt folgt einem strikten Workflow. Siehe [`OPENSPEC.md`](OPENSPEC.md) für die vollständigen Details.
+
+**Kurzfassung:**
+```
+Spec → Tickets → Implement → TDD → Code-Review → Merge
+```
+
+**Regeln (nie ignorieren):**
+1. **Tests zuerst** — Kein Code ohne Test (immer `/tdd` Skill laden)
+2. **Review vor Merge** — Immer `/code-review` Skill nutzen
+3. **TypeScript Strict** — Keine `any`, `pnpm lint` muss clean durchlaufen
+4. **Ticket zuerst** — Keine Implementierung ohne Ticket
+5. **Dependenz-Kette** — Tickets in Dependency-Order abarbeiten
+
+**Wichtige Skills:**
+- `/to-spec` — Anforderungen → SPEC.md
+- `/to-tickets` — SPEC.md → GitHub Issues
+- `/implement` — Ticket implementieren (Phase A–E)
+- `/tdd` — Test-Driven Development
+- `/code-review` — Qualitätssicherung (Standards + Spec)
+- `/diagnose` — Fehler debugging
+

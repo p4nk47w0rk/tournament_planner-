@@ -1,30 +1,18 @@
 'use client'
 
-import {useState, useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import ThemeToggle from '../Shared/ThemeToggle'
 import LocaleSwitcher from '../Shared/LocaleSwitcher'
 import {useAuth} from '@/lib/supabase/hooks'
+import {useEditMode} from '@/lib/edit-mode-context'
 
 export default function Navbar() {
   const {user, isAuthenticated, isLoading, signOut} = useAuth()
-  const [editMode, setEditMode] = useState(false)
+  const {editable, toggle: toggleEditMode} = useEditMode()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
-  // Load edit mode from localStorage
-  useEffect(() => {
-    const stored = localStorage.getItem('edit-mode')
-    if (stored === 'true') setEditMode(true)
-  }, [])
-
-  const toggleEditMode = () => {
-    const newState = !editMode
-    setEditMode(newState)
-    localStorage.setItem('edit-mode', String(newState))
-  }
 
   const handleLogout = async () => {
     await signOut()
-    setEditMode(false)
     localStorage.removeItem('edit-mode')
   }
 
@@ -63,13 +51,13 @@ export default function Navbar() {
                 <button
                   onClick={toggleEditMode}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
-                    editMode
+                    editable
                       ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
                       : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'
                   }`}
-                  title={editMode ? 'Edit-Mode: AN' : 'Edit-Mode: AUS'}
+                  title={editable ? 'Edit-Mode: AN' : 'Edit-Mode: AUS'}
                 >
-                  {editMode ? '✏️ Edit' : '👁 View'}
+                  {editable ? '✏️ Edit' : '👁 View'}
                 </button>
                 <button
                   onClick={handleLogout}
@@ -94,6 +82,8 @@ export default function Navbar() {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+              aria-label={mobileMenuOpen ? 'Menü schließen' : 'Menü öffnen'}
+              aria-expanded={mobileMenuOpen}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {mobileMenuOpen ? (

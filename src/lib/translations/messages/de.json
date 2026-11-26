@@ -57,7 +57,14 @@
     "enterScore": "Ergebnis eingeben",
     "save": "Speichern",
     "cancel": "Abbrechen",
-    "filter": "Filter"
+    "filter": "Filter",
+    "group": "Gruppe",
+    "finished": "Beendet",
+    "upcoming": "Steht an",
+    "goalsLabel": "Tore",
+    "goalEntryTitle": "Tor erfassen",
+    "minutePlaceholder": "Minute (optional)",
+    "playerPlaceholder": "Spieler (optional)"
   },
   "standings": {
     "title": "Gruppenstände",

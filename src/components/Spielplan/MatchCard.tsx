@@ -1,6 +1,7 @@
 'use client'
 
 import {useEffect, useState} from 'react'
+import {useTranslations} from 'next-intl'
 import {type Match, type Team, type Goal} from '@/lib/types'
 import {TEAMS} from '@/lib/tournament-data'
 import {GoalService} from '@/lib/services/goal-service'
@@ -14,6 +15,7 @@ interface MatchCardProps {
 }
 
 export default function MatchCard({match, editable = false, onScoreChange, onGoalAdd, onGoalRemove}: MatchCardProps) {
+  const t = useTranslations('schedule')
   const [goals, setGoals] = useState<Goal[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -58,10 +60,10 @@ export default function MatchCard({match, editable = false, onScoreChange, onGoa
             {match.time}
           </span>
           <span className="text-xs font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-dark-secondary text-slate-600 dark:text-dark-text-secondary">
-            Platz {match.pitch}
+            {t('field')} {match.pitch}
           </span>
           <span className="text-xs font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-dark-secondary text-slate-600 dark:text-dark-text-secondary">
-            Gruppe {match.group}
+            {t('group')} {match.group}
           </span>
         </div>
         <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
@@ -69,7 +71,7 @@ export default function MatchCard({match, editable = false, onScoreChange, onGoa
             ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
             : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
         }`}>
-          {status === 'finished' ? '✅ Beendet' : '⏱ Steht an'}
+          {status === 'finished' ? t('finished') : t('upcoming')}
         </span>
       </div>
 
@@ -118,7 +120,7 @@ export default function MatchCard({match, editable = false, onScoreChange, onGoa
       {!editable && goals.length > 0 && (
         <div className="mt-3 pt-3 border-t border-slate-100 dark:border-dark-border">
           <p className="text-xs font-medium text-slate-500 dark:text-dark-text-secondary mb-2">
-            Tore
+            {t('goalsLabel')}
           </p>
           <div className="space-y-1 max-h-32 overflow-y-auto">
             {goals.map((goal) => (
@@ -253,6 +255,7 @@ function GoalEntry({
   onGoalAdd?: (matchId: number, team: string, minute?: string, player?: string) => void
   onGoalRemove?: (goalId: number) => void
 }) {
+  const t = useTranslations('schedule')
   const [minute, setMinute] = useState('')
   const [player, setPlayer] = useState('')
 
@@ -261,7 +264,7 @@ function GoalEntry({
   return (
     <div className="mt-3 pt-3 border-t border-slate-100 dark:border-dark-border">
       <p className="text-xs font-medium text-slate-500 dark:text-dark-text-secondary mb-2">
-        Tor erfassen
+        {t('goalEntryTitle')}
       </p>
       <div className="flex flex-wrap gap-2">
         {teams.map((team) => (
@@ -281,14 +284,14 @@ function GoalEntry({
       <div className="flex gap-2 mt-2">
         <input
           type="text"
-          placeholder="Minute (optional, z.B. 12')"
+          placeholder={t('minutePlaceholder')}
           value={minute}
           onChange={(e) => setMinute(e.target.value)}
           className="flex-1 px-3 py-2 text-sm border border-slate-200 dark:border-dark-border rounded-lg bg-white dark:bg-dark-card text-slate-900 dark:text-dark-text focus:outline-none focus:ring-2 focus:ring-sage/50"
         />
         <input
           type="text"
-          placeholder="Spieler (optional)"
+          placeholder={t('playerPlaceholder')}
           value={player}
           onChange={(e) => setPlayer(e.target.value)}
           className="flex-1 px-3 py-2 text-sm border border-slate-200 dark:border-dark-border rounded-lg bg-white dark:bg-dark-card text-slate-900 dark:text-dark-text focus:outline-none focus:ring-2 focus:ring-sage/50"

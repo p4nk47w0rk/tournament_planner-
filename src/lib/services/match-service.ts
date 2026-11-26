@@ -6,7 +6,7 @@
  */
 
 import {createClient} from '@/lib/supabase/client'
-import type {Match} from '@/lib/types'
+import type {Match, MatchDbRow} from '@/lib/types'
 import {INITIAL_MATCHES} from '@/lib/tournament-data'
 
 export class MatchService {
@@ -41,11 +41,13 @@ export class MatchService {
     const supabase = createClient()
 
     // Determine status based on scores
-    let status: 'scheduled' | 'live' | 'finished' = 'scheduled'
-    if (homeScore > 0 || awayScore > 0) {
+    let status: 'scheduled' | 'live' | 'finished'
+    if (homeScore === null && awayScore === null) {
+      status = 'scheduled'
+    } else if (homeScore > 0 || awayScore > 0) {
       status = 'live'
-    }
-    if (homeScore > 0 && awayScore > 0) {
+    } else {
+      // Both scores are 0 or explicitly set to 0:0
       status = 'finished'
     }
 
@@ -91,19 +93,19 @@ export class MatchService {
   /**
    * Map Supabase row to Match interface
    */
-  private static mapToMatch(row: any): Match {
+  private static mapToMatch(row: MatchDbRow): Match {
     return {
       id: row.id,
       matchNo: row.match_no,
       time: row.time,
-      pitch: row.pitch as 'A' | 'B',
-      group: row.group_name as 'A' | 'B',
-      phase: row.phase as Match['phase'],
+      pitch: row.pitch,
+      group: row.group_name,
+      phase: row.phase,
       homeTeam: row.home_team,
       awayTeam: row.away_team,
       homeScore: row.home_score,
       awayScore: row.away_score,
-      status: row.status as Match['status'],
+      status: row.status,
       fairplay: row.fairplay,
       createdAt: row.created_at,
       updatedAt: row.updated_at,

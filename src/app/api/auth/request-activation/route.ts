@@ -33,6 +33,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // US4: Block arbitrary registration — only allow configured admin email
+    const allowedEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase()
+    if (allowedEmail && email.toLowerCase() !== allowedEmail) {
+      return NextResponse.json(
+        {error: 'Registrierung nur für autorisierte Accounts möglich'},
+        {status: 403}
+      )
+    }
+
     const supabase = await createClient()
 
     // Send magic link for password setup

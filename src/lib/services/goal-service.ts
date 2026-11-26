@@ -6,7 +6,7 @@
  */
 
 import {createClient} from '@/lib/supabase/client'
-import type {Goal} from '@/lib/types'
+import type {Goal, GoalDbRow} from '@/lib/types'
 
 export class GoalService {
   /**
@@ -59,7 +59,7 @@ export class GoalService {
     if (error) throw error
     if (!data) return []
 
-    return data.map((row) => ({
+    return data.map((row: GoalDbRow) => ({
       id: row.id,
       matchId: row.match_id,
       team: row.team,
@@ -100,7 +100,7 @@ export class GoalService {
           filter: `match_id=eq.${matchId}`,
         },
         (payload) => {
-          const data = payload.new as any
+          const data = payload.new as GoalDbRow
           callback({
             id: data.id,
             matchId: data.match_id,

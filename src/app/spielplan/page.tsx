@@ -4,30 +4,47 @@ import {useTranslations} from 'next-intl'
 import MatchCard from '@/components/Spielplan/MatchCard'
 import PlayoffBracket from '@/components/Spielplan/PlayoffBracket'
 import {INITIAL_MATCHES, PLAYOFF_MATCHES, type Match} from '@/lib/tournament-data'
-import {useState, useMemo, useCallback} from 'react'
+import {useState, useMemo, useCallback, useEffect} from 'react'
 import {MatchService} from '@/lib/services/match-service'
 import {GoalService} from '@/lib/services/goal-service'
+import {useEditMode} from '@/lib/edit-mode-context'
 
 type Tab = 'all' | 'A' | 'B' | 'playoffs'
 type FilterTeam = 'all' | string
 
 export default function SchedulePage() {
   const t = useTranslations('schedule')
+  const {editable, toggle: toggleEditMode} = useEditMode()
 
-  // Local state for MVP (static matches)
-  // In V2, this will come from Supabase
+  // Local state for MVP (static matches fallback)
   const [matches, setMatches] = useState<Match[]>(INITIAL_MATCHES)
   const [playoffMatches, setPlayoffMatches] = useState<Match[]>(PLAYOFF_MATCHES)
   const [activeTab, setActiveTab] = useState<Tab>('all')
   const [filterTeam, setFilterTeam] = useState<FilterTeam>('all')
+  const [loading, setLoading] = useState(true)
 
-  // Check edit mode from localStorage
-  const [editable, setEditable] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('edit-mode') === 'true'
+  // Load matches from Supabase (with static fallback)
+  useEffect(() => {
+    const loadMatches = async () => {
+      try {
+        const data = await MatchService.getAllMatches()
+        setMatches(data)
+      } catch (err) {
+        console.warn('Failed to load matches from Supabase:', err)
+      } finally {
+        setLoading(false)
+      }
     }
-    return false
-  })
+
+    loadMatches()
+
+    // US20/21: Subscribe to realtime match updates (score changes)
+    const unsubscribeMatches = MatchService.subscribeToAll(() => {
+      loadMatches()
+    })
+
+    return unsubscribeMatches
+  }, [])
 
   const handleScoreChange = useCallback(async (matchId: number, team: 'home' | 'away', delta: number) => {
     // Optimistic update
@@ -87,21 +104,36 @@ export default function SchedulePage() {
     return Array.from(names).sort()
   }, [matches])
 
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="animate-pulse space-y-4">
+          <div className="h-8 bg-slate-200 dark:bg-dark-secondary rounded w-1/4" />
+          <div className="space-y-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-24 bg-slate-100 dark:bg-dark-secondary rounded-xl" />
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
         <h1 className="text-3xl font-bold text-slate-ink dark:text-dark-text">{t('title')}</h1>
 
-        {/* Edit toggle */}
+        {/* Edit toggle (also available in Navbar) */}
         <button
-          onClick={() => setEditable(!editable)}
+          onClick={toggleEditMode}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             editable
               ? 'bg-green-600 text-white'
               : 'bg-slate-100 dark:bg-dark-secondary text-slate-600 dark:text-dark-text-secondary hover:bg-slate-200 dark:hover:bg-dark-border'
           }`}
         >
-          {editable ? '✏️ Edit-Mode' : '👁 View-Mode'}
+          {editable ? t('editModeOn') : t('editModeOff')}
         </button>
       </div>
 

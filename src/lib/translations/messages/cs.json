@@ -57,7 +57,14 @@
     "enterScore": "Zadat výsledek",
     "save": "Uložit",
     "cancel": "Zrušit",
-    "filter": "Filtr"
+    "filter": "Filtr",
+    "group": "Skupina",
+    "finished": "Ukončeno",
+    "upcoming": "Přichází",
+    "goalsLabel": "Góly",
+    "goalEntryTitle": "Zaznamenat gól",
+    "minutePlaceholder": "Minuta (volitelné)",
+    "playerPlaceholder": "Hráč (volitelný)"
   },
   "standings": {
     "title": "Žebříček",

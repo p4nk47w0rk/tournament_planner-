@@ -4,6 +4,7 @@ import './globals.css'
 import {NextIntlClientProvider} from 'next-intl'
 import {getMessages} from 'next-intl/server'
 import {LocaleProvider} from '@/lib/locale-context'
+import {EditModeProvider} from '@/lib/edit-mode-context'
 import {ThemeProvider} from './ThemeProvider'
 import Navbar from '@/components/Layout/Navbar'
 import Footer from '@/components/Layout/Footer'
@@ -37,11 +38,13 @@ export default async function RootLayout({
       >
         <NextIntlClientProvider messages={messages}>
           <LocaleProvider>
-            <ThemeProvider>
-              <Navbar />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </ThemeProvider>
+            <EditModeProvider>
+              <ThemeProvider>
+                <Navbar />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </ThemeProvider>
+            </EditModeProvider>
           </LocaleProvider>
         </NextIntlClientProvider>
       </body>
