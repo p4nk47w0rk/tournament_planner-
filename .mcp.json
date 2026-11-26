@@ -4,7 +4,11 @@
     "servers": {
       "supabase": {
         "type": "remote",
-        "url": "https://mcp.supabase.com/mcp"
+        "url": "https://mcp.supabase.com/mcp?project_ref=hcacssnayskproszwkdl"
+      },
+      "vercel": {
+        "type": "remote",
+        "url": "https://mcp.vercel.com"
       }
     }
   }

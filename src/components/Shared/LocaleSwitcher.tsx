@@ -1,19 +1,24 @@
-'use client'
+"use client";
 
-import {useLocale} from '@/lib/locale-context'
-import {useTranslations} from 'next-intl'
+import { useLocale } from "@/lib/locale-context";
+import { useTranslations } from "next-intl";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function LocaleSwitcher() {
-  const {locale, setLocale} = useLocale()
-  const t = useTranslations('nav')
+  const { locale } = useLocale();
+  const _t = useTranslations("nav");
+  const _router = useRouter();
+  const pathname = usePathname();
 
-  const nextLocale = locale === 'de' ? 'cs' : 'de'
+  const nextLocale = locale === "de" ? "cs" : "de";
 
   const handleSwitch = () => {
-    setLocale(nextLocale)
-    // Set cookie for server components (next-intl reads from NEXT_LOCALE cookie)
-    document.cookie = `NEXT_LOCALE=${nextLocale}; path=/; max-age=31536000`
-  }
+    // Hard navigation: URL mit ?locale=cs aufrufen → Middleware setzt Cookie
+    // → leitet ohne Query-Param um → Server rendert mit neuer Locale.
+    // Ein echter Browser-Navigation (nicht Client-Side Router), damit die
+    // Middleware durchlaufen wird.
+    window.location.href = `${pathname}?locale=${nextLocale}`;
+  };
 
   return (
     <button
@@ -23,7 +28,7 @@ export default function LocaleSwitcher() {
                  hover:bg-slate-200 dark:hover:bg-dark-border focus:outline-none focus:ring-2 focus:ring-[#3B5E4D]"
       aria-label="Sprache wechseln"
     >
-      {locale === 'de' ? '🇩🇪 DE' : '🇨🇿 CS'}
+      {locale === "de" ? "🇩🇪 DE" : "🇨🇿 CS"}
     </button>
-  )
+  );
 }

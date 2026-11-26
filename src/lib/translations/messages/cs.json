@@ -10,34 +10,151 @@
     "logout": "Odhlásit",
     "edit": "Upravit",
     "nextMatch": "Další zápas",
-    "playoffs": "Playoff"
+    "playoffs": "Playoff",
+    "myTournaments": "Moje turnaje",
+    "newTournament": "Nový turnaj"
   },
   "home": {
-    "title": "Bambini Cup 2026",
-    "tagline": "Malé hřiště. Velké kroky.",
-    "date": "5. prosince 2026",
-    "time": "od 09:00",
-    "location": "Sál Vilémov",
-    "countdown": {
-      "days": "Dny",
-      "hours": "Hodiny",
-      "minutes": "Minuty",
-      "seconds": "Vteřiny"
+    "hero": {
+      "title": "Plánuj turnaje. Sleduj. Pamatuj si.",
+      "tagline": "Malé hřiště. Velké kroky.",
+      "date": "5. prosince 2026",
+      "time": "od 09:00",
+      "location": "Sál Vilémov",
+      "countdown": {
+        "days": "Dny",
+        "hours": "Hodiny",
+        "minutes": "Minuty",
+        "seconds": "Vteřiny"
+      },
+      "stats": {
+        "teams": "Týmy",
+        "matches": "Zápasy",
+        "fields": "Hřiště",
+        "groups": "Skupiny"
+      },
+      "status": {
+        "preparing": "Příprava...",
+        "live": "BĚŽÍ!",
+        "finished": "Ukončeno"
+      }
     },
     "nextMatch": "Další zápas",
     "stats": {
-      "teams": "Týmy",
-      "matches": "Zápasy",
-      "fields": "Hřiště",
       "groups": "Skupiny"
     },
-    "liveStatus": {
-      "preparing": "Příprava...",
-      "live": "BĚŽÍ! ⚽",
-      "finished": "Ukončeno",
-      "coming": "Brzy"
+    "actions": {
+      "tournaments": "Moje turnaje",
+      "tournamentsDesc": "Všechny turnaje na jednom místě",
+      "create": "Nový turnaj",
+      "createDesc": "Brzy k dispozici",
+      "schedule": "Rozlosování",
+      "scheduleDesc": "Bambini-Cup 2026"
+    }
+  },
+  "landing": {
+    "hero": {
+      "title": "Plánuj turnaje. Sleduj. Pamatuj si.",
+      "tagline": "Tvůj nástroj pro fotbalové turnaje – od plánování až po finále.",
+      "cta": "Vytvoř svůj turnaj hned teď"
     },
-    "fairplay": "Fair play"
+    "features": {
+      "title": "Funkce na první pohled",
+      "subtitle": "Všechno, co potřebuješ pro úspěšnou organizaci turnaje.",
+      "tournaments": {
+        "title": "Správa turnajů",
+        "description": "Vytvářej a spravuj více turnajů najednou. Měj přehled o všech svých akcích na jednom místě."
+      },
+      "schedule": {
+        "title": "Vytvořit rozlosování",
+        "description": "Nastav rozlosování pro skupiny, vyřazovací fáze a časy zápasů. Flexibilně upravuj hřiště a časy."
+      },
+      "standings": {
+        "title": "Tabulky a statistiky",
+        "description": "Automatický výpočet pořadí ve skupinách – góly, rozdíl a body. Vždy aktuální."
+      },
+      "teams": {
+        "title": "Správa týmů",
+        "description": "Zadej týmy, přiřaď je ke skupinám a měj všechny informace na jednom místě."
+      }
+    },
+    "cta": {
+      "title": "Jsi připraven začít?",
+      "description": "Vytvoř svůj první turnaj během několika minut – s rozlosováním, skupinami a živými výsledky.",
+      "button": "Začít teď"
+    }
+  },
+  "dashboard": {
+    "title": "Vítej zpátky!",
+    "subtitle": "Tady je tvůj přehled – co se děje?",
+    "upcoming": {
+      "title": "Nadcházející turnaje"
+    },
+    "links": {
+      "title": "Rychlý přístup",
+      "tournaments": "Moje turnaje",
+      "tournamentsDesc": "Všechny turnaje na jednom místě",
+      "create": "Nový turnaj",
+      "createDesc": "Vytvořit nový turnaj",
+      "schedule": "Rozlosování",
+      "scheduleDesc": "Upravit rozlosování",
+      "groups": "Skupiny",
+      "groupsDesc": "Žebříčky a statistiky",
+      "teams": "Týmy",
+      "teamsDesc": "Spravovat týmy",
+      "goToTournament": "Na turnaj"
+    },
+    "features": {
+      "title": "Brzy k dispozici",
+      "comingSoon": {
+        "title1": "Živé výsledky",
+        "desc1": "Zadávej výsledky živě a okamžitě se aktualizují",
+        "title2": "Automatický výpočet",
+        "desc2": "Žebříčky a statistiky se počítají automaticky",
+        "title3": "Pozvánky",
+        "desc3": "Sdílej svůj turnaj s ostatními pomocí odkazu"
+      }
+    }
+  },
+  "turniere": {
+    "title": "Moje turnaje",
+    "subtitle": "Spravuj své turnaje",
+    "createNew": "Nový turnaj",
+    "createNewDesc": "Funkce brzy k dispozici",
+    "backToOverview": "Zpět na přehled"
+  },
+  "newTournament": {
+    "title": "Vytvořit nový turnaj",
+    "description": "Tato funkce brzy přijde. Budeš moci vytvořit vlastní turnaj s týmy, rozlosováním a živými výsledky.",
+    "features": "Co tě čeká:",
+    "featureSchedule": "Vytvořit rozlosování a skupiny",
+    "featureStandings": "Tabulky a statistiky",
+    "featureLive": "Živé výsledky v reálném čase",
+    "featureTeams": "Spravovat týmy",
+    "backToTournaments": "Zpět na přehled"
+  },
+  "turnier": {
+    "detail": {
+      "title": "Detail turnaje",
+      "notFoundTitle": "Turnaj nebyl nalezen",
+      "backToTournaments": "Zpět na přehled",
+      "stats": {
+        "teams": "Týmy",
+        "matches": "Zápasy",
+        "groups": "Skupiny",
+        "fields": "Hřiště"
+      },
+      "quickLinks": {
+        "schedule": "Rozlosování",
+        "standings": "Tabulky",
+        "teams": "Týmy"
+      },
+      "status": {
+        "upcoming": "Brzy",
+        "live": "Živě ⚽",
+        "finished": "Ukončeno"
+      }
+    }
   },
   "schedule": {
     "title": "Rozlosování",
@@ -76,11 +193,19 @@
     "title": "Týmy",
     "groupA": "Skupina A",
     "groupB": "Skupina B",
+    "group": "Skupina",
     "pitch": "Hřiště",
+    "matches": "Zápasy",
     "matchDuration": "Délka zápasu",
     "minutes": "minut",
     "referee": "Rozhodčí",
-    "notes": "Poznámky"
+    "notes": "Poznámky",
+    "founded": "Založen",
+    "league": "Liga",
+    "stadium": "Stadion",
+    "address": "Adresa",
+    "about": "O klubu",
+    "backToTeams": "Zpět na týmy"
   },
   "info": {
     "title": "Informace o turnaji",
@@ -88,6 +213,8 @@
     "canteen": "Stravování",
     "location": "Jak se dostat",
     "organizers": "Organizátoři",
+    "invitation": "Pozvánka / Flyer",
+    "viewFull": "Zobrazit celou",
     "rulesItems": [
       "Každý zápas hlídá vedoucí nebo trenér podle dohody",
       "Hraje se podle zjednodušených pravidel kopané",
@@ -128,5 +255,12 @@
     "yourTeam": "Můj tým",
     "filter": "Filtr",
     "clear": "Smazat"
+  },
+  "legal": {
+    "imprintTitle": "Impressum",
+    "imprintSubtitle": "Udaje podle § 5 DDG",
+    "privacyTitle": "Zásady ochrany osobních údajů",
+    "privacySubtitle": "Informace o zpracování údajů",
+    "stand": "Stav"
   }
 }

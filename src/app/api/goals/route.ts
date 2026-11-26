@@ -13,6 +13,46 @@ import { TEAMS } from "@/lib/tournament-data";
 // Get all team names for validation
 const teamNames = new Set(TEAMS.map((t) => t.name));
 
+/**
+ * Validate that a user is authenticated. Returns user or null.
+ */
+async function requireAuth(supabase: Awaited<ReturnType<typeof createClient>>) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+  return user;
+}
+
+/**
+ * Validate goal input. Returns error response or null.
+ */
+function validateGoalInput(
+  matchId: unknown,
+  team: unknown
+): ReturnType<typeof NextResponse.json> | null {
+  if (!matchId || !team) {
+    return NextResponse.json(
+      { error: "matchId and team are required" },
+      { status: 400 }
+    );
+  }
+  if (!teamNames.has(String(team))) {
+    return NextResponse.json(
+      { error: `Invalid team name: ${team}` },
+      { status: 400 }
+    );
+  }
+  const num = Number(matchId);
+  if (isNaN(num)) {
+    return NextResponse.json(
+      { error: "matchId must be a number" },
+      { status: 400 }
+    );
+  }
+  return null;
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const matchId = searchParams.get("matchId");
@@ -42,47 +82,20 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
-
-  // Check authentication
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
+  if (!(await requireAuth(supabase))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const body = await request.json();
   const { matchId, team, minute, player } = body;
 
-  // Validate required fields
-  if (!matchId || !team) {
-    return NextResponse.json(
-      { error: "matchId and team are required" },
-      { status: 400 }
-    );
-  }
-
-  // Validate team exists
-  if (!teamNames.has(team)) {
-    return NextResponse.json(
-      { error: `Invalid team name: ${team}` },
-      { status: 400 }
-    );
-  }
-
-  // Validate matchId is a number
-  const matchIdNum = parseInt(matchId);
-  if (isNaN(matchIdNum)) {
-    return NextResponse.json(
-      { error: "matchId must be a number" },
-      { status: 400 }
-    );
-  }
+  const validationError = validateGoalInput(matchId, team);
+  if (validationError) return validationError;
 
   const { data, error } = await supabase
     .from("goals")
     .insert({
-      match_id: matchIdNum,
+      match_id: Number(matchId),
       team,
       minute: minute || null,
       player: player || null,
@@ -100,12 +113,7 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   const supabase = await createClient();
-
-  // Check authentication
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
+  if (!(await requireAuth(supabase))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

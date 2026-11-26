@@ -10,34 +10,151 @@
     "logout": "Abmelden",
     "edit": "Bearbeiten",
     "nextMatch": "Nächstes Spiel",
-    "playoffs": "Playoffs"
+    "playoffs": "Playoffs",
+    "myTournaments": "Meine Turniere",
+    "newTournament": "Neues Turnier"
   },
   "home": {
-    "title": "Bambini Cup 2026",
-    "tagline": "Kleines Feld. Große Schritte.",
-    "date": "5. Dezember 2026",
-    "time": "ab 09:00 Uhr",
-    "location": "Sporthalle Vilémov",
-    "countdown": {
-      "days": "Tage",
-      "hours": "Stunden",
-      "minutes": "Minuten",
-      "seconds": "Sekunden"
+    "hero": {
+      "title": "Turniere planen. Verfolgen. Erinnern.",
+      "tagline": "Kleines Feld. Große Schritte.",
+      "date": "5. Dezember 2026",
+      "time": "ab 09:00 Uhr",
+      "location": "Sporthalle Vilémov",
+      "countdown": {
+        "days": "Tage",
+        "hours": "Stunden",
+        "minutes": "Minuten",
+        "seconds": "Sekunden"
+      },
+      "stats": {
+        "teams": "Mannschaften",
+        "matches": "Spiele",
+        "fields": "Felder",
+        "groups": "Gruppen"
+      },
+      "status": {
+        "preparing": "Vorbereitungen...",
+        "live": "LÄUFT!",
+        "finished": "Beendet"
+      }
     },
     "nextMatch": "Nächstes Spiel",
     "stats": {
-      "teams": "Mannschaften",
-      "matches": "Spiele",
-      "fields": "Felder",
       "groups": "Gruppen"
     },
-    "liveStatus": {
-      "preparing": "Vorbereitungen...",
-      "live": "LÄUFT! ⚽",
-      "finished": "Beendet",
-      "coming": "Kommt bald"
+    "actions": {
+      "tournaments": "Meine Turniere",
+      "tournamentsDesc": "Alle Turniere auf einen Blick",
+      "create": "Neues Turnier",
+      "createDesc": "Kommt bald",
+      "schedule": "Spielplan",
+      "scheduleDesc": "Bambini-Cup 2026"
+    }
+  },
+  "landing": {
+    "hero": {
+      "title": "Turniere planen. Verfolgen. Erinnern.",
+      "tagline": "Dein Tool für Fußballturniere – von der Planung bis zum Finale.",
+      "cta": "Leg jetzt dein Turnier an"
     },
-    "fairplay": "Fairplay"
+    "features": {
+      "title": "Features auf einen Blick",
+      "subtitle": "Alles was du brauchst, um dein Turnier erfolgreich zu organisieren.",
+      "tournaments": {
+        "title": "Turniere verwalten",
+        "description": "Erstelle und verwalte mehrere Turniere gleichzeitig. Behalte den Überblick über alle deine Events an einem Ort."
+      },
+      "schedule": {
+        "title": "Spielplan erstellen",
+        "description": "Lege Spielpläne für Gruppen, KO-Phasen und Spielzeiten fest. Passe Felder und Zeiten flexibel an."
+      },
+      "standings": {
+        "title": "Gruppenstände & Statistiken",
+        "description": "Gruppenstand automatisch berechnen lassen – mit Toren, Differenz und Punkten. Immer aktuell."
+      },
+      "teams": {
+        "title": "Mannschaften verwalten",
+        "description": "Trage Teams ein, weise sie Gruppen zu und behalte alle Informationen an einem Ort."
+      }
+    },
+    "cta": {
+      "title": "Bereit, loszulegen?",
+      "description": "Erstelle dein erstes Turnier in wenigen Minuten – mit Spielplan, Gruppen und Live-Ergebnissen.",
+      "button": "Jetzt starten"
+    }
+  },
+  "dashboard": {
+    "title": "Willkommen zurück!",
+    "subtitle": "Hier ist dein Überblick – was läuft gerade?",
+    "upcoming": {
+      "title": "Anstehende Turniere"
+    },
+    "links": {
+      "title": "Schnellzugriff",
+      "tournaments": "Meine Turniere",
+      "tournamentsDesc": "Alle Turniere auf einen Blick",
+      "create": "Neues Turnier",
+      "createDesc": "Ein neues Turnier erstellen",
+      "schedule": "Spielplan",
+      "scheduleDesc": "Spielpläne bearbeiten",
+      "groups": "Gruppen",
+      "groupsDesc": "Gruppenstände & Stats",
+      "teams": "Mannschaften",
+      "teamsDesc": "Teams verwalten",
+      "goToTournament": "Zum Turnier"
+    },
+    "features": {
+      "title": "Demnächst",
+      "comingSoon": {
+        "title1": "Live-Ergebnisse",
+        "desc1": "Trage Ergebnisse live ein und sie werden sofort aktualisiert",
+        "title2": "Automatische Berechnung",
+        "desc2": "Gruppenstände und Statistiken werden automatisch berechnet",
+        "title3": "Einladungen",
+        "desc3": "Teile dein Turnier mit anderen per Link"
+      }
+    }
+  },
+  "turniere": {
+    "title": "Meine Turniere",
+    "subtitle": "Verwalte deine Turniere",
+    "createNew": "Neues Turnier",
+    "createNewDesc": "Funktion kommt bald",
+    "backToOverview": "Zurück zur Übersicht"
+  },
+  "newTournament": {
+    "title": "Neues Turnier erstellen",
+    "description": "Diese Funktion kommt bald. Du wirst dann dein eigenes Turnier mit Teams, Spielplan und Live-Ergebnissen anlegen können.",
+    "features": "Was dich erwartet:",
+    "featureSchedule": "Spielplan und Gruppen erstellen",
+    "featureStandings": "Gruppenstände und Statistiken",
+    "featureLive": "Live-Ergebnisse in Echtzeit",
+    "featureTeams": "Mannschaften verwalten",
+    "backToTournaments": "Zurück zur Übersicht"
+  },
+  "turnier": {
+    "detail": {
+      "title": "Turnier-Detail",
+      "notFoundTitle": "Turnier nicht gefunden",
+      "backToTournaments": "Zurück zur Übersicht",
+      "stats": {
+        "teams": "Mannschaften",
+        "matches": "Spiele",
+        "groups": "Gruppen",
+        "fields": "Felder"
+      },
+      "quickLinks": {
+        "schedule": "Spielplan",
+        "standings": "Gruppenstände",
+        "teams": "Mannschaften"
+      },
+      "status": {
+        "upcoming": "Kommt bald",
+        "live": "Live ⚽",
+        "finished": "Beendet"
+      }
+    }
   },
   "schedule": {
     "title": "Spielplan",
@@ -76,11 +193,19 @@
     "title": "Mannschaften",
     "groupA": "Gruppe A",
     "groupB": "Gruppe B",
+    "group": "Gruppe",
     "pitch": "Platz",
+    "matches": "Spiele",
     "matchDuration": "Spielzeit",
     "minutes": "Minuten",
     "referee": "Schiedsrichter",
-    "notes": "Hinweise"
+    "notes": "Hinweise",
+    "founded": "Gegründet",
+    "league": "Liga",
+    "stadium": "Stadion",
+    "address": "Adresse",
+    "about": "Über den Verein",
+    "backToTeams": "Zurück zu den Mannschaften"
   },
   "info": {
     "title": "Turnier-Infos",
@@ -88,6 +213,8 @@
     "canteen": "Verpflegung",
     "location": "Anfahrt",
     "organizers": "Veranstalter",
+    "invitation": "Einladung / Flyer",
+    "viewFull": "Vollständige Ansicht",
     "rulesItems": [
       "Jedes Spiel pfeifen Leiter oder Trainer nach Vereinbarung",
       "Gespielt wird nach den vereinfachten Regeln des Fußballs",
@@ -128,5 +255,12 @@
     "yourTeam": "Mein Team",
     "filter": "Filter",
     "clear": "Löschen"
+  },
+  "legal": {
+    "imprintTitle": "Impressum",
+    "imprintSubtitle": "Angaben gemäß § 5 DDG",
+    "privacyTitle": "Datenschutzerklärung",
+    "privacySubtitle": "Informationen zur Datenverarbeitung",
+    "stand": "Stand"
   }
 }

@@ -41,7 +41,9 @@
     "jsdom": "^31.0.1",
     "lint-staged": "^17.6.2",
     "prettier": "^3.10.1",
+    "supabase": "^3.4.0",
     "tailwindcss": "4.3.3",
+    "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^5.1.2"
   }

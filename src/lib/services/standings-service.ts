@@ -6,6 +6,7 @@
  */
 
 import type { Match, StandingsRow } from "@/lib/types";
+import { TEAMS } from "@/lib/tournament-data";
 
 interface TeamStats {
   played: number;
@@ -95,6 +96,7 @@ export class StandingsService {
     const rows: StandingsRow[] = [];
 
     for (const [team, stat] of stats) {
+      const teamInfo = TEAMS.find((t) => t.name === team);
       rows.push({
         team,
         group: stat.group,
@@ -108,6 +110,7 @@ export class StandingsService {
         points: stat.won * 3 + stat.drawn,
         fairplayPoints: 0,
         rank: null,
+        logo: teamInfo?.logo,
       });
     }
 
@@ -120,8 +123,8 @@ export class StandingsService {
     });
 
     // Assign ranks
-    for (let i = 0; i < rows.length; i++) {
-      rows[i].rank = i + 1;
+    for (const [i, row] of rows.entries()) {
+      row.rank = i + 1;
     }
 
     // Filter out teams that haven't played
@@ -145,13 +148,13 @@ export class StandingsService {
    */
   static createTestMatch(
     id: number,
-    home: string,
-    away: string,
-    homeScore: number,
-    awayScore: number,
-    group: "A" | "B" = "A",
-    pitch: "A" | "B" = "A"
+    teams: { home: string; away: string },
+    scores: { home: number; away: number },
+    options?: { group?: "A" | "B"; pitch?: "A" | "B" }
   ): Match {
+    const { home, away } = teams;
+    const { home: homeScore, away: awayScore } = scores;
+    const { group = "A", pitch = "A" } = options ?? {};
     return {
       id,
       matchNo: id,

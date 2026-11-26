@@ -1,16 +1,22 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { INITIAL_MATCHES } from "@/lib/tournament-data";
 import { useState, useEffect, useMemo } from "react";
 
-interface HeroProps {}
+interface CountdownValue {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
+interface TournamentStatus {
+  countdown: CountdownValue | null;
+  liveStatus: "preparing" | "live" | "finished";
+}
 
 export default function Hero() {
   const t = useTranslations("home");
-
-  const tournamentDate = new Date("2026-12-05T09:00:00");
-  const endTournamentDate = new Date("2026-12-05T13:00:00");
 
   const [now, setNow] = useState(0);
 
@@ -20,20 +26,10 @@ export default function Hero() {
     return () => clearInterval(id);
   }, []);
 
-  const countdown = useMemo(() => {
-    const diff = tournamentDate.getTime() - now;
-    if (diff <= 0) return null;
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-    return { days, hours, minutes, seconds };
-  }, [now]);
-
-  const isLive =
-    now >= tournamentDate.getTime() && now <= endTournamentDate.getTime();
-  const isPast = now > endTournamentDate.getTime();
-  const liveStatus = isPast ? "finished" : isLive ? "live" : "preparing";
+  const { countdown, liveStatus } = useMemo(
+    () => getTournamentStatus(now),
+    [now]
+  );
 
   return (
     <section className="relative overflow-hidden">
@@ -43,69 +39,137 @@ export default function Hero() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         {/* Hero content */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sage/10 text-sage dark:bg-dark-primary/20 dark:text-dark-primary text-sm font-medium mb-6">
-            <span
-              className={`w-2 h-2 rounded-full ${isLive ? "bg-terracotta animate-pulse" : isPast ? "bg-sage" : "bg-ochre"}`}
-            />
-            {t(`liveStatus.${liveStatus}`)}
+          {/* Brand icon */}
+          <div className="w-16 h-16 rounded-2xl bg-sage/10 dark:bg-sage/20 flex items-center justify-center mx-auto mb-8">
+            <svg
+              className="w-9 h-9 text-sage dark:text-dark-primary"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+              />
+            </svg>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tightest text-slate-ink dark:text-dark-text mb-4">
-            {t("title")}
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-ink dark:text-dark-text mb-4">
+            {t("hero.title")}
           </h1>
 
           <p className="text-xl sm:text-2xl text-slate-stone dark:text-dark-text-secondary font-light max-w-2xl mx-auto mb-8">
-            {t("tagline")}
+            {t("hero.tagline")}
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-slate-stone dark:text-dark-text-secondary font-mono">
-            <span>📅 5. Dezember 2026</span>
+            <span>📅 {t("hero.date")}</span>
             <span>·</span>
-            <span>🕐 09:00 Uhr</span>
+            <span>🕐 {t("hero.time")}</span>
             <span>·</span>
-            <span>📍 Sporthalle Vilémov</span>
+            <span>📍 {t("hero.location")}</span>
           </div>
         </div>
 
         {/* Countdown */}
         {countdown && liveStatus === "preparing" && (
           <div className="flex items-center justify-center gap-6 sm:gap-8 mb-12">
-            <CountdownUnit value={countdown.days} label={t("countdown.days")} />
+            <CountdownUnit
+              value={countdown.days}
+              label={t("hero.countdown.days")}
+            />
             <span className="text-2xl font-bold text-slate-hairline dark:text-dark-border">
               :
             </span>
             <CountdownUnit
               value={countdown.hours}
-              label={t("countdown.hours")}
+              label={t("hero.countdown.hours")}
             />
             <span className="text-2xl font-bold text-slate-hairline dark:text-dark-border">
               :
             </span>
             <CountdownUnit
               value={countdown.minutes}
-              label={t("countdown.minutes")}
+              label={t("hero.countdown.minutes")}
             />
             <span className="text-2xl font-bold text-slate-hairline dark:text-dark-border">
               :
             </span>
             <CountdownUnit
               value={countdown.seconds}
-              label={t("countdown.seconds")}
+              label={t("hero.countdown.seconds")}
             />
+          </div>
+        )}
+
+        {/* Status */}
+        {liveStatus === "finished" && (
+          <div className="text-center mb-12">
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-slate-100 dark:bg-dark-secondary text-sm text-slate-stone dark:text-dark-text-secondary font-medium">
+              {t("hero.status.finished")}
+            </span>
+          </div>
+        )}
+        {liveStatus === "live" && (
+          <div className="text-center mb-12">
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-green-100 dark:bg-green-900/30 text-sm text-green-800 dark:text-green-300 font-medium">
+              {t("hero.status.live")} ⚽
+            </span>
           </div>
         )}
 
         {/* Stats bar */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto">
-          <StatCard value="10" label={t("stats.teams")} />
-          <StatCard value="20" label={t("stats.matches")} />
-          <StatCard value="2" label={t("stats.fields")} />
-          <StatCard value="2" label={t("stats.groups")} />
+          <StatCard value="10" label={t("hero.stats.teams")} />
+          <StatCard value="20" label={t("hero.stats.matches")} />
+          <StatCard value="2" label={t("hero.stats.fields")} />
+          <StatCard value="2" label={t("hero.stats.groups")} />
         </div>
       </div>
     </section>
   );
 }
+
+// ============================================
+// Tournament status computation (pure function)
+// ============================================
+
+function getTournamentStatus(now: number): TournamentStatus {
+  const tDate = new Date("2026-12-05T09:00:00").getTime();
+  const eDate = new Date("2026-12-05T13:00:00").getTime();
+  const isPast = now > eDate;
+  const isLive = now >= tDate && now <= eDate;
+
+  let liveStatus: "preparing" | "live" | "finished";
+  if (isPast) {
+    liveStatus = "finished";
+  } else if (isLive) {
+    liveStatus = "live";
+  } else {
+    liveStatus = "preparing";
+  }
+
+  let countdown: CountdownValue | null = null;
+  if (!isPast) {
+    const diff = tDate - now;
+    if (diff > 0) {
+      countdown = {
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((diff % (1000 * 60)) / 1000),
+      };
+    }
+  }
+
+  return { countdown, liveStatus };
+}
+
+// ============================================
+// CountdownUnit
+// ============================================
 
 function CountdownUnit({ value, label }: { value: number; label: string }) {
   return (
@@ -119,6 +183,10 @@ function CountdownUnit({ value, label }: { value: number; label: string }) {
     </div>
   );
 }
+
+// ============================================
+// StatCard
+// ============================================
 
 function StatCard({ value, label }: { value: string; label: string }) {
   return (

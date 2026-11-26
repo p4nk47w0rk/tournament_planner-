@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 280" width="240" height="280" fill="none">
+  <path d="M24 20 H216 V145 C216 205 120 260 120 260 C120 260 24 205 24 145 Z" fill="#3B5E4D" stroke="#1C2420" stroke-width="6"/>
+  <path d="M36 32 H204 V142 C204 194 120 244 120 244 C120 244 36 194 36 142 Z" stroke="#E2B86B" stroke-width="2.5"/>
+  <!-- Architectural Chevron / Progress Arrow -->
+  <path d="M62 128 L120 82 L178 128" stroke="#F7F6F2" stroke-width="10" stroke-linecap="square"/>
+  <path d="M78 156 L120 122 L162 156" stroke="#E2B86B" stroke-width="7" stroke-linecap="square"/>
+  <!-- Minimalist Football -->
+  <circle cx="120" cy="192" r="22" fill="#F7F6F2"/>
+  <polygon points="120,182 129,189 125,200 115,200 111,189" fill="#3B5E4D"/>
+  <!-- Club Monogram -->
+  <text x="120" y="64" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="18" font-weight="800" letter-spacing="0.14em" fill="#F7F6F2">SV FORTSCHRITT</text>
+  <text x="120" y="232" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700" letter-spacing="0.16em" fill="#E2B86B">GROSSHARTHAU</text>
+</svg>

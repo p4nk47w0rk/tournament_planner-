@@ -1,74 +1,128 @@
-'use client'
+"use client";
 
-import {createClient} from '@/lib/supabase/client'
-import {useEffect, useState, useCallback} from 'react'
+import { createClient } from "@/lib/supabase/client";
+import {
+  isLocalDevAuth,
+  getLocalDevSession,
+  getLocalDevUser,
+} from "@/lib/supabase/client";
+import { useEffect, useState, useCallback } from "react";
 
 export function useSupabase() {
-  return createClient()
+  return createClient();
 }
 
 export function useSession() {
-  const [session, setSession] = useState<import('@supabase/supabase-js').Session | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [session, setSession] = useState<
+    import("@supabase/supabase-js").Session | null
+  >(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const supabase = createClient()
+    // Local dev: always return mock session
+    // But respect ?dev=logout flag on first mount
+    if (isLocalDevAuth()) {
+      // Check for dev=logout flag from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("dev") === "logout") {
+        setLoading(false);
+        return;
+      }
+      setSession(getLocalDevSession() as any);
+      setLoading(false);
+      return;
+    }
 
-    supabase.auth.getSession().then(({data: {session}}) => {
-      setSession(session)
-      setLoading(false)
-    })
+    const supabase = createClient();
 
-    const {data: {subscription}} = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setLoading(false);
+    });
 
-    return () => subscription.unsubscribe()
-  }, [])
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
 
-  return {session, loading}
+    return () => subscription.unsubscribe();
+  }, []);
+
+  return { session, loading };
 }
 
 export function useUser() {
-  const [user, setUser] = useState<import('@supabase/supabase-js').User | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<import("@supabase/supabase-js").User | null>(
+    null
+  );
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const supabase = createClient()
+    // Local dev: always return mock user
+    // But respect ?dev=logout flag on first mount
+    if (isLocalDevAuth()) {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("dev") === "logout") {
+        setLoading(false);
+        return;
+      }
+      setUser(getLocalDevUser());
+      setLoading(false);
+      return;
+    }
 
-    supabase.auth.getUser().then(({data: {user}}) => {
-      setUser(user)
-      setLoading(false)
-    })
+    const supabase = createClient();
 
-    const {data: {subscription}} = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-    })
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+      setLoading(false);
+    });
 
-    return () => subscription.unsubscribe()
-  }, [])
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
 
-  return {user, loading}
+    return () => subscription.unsubscribe();
+  }, []);
+
+  return { user, loading };
 }
 
 export function useAuth() {
-  const {session, loading: sessionLoading} = useSession()
-  const {user, loading: userLoading} = useUser()
+  const { session, loading: sessionLoading } = useSession();
+  const { user, loading: userLoading } = useUser();
 
   const signIn = useCallback(async (email: string, password: string) => {
-    const supabase = createClient()
-    const {data, error} = await supabase.auth.signInWithPassword({email, password})
-    if (error) throw error
-    return data
-  }, [])
+    const supabase = createClient();
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) throw error;
+    return data;
+  }, []);
 
   const signOut = useCallback(async () => {
-    const supabase = createClient()
-    const {error} = await supabase.auth.signOut()
-    if (error) throw error
-  }, [])
+    // Local dev: redirect to landing page
+    if (isLocalDevAuth()) {
+      // Clear any Supabase cookies
+      document.cookie = "sb-access-token-0=; path=/; max-age=0";
+      document.cookie = "sb-refresh-token-0=; path=/; max-age=0";
+      document.cookie = "sb-auth-token=; path=/; max-age=0";
+      // Force full reload with dev=logout flag
+      window.location.href = "/?dev=logout";
+      return;
+    }
 
-  const isLoading = sessionLoading || userLoading
+    const supabase = createClient();
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
+  }, []);
+
+  const isLoading = sessionLoading || userLoading;
 
   return {
     session,
@@ -77,5 +131,5 @@ export function useAuth() {
     isAuthenticated: !!session,
     signIn,
     signOut,
-  }
+  };
 }

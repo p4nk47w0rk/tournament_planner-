@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <circle cx="60" cy="60" r="55" fill="#003DA5" stroke="#FFFFFF" stroke-width="3"/>
+  <circle cx="60" cy="60" r="45" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+  <text x="60" y="48" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#FFFFFF">UNION</text>
+  <text x="60" y="68" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#FFFFFF">DĚČÍN</text>
+  <text x="60" y="88" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#FFFFFF" letter-spacing="1">FUTBAL</text>
+</svg>

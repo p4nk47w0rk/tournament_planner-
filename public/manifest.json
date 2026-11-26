@@ -1,0 +1,16 @@
+{
+  "name": "Tournament Planner — Bambini-Cup 2026",
+  "short_name": "TP",
+  "description": "Fußballturnier-Plattform für den Bambini-Cup 2026 des SV Fortschritt Großharthau",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F7F6F2",
+  "theme_color": "#3B5E4D",
+  "icons": [
+    {
+      "src": "/02_tournament-planner-app-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

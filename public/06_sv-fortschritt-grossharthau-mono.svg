@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 280" width="240" height="280" fill="none">
+  <path d="M24 20 H216 V145 C216 205 120 260 120 260 C120 260 24 205 24 145 Z" fill="none" stroke="#1C2420" stroke-width="6"/>
+  <path d="M36 32 H204 V142 C204 194 120 244 120 244 C120 244 36 194 36 142 Z" stroke="#1C2420" stroke-width="2"/>
+  <path d="M62 128 L120 82 L178 128" stroke="#1C2420" stroke-width="10" stroke-linecap="square"/>
+  <path d="M78 156 L120 122 L162 156" stroke="#1C2420" stroke-width="7" stroke-linecap="square"/>
+  <circle cx="120" cy="192" r="22" fill="none" stroke="#1C2420" stroke-width="4"/>
+  <polygon points="120,182 129,189 125,200 115,200 111,189" fill="#1C2420"/>
+  <text x="120" y="64" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="18" font-weight="800" letter-spacing="0.14em" fill="#1C2420">SV FORTSCHRITT</text>
+  <text x="120" y="232" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700" letter-spacing="0.16em" fill="#1C2420">GROSSHARTHAU</text>
+</svg>

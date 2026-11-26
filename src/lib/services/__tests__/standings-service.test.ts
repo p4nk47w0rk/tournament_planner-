@@ -9,7 +9,7 @@
 
 import { describe, it, expect } from "vitest";
 import { StandingsService } from "@/lib/services/standings-service";
-import type { Match, StandingsRow } from "@/lib/types";
+import type { Match } from "@/lib/types";
 
 describe("StandingsService.calculateStandings", () => {
   it("should return empty array when no matches", () => {
@@ -42,7 +42,12 @@ describe("StandingsService.calculateStandings", () => {
 
   it("should calculate basic standings from one match", () => {
     const matches: Match[] = [
-      StandingsService.createTestMatch(1, "Team A", "Team B", 3, 1, "A"),
+      StandingsService.createTestMatch(
+        1,
+        { home: "Team A", away: "Team B" },
+        { home: 3, away: 1 },
+        { group: "A" }
+      ),
     ];
 
     const standings = StandingsService.calculateStandings(matches);
@@ -83,8 +88,18 @@ describe("StandingsService.calculateStandings", () => {
 
   it("should sort by points first", () => {
     const matches: Match[] = [
-      StandingsService.createTestMatch(1, "Team A", "Team B", 2, 0, "A"),
-      StandingsService.createTestMatch(2, "Team C", "Team D", 3, 0, "A"),
+      StandingsService.createTestMatch(
+        1,
+        { home: "Team A", away: "Team B" },
+        { home: 2, away: 0 },
+        { group: "A" }
+      ),
+      StandingsService.createTestMatch(
+        2,
+        { home: "Team C", away: "Team D" },
+        { home: 3, away: 0 },
+        { group: "A" }
+      ),
     ];
 
     const standings = StandingsService.calculateStandings(matches);
@@ -100,8 +115,18 @@ describe("StandingsService.calculateStandings", () => {
 
   it("should sort by goal difference when points are equal", () => {
     const matches: Match[] = [
-      StandingsService.createTestMatch(1, "Team A", "Team B", 5, 1, "A"),
-      StandingsService.createTestMatch(2, "Team C", "Team D", 3, 0, "A"),
+      StandingsService.createTestMatch(
+        1,
+        { home: "Team A", away: "Team B" },
+        { home: 5, away: 1 },
+        { group: "A" }
+      ),
+      StandingsService.createTestMatch(
+        2,
+        { home: "Team C", away: "Team D" },
+        { home: 3, away: 0 },
+        { group: "A" }
+      ),
     ];
 
     const standings = StandingsService.calculateStandings(matches);
@@ -113,8 +138,18 @@ describe("StandingsService.calculateStandings", () => {
 
   it("should sort by goalsFor when points and GD are equal", () => {
     const matches: Match[] = [
-      StandingsService.createTestMatch(1, "Team A", "Team B", 2, 1, "A"),
-      StandingsService.createTestMatch(2, "Team C", "Team D", 3, 2, "A"),
+      StandingsService.createTestMatch(
+        1,
+        { home: "Team A", away: "Team B" },
+        { home: 2, away: 1 },
+        { group: "A" }
+      ),
+      StandingsService.createTestMatch(
+        2,
+        { home: "Team C", away: "Team D" },
+        { home: 3, away: 2 },
+        { group: "A" }
+      ),
     ];
 
     const standings = StandingsService.calculateStandings(matches);
@@ -127,7 +162,12 @@ describe("StandingsService.calculateStandings", () => {
 
   it("should handle draw correctly", () => {
     const matches: Match[] = [
-      StandingsService.createTestMatch(1, "Team A", "Team B", 1, 1, "A"),
+      StandingsService.createTestMatch(
+        1,
+        { home: "Team A", away: "Team B" },
+        { home: 1, away: 1 },
+        { group: "A" }
+      ),
     ];
 
     const standings = StandingsService.calculateStandings(matches);
@@ -141,9 +181,24 @@ describe("StandingsService.calculateStandings", () => {
 
   it("should handle multiple matches for the same team", () => {
     const matches: Match[] = [
-      StandingsService.createTestMatch(1, "Team A", "Team B", 2, 0, "A"),
-      StandingsService.createTestMatch(2, "Team A", "Team C", 1, 1, "A"),
-      StandingsService.createTestMatch(3, "Team A", "Team D", 0, 3, "A"),
+      StandingsService.createTestMatch(
+        1,
+        { home: "Team A", away: "Team B" },
+        { home: 2, away: 0 },
+        { group: "A" }
+      ),
+      StandingsService.createTestMatch(
+        2,
+        { home: "Team A", away: "Team C" },
+        { home: 1, away: 1 },
+        { group: "A" }
+      ),
+      StandingsService.createTestMatch(
+        3,
+        { home: "Team A", away: "Team D" },
+        { home: 0, away: 3 },
+        { group: "A" }
+      ),
     ];
 
     const standings = StandingsService.calculateStandings(matches);
@@ -161,8 +216,18 @@ describe("StandingsService.calculateStandings", () => {
 
   it("should handle ties in ranking (same points, GD, GF)", () => {
     const matches: Match[] = [
-      StandingsService.createTestMatch(1, "Team A", "Team B", 1, 0, "A"),
-      StandingsService.createTestMatch(2, "Team C", "Team D", 1, 0, "A"),
+      StandingsService.createTestMatch(
+        1,
+        { home: "Team A", away: "Team B" },
+        { home: 1, away: 0 },
+        { group: "A" }
+      ),
+      StandingsService.createTestMatch(
+        2,
+        { home: "Team C", away: "Team D" },
+        { home: 1, away: 0 },
+        { group: "A" }
+      ),
     ];
 
     const standings = StandingsService.calculateStandings(matches);
@@ -174,8 +239,18 @@ describe("StandingsService.calculateStandings", () => {
 
   it("should only include teams that appear in group A or B", () => {
     const matches: Match[] = [
-      StandingsService.createTestMatch(1, "Team A", "Team B", 2, 1, "A"),
-      StandingsService.createTestMatch(2, "Team C", "Team D", 3, 0, "B"),
+      StandingsService.createTestMatch(
+        1,
+        { home: "Team A", away: "Team B" },
+        { home: 2, away: 1 },
+        { group: "A" }
+      ),
+      StandingsService.createTestMatch(
+        2,
+        { home: "Team C", away: "Team D" },
+        { home: 3, away: 0 },
+        { group: "B" }
+      ),
     ];
 
     const standings = StandingsService.calculateStandings(matches);
@@ -190,8 +265,18 @@ describe("StandingsService.calculateStandings", () => {
 describe("StandingsService.getGroupStandings", () => {
   it("should filter by group", () => {
     const matches: Match[] = [
-      StandingsService.createTestMatch(1, "A1", "A2", 2, 0, "A"),
-      StandingsService.createTestMatch(2, "B1", "B2", 3, 1, "B"),
+      StandingsService.createTestMatch(
+        1,
+        { home: "A1", away: "A2" },
+        { home: 2, away: 0 },
+        { group: "A" }
+      ),
+      StandingsService.createTestMatch(
+        2,
+        { home: "B1", away: "B2" },
+        { home: 3, away: 1 },
+        { group: "B" }
+      ),
     ];
 
     const groupA = StandingsService.getGroupStandings(matches, "A");

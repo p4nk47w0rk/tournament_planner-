@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" fill="none">
+  <!-- Background optional transparent -->
+  <!-- Architectural Tactical Grid (Sage Green #3B5E4D) -->
+  <g stroke="#3B5E4D" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M36 44 H116"/>
+    <path d="M36 44 V156 H148 V96"/>
+    <path d="M36 74 H68 V106"/>
+    <path d="M36 126 H78 V156"/>
+    <path d="M104 156 V126 H148"/>
+    <path d="M68 106 H96"/>
+  </g>
+  <!-- Motion Streaks (Terracotta #D97757) -->
+  <g fill="#D97757">
+    <polygon points="84,104 114,74 120,80 90,110"/>
+    <polygon points="96,116 126,86 132,92 102,122"/>
+    <polygon points="108,128 138,98 144,104 114,134"/>
+  </g>
+  <!-- Dynamic Football (Terracotta #D97757 + Alabaster #F7F6F2) -->
+  <g transform="translate(136, 64)">
+    <circle cx="0" cy="0" r="30" fill="#D97757"/>
+    <polygon points="0,-11 10,-3 6,9 -6,9 -10,-3" fill="#F7F6F2"/>
+    <line x1="0" y1="-11" x2="0" y2="-28" stroke="#F7F6F2" stroke-width="3.5"/>
+    <line x1="10" y1="-3" x2="26" y2="-8" stroke="#F7F6F2" stroke-width="3.5"/>
+    <line x1="6" y1="9" x2="17" y2="23" stroke="#F7F6F2" stroke-width="3.5"/>
+    <line x1="-6" y1="9" x2="-17" y2="23" stroke="#F7F6F2" stroke-width="3.5"/>
+    <line x1="-10" y1="-3" x2="-26" y2="-8" stroke="#F7F6F2" stroke-width="3.5"/>
+  </g>
+</svg>
