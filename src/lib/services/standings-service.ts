@@ -5,7 +5,66 @@
  * Pure Function — keine Side Effects.
  */
 
-import type {Match, StandingsRow} from '@/lib/types'
+import type { Match, StandingsRow } from "@/lib/types";
+
+interface TeamStats {
+  played: number;
+  won: number;
+  drawn: number;
+  lost: number;
+  goalsFor: number;
+  goalsAgainst: number;
+  group: "A" | "B";
+}
+
+function createEmptyStats(group: "A" | "B"): TeamStats {
+  return {
+    played: 0,
+    won: 0,
+    drawn: 0,
+    lost: 0,
+    goalsFor: 0,
+    goalsAgainst: 0,
+    group,
+  };
+}
+
+function getOrCreateTeam(
+  stats: Map<string, TeamStats>,
+  name: string,
+  group: "A" | "B"
+): TeamStats {
+  if (!stats.has(name)) {
+    stats.set(name, createEmptyStats(group));
+  }
+  return stats.get(name)!;
+}
+
+function applyMatchResult(
+  home: TeamStats,
+  away: TeamStats,
+  homeScore: number,
+  awayScore: number
+) {
+  home.played++;
+  away.played++;
+
+  home.goalsFor += homeScore;
+  home.goalsAgainst += awayScore;
+  away.goalsFor += awayScore;
+  away.goalsAgainst += homeScore;
+
+  if (homeScore > awayScore) {
+    home.won++;
+    away.lost++;
+  } else if (homeScore < awayScore) {
+    away.won++;
+    home.lost++;
+  } else {
+    home.drawn++;
+    away.drawn++;
+  }
+}
 
 export class StandingsService {
   /**
@@ -14,65 +73,28 @@ export class StandingsService {
    * Sorting: points (desc) → goalDifference (desc) → goalsFor (desc)
    */
   static calculateStandings(matches: Match[]): StandingsRow[] {
-    // Initialize stats for all teams
-    const stats = new Map<string, {
-      played: number
-      won: number
-      drawn: number
-      lost: number
-      goalsFor: number
-      goalsAgainst: number
-      group: 'A' | 'B'
-    }>()
+    const stats = new Map<string, TeamStats>();
 
-    // First pass: get all teams and their groups
+    // First pass: register all teams and their groups
     for (const match of matches) {
-      if (!stats.has(match.homeTeam)) {
-        stats.set(match.homeTeam, {played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, group: match.group})
-      }
-      if (!stats.has(match.awayTeam)) {
-        stats.set(match.awayTeam, {played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, group: match.group})
-      }
+      getOrCreateTeam(stats, match.homeTeam, match.group);
+      getOrCreateTeam(stats, match.awayTeam, match.group);
     }
 
-    // Second pass: update stats from matches with scores
+    // Second pass: compute stats from finished matches
     for (const match of matches) {
-      if (match.homeScore === null || match.awayScore === null) continue
+      if (match.homeScore === null || match.awayScore === null) continue;
 
-      const home = stats.get(match.homeTeam)!
-      const away = stats.get(match.awayTeam)!
+      const home = stats.get(match.homeTeam)!;
+      const away = stats.get(match.awayTeam)!;
 
-      // Update played
-      home.played++
-      away.played++
-
-      // Update goals
-      home.goalsFor += match.homeScore
-      home.goalsAgainst += match.awayScore
-      away.goalsFor += match.awayScore
-      away.goalsAgainst += match.homeScore
-
-      // Update win/draw/loss
-      if (match.homeScore > match.awayScore) {
-        home.won++
-        away.lost++
-      } else if (match.homeScore < match.awayScore) {
-        away.won++
-        home.lost++
-      } else {
-        home.drawn++
-        away.drawn++
-      }
+      applyMatchResult(home, away, match.homeScore, match.awayScore);
     }
 
     // Convert to StandingsRow and calculate derived stats
-    const rows: StandingsRow[] = []
-    let rank = 1
+    const rows: StandingsRow[] = [];
 
     for (const [team, stat] of stats) {
-      const goalDifference = stat.goalsFor - stat.goalsAgainst
-      const points = stat.won * 3 + stat.drawn
-
       rows.push({
         team,
         group: stat.group,
@@ -82,34 +104,36 @@ export class StandingsService {
         lost: stat.lost,
         goalsFor: stat.goalsFor,
         goalsAgainst: stat.goalsAgainst,
-        goalDifference: goalDifference,
-        points,
-        fairplayPoints: 0, // TODO: calculate from matches
-        rank: null, // Will be set after sorting
-      })
+        goalDifference: stat.goalsFor - stat.goalsAgainst,
+        points: stat.won * 3 + stat.drawn,
+        fairplayPoints: 0,
+        rank: null,
+      });
     }
 
     // Sort: points → GD → goalsFor
     rows.sort((a, b) => {
-      if (b.points !== a.points) return b.points - a.points
-      if (b.goalDifference !== a.goalDifference) return b.goalDifference - a.goalDifference
-      return b.goalsFor - a.goalsFor
-    })
+      if (b.points !== a.points) return b.points - a.points;
+      if (b.goalDifference !== a.goalDifference)
+        return b.goalDifference - a.goalDifference;
+      return b.goalsFor - a.goalsFor;
+    });
 
     // Assign ranks
     for (let i = 0; i < rows.length; i++) {
-      rows[i].rank = i + 1
+      rows[i].rank = i + 1;
     }
 
-    return rows
+    // Filter out teams that haven't played
+    return rows.filter((row) => row.played > 0);
   }
 
   /**
    * Get standings for a specific group
    */
-  static getGroupStandings(matches: Match[], group: 'A' | 'B'): StandingsRow[] {
-    const all = this.calculateStandings(matches)
-    return all.filter((row) => row.group === group)
+  static getGroupStandings(matches: Match[], group: "A" | "B"): StandingsRow[] {
+    const all = this.calculateStandings(matches);
+    return all.filter((row) => row.group === group);
   }
 
   // ============================================
@@ -125,22 +149,22 @@ export class StandingsService {
     away: string,
     homeScore: number,
     awayScore: number,
-    group: 'A' | 'B' = 'A',
-    pitch: 'A' | 'B' = 'A'
+    group: "A" | "B" = "A",
+    pitch: "A" | "B" = "A"
   ): Match {
     return {
       id,
       matchNo: id,
-      time: '12:00',
+      time: "12:00",
       pitch,
       group,
-      phase: 'group',
+      phase: "group",
       homeTeam: home,
       awayTeam: away,
       homeScore,
       awayScore,
-      status: 'finished',
+      status: "finished",
       fairplay: false,
-    }
+    };
   }
 }

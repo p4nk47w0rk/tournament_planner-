@@ -1,7 +1,6 @@
-'use client'
-
-import TeamGrid from '@/components/Teams/TeamGrid'
+"use client";
+import TeamGrid from "@/components/Teams/TeamGrid";
 
 export default function TeamsPage() {
-  return <TeamGrid />
+  return <TeamGrid />;
 }

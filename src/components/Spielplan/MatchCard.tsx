@@ -1,54 +1,95 @@
-'use client'
+"use client";
 
-import {useEffect, useState} from 'react'
-import {type Match, type Team, type Goal} from '@/lib/types'
-import {TEAMS} from '@/lib/tournament-data'
-import {GoalService} from '@/lib/services/goal-service'
+import { useEffect, useState } from "react";
+import { type Match, type Team, type Goal } from "@/lib/types";
+import { TEAMS } from "@/lib/tournament-data";
+import { GoalService } from "@/lib/services/goal-service";
 
 interface MatchCardProps {
-  match: Match
-  editable?: boolean
-  onScoreChange?: (matchId: number, team: 'home' | 'away', delta: number) => void
-  onGoalAdd?: (matchId: number, team: string, minute?: string, player?: string) => void
-  onGoalRemove?: (goalId: number) => void
+  match: Match;
+  editable?: boolean;
+  onScoreChange?: (
+    matchId: number,
+    team: "home" | "away",
+    delta: number
+  ) => void;
+  onGoalAdd?: (
+    matchId: number,
+    team: string,
+    minute?: string,
+    player?: string
+  ) => void;
+  onGoalRemove?: (goalId: number) => void;
 }
 
-export default function MatchCard({match, editable = false, onScoreChange, onGoalAdd, onGoalRemove}: MatchCardProps) {
-  const [goals, setGoals] = useState<Goal[]>([])
-  const [loading, setLoading] = useState(true)
+function useMatchCard(match: Match, _editable: boolean) {
+  const [goals, setGoals] = useState<Goal[]>([]);
+  const [loading, setLoading] = useState(true);
 
   // Load goals on mount
   useEffect(() => {
     const loadGoals = async () => {
       try {
-        const data = await GoalService.getGoals(match.id)
-        setGoals(data)
+        const data = await GoalService.getGoals(match.id);
+        setGoals(data);
       } catch (err) {
-        console.error('Failed to load goals:', err)
+        console.error("Failed to load goals:", err);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    loadGoals()
+    loadGoals();
 
     // Subscribe to realtime goal updates
-    const unsubscribe = GoalService.subscribeToGoals(match.id, (newGoal: Goal) => {
-      setGoals((prev) => [...prev, newGoal])
-    })
+    const unsubscribe = GoalService.subscribeToGoals(
+      match.id,
+      (newGoal: Goal) => {
+        setGoals((prev) => [...prev, newGoal]);
+      }
+    );
 
-    return unsubscribe
-  }, [match.id])
+    return unsubscribe;
+  }, [match.id]);
 
-  const homeTeam = TEAMS.find((t) => t.name === match.homeTeam)
-  const awayTeam = TEAMS.find((t) => t.name === match.awayTeam)
+  const homeTeam = TEAMS.find((t) => t.name === match.homeTeam);
+  const awayTeam = TEAMS.find((t) => t.name === match.awayTeam);
+  const status =
+    match.homeScore !== null || match.awayScore !== null
+      ? "finished"
+      : "upcoming";
 
-  const status = match.homeScore !== null || match.awayScore !== null ? 'finished' : 'upcoming'
+  const statusLabel = status === "finished" ? "✅ Beendet" : "⏱ Steht an";
+  const statusBadgeColor =
+    status === "finished"
+      ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+      : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400";
+
+  return {
+    goals,
+    loading,
+    homeTeam,
+    awayTeam,
+    status,
+    statusLabel,
+    statusBadgeColor,
+  };
+}
+
+export default function MatchCard({
+  match,
+  editable = false,
+  onScoreChange,
+  onGoalAdd,
+  onGoalRemove,
+}: MatchCardProps) {
+  const { goals, homeTeam, awayTeam, status, statusLabel, statusBadgeColor } =
+    useMatchCard(match, editable);
 
   return (
     <div
       className={`match-card rounded-xl border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-card p-4 transition-all duration-200 ${
-        status === 'finished' ? 'opacity-80' : ''
+        status === "finished" ? "opacity-80" : ""
       }`}
     >
       {/* Time, Field, Group */}
@@ -64,12 +105,10 @@ export default function MatchCard({match, editable = false, onScoreChange, onGoa
             Gruppe {match.group}
           </span>
         </div>
-        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-          status === 'finished'
-            ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-            : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
-        }`}>
-          {status === 'finished' ? '✅ Beendet' : '⏱ Steht an'}
+        <span
+          className={`text-xs font-medium px-2 py-0.5 rounded-full ${statusBadgeColor}`}
+        >
+          {statusLabel}
         </span>
       </div>
 
@@ -95,11 +134,11 @@ export default function MatchCard({match, editable = false, onScoreChange, onGoa
           ) : (
             <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 dark:bg-dark-secondary">
               <span className="font-mono text-2xl font-bold text-slate-900 dark:text-dark-text">
-                {match.homeScore ?? '—'}
+                {match.homeScore ?? "—"}
               </span>
               <span className="text-slate-300 dark:text-dark-border">:</span>
               <span className="font-mono text-2xl font-bold text-slate-900 dark:text-dark-text">
-                {match.awayScore ?? '—'}
+                {match.awayScore ?? "—"}
               </span>
             </div>
           )}
@@ -137,23 +176,27 @@ export default function MatchCard({match, editable = false, onScoreChange, onGoa
         />
       )}
     </div>
-  )
+  );
 }
 
 // ============================================
 // TeamBadge
 // ============================================
 
-function TeamBadge({team}: {team?: Team}) {
+function TeamBadge({ team }: { team?: Team }) {
   if (!team) {
-    return <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-dark-secondary shrink-0" />
+    return (
+      <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-dark-secondary shrink-0" />
+    );
   }
 
   return (
-    <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${team.color} text-white shrink-0 flex items-center justify-center text-xs font-bold`}>
+    <div
+      className={`w-8 h-8 rounded-lg bg-gradient-to-br ${team.color} text-white shrink-0 flex items-center justify-center text-xs font-bold`}
+    >
       {team.shortName}
     </div>
-  )
+  );
 }
 
 // ============================================
@@ -166,18 +209,22 @@ function EditableScore({
   onScoreChange,
   matchId,
 }: {
-  homeScore: number | null
-  awayScore: number | null
-  onScoreChange?: (matchId: number, team: 'home' | 'away', delta: number) => void
-  matchId: number
+  homeScore: number | null;
+  awayScore: number | null;
+  onScoreChange?: (
+    matchId: number,
+    team: "home" | "away",
+    delta: number
+  ) => void;
+  matchId: number;
 }) {
-  const home = homeScore ?? 0
-  const away = awayScore ?? 0
+  const home = homeScore ?? 0;
+  const away = awayScore ?? 0;
 
   return (
     <div className="flex items-center gap-1">
       <button
-        onClick={() => onScoreChange?.(matchId, 'home', -1)}
+        onClick={() => onScoreChange?.(matchId, "home", -1)}
         className="min-w-[44px] min-h-[44px] rounded-lg bg-slate-100 dark:bg-dark-secondary text-slate-600 hover:bg-slate-200 dark:hover:bg-dark-border flex items-center justify-center"
         aria-label={`${home} minus`}
       >
@@ -187,7 +234,7 @@ function EditableScore({
         {home}
       </div>
       <button
-        onClick={() => onScoreChange?.(matchId, 'home', 1)}
+        onClick={() => onScoreChange?.(matchId, "home", 1)}
         className="min-w-[44px] min-h-[44px] rounded-lg bg-sage/20 dark:bg-dark-secondary text-sage-dark hover:bg-sage/30 dark:text-dark-primary flex items-center justify-center"
         aria-label={`${home} plus`}
       >
@@ -195,7 +242,7 @@ function EditableScore({
       </button>
       <span className="text-slate-300 dark:text-dark-border px-1">:</span>
       <button
-        onClick={() => onScoreChange?.(matchId, 'away', -1)}
+        onClick={() => onScoreChange?.(matchId, "away", -1)}
         className="min-w-[44px] min-h-[44px] rounded-lg bg-slate-100 dark:bg-dark-secondary text-slate-600 hover:bg-slate-200 dark:hover:bg-dark-border flex items-center justify-center"
         aria-label={`${away} minus`}
       >
@@ -205,30 +252,29 @@ function EditableScore({
         {away}
       </div>
       <button
-        onClick={() => onScoreChange?.(matchId, 'away', 1)}
+        onClick={() => onScoreChange?.(matchId, "away", 1)}
         className="min-w-[44px] min-h-[44px] rounded-lg bg-sage/20 dark:bg-dark-secondary text-sage-dark hover:bg-sage/30 dark:text-dark-primary flex items-center justify-center"
         aria-label={`${away} plus`}
       >
         +
       </button>
     </div>
-  )
+  );
 }
 
 // ============================================
 // GoalItem (Read-Only)
 // ============================================
 
-function GoalItem({goal}: {goal: Goal}) {
-  // Format: ⚽ 12' Team (Player)
-  const timePart = goal.minute ? `${goal.minute}' ` : ''
-  const playerPart = goal.player ? ` (${goal.player})` : ''
+function GoalItem({ goal }: { goal: Goal }) {
+  const timePart = goal.minute ? `${goal.minute}' ` : "";
+  const playerPart = goal.player ? ` (${goal.player})` : "";
 
   return (
     <div className="flex items-center gap-2 text-sm text-slate-700 dark:text-dark-text-secondary">
       <span className="text-base">⚽</span>
       <span className="font-mono text-xs text-slate-500 dark:text-dark-text-tertiary">
-        {timePart || '—'}
+        {timePart || "—"}
       </span>
       <span className="font-medium">{goal.team}</span>
       {playerPart && (
@@ -237,7 +283,7 @@ function GoalItem({goal}: {goal: Goal}) {
         </span>
       )}
     </div>
-  )
+  );
 }
 
 // ============================================
@@ -247,16 +293,21 @@ function GoalItem({goal}: {goal: Goal}) {
 function GoalEntry({
   match,
   onGoalAdd,
-  onGoalRemove,
+  onGoalRemove: _onGoalRemove,
 }: {
-  match: Match
-  onGoalAdd?: (matchId: number, team: string, minute?: string, player?: string) => void
-  onGoalRemove?: (goalId: number) => void
+  match: Match;
+  onGoalAdd?: (
+    matchId: number,
+    team: string,
+    minute?: string,
+    player?: string
+  ) => void;
+  onGoalRemove?: (goalId: number) => void; // reserved for future goal removal
 }) {
-  const [minute, setMinute] = useState('')
-  const [player, setPlayer] = useState('')
+  const [minute, setMinute] = useState("");
+  const [player, setPlayer] = useState("");
 
-  const teams = [match.homeTeam, match.awayTeam]
+  const teams = [match.homeTeam, match.awayTeam];
 
   return (
     <div className="mt-3 pt-3 border-t border-slate-100 dark:border-dark-border">
@@ -268,9 +319,14 @@ function GoalEntry({
           <button
             key={team}
             onClick={() => {
-              onGoalAdd?.(match.id, team, minute || undefined, player || undefined)
-              setMinute('')
-              setPlayer('')
+              onGoalAdd?.(
+                match.id,
+                team,
+                minute || undefined,
+                player || undefined
+              );
+              setMinute("");
+              setPlayer("");
             }}
             className="flex-1 min-w-[120px] min-h-[44px] px-3 py-2 rounded-lg text-sm font-medium bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/50 transition-colors"
           >
@@ -295,5 +351,5 @@ function GoalEntry({
         />
       </div>
     </div>
-  )
+  );
 }

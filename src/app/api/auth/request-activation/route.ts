@@ -8,58 +8,51 @@
  * The user clicks the link, sets a password, and is then logged in.
  */
 
-import {NextResponse} from 'next/server'
-import {type NextRequest} from 'next/server'
-import {createClient} from '@/lib/supabase/server'
+import { NextResponse, type NextRequest } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const {email} = body
+    const body = await request.json();
+    const { email } = body;
 
     // Validate input
-    if (!email || typeof email !== 'string') {
-      return NextResponse.json(
-        {error: 'Email is required'},
-        {status: 400}
-      )
+    if (!email || typeof email !== "string") {
+      return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
-        {error: 'Invalid email format'},
-        {status: 400}
-      )
+        { error: "Invalid email format" },
+        { status: 400 }
+      );
     }
 
-    const supabase = await createClient()
+    const supabase = await createClient();
 
     // Send magic link for password setup
-    const {error} = await supabase.auth.signInWithOtp({
+    const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/auth/verify-activation`,
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/api/auth/verify-activation`,
       },
-    })
+    });
 
     if (error) {
-      console.error('Activation request error:', error.message)
-      return NextResponse.json(
-        {error: error.message},
-        {status: 500}
-      )
+      console.error("Activation request error:", error.message);
+      return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Activation email sent. Check your inbox.',
-    })
+      message: "Activation email sent. Check your inbox.",
+    });
   } catch (error) {
-    console.error('Activation request failed:', error)
+    console.error("Activation request failed:", error);
     return NextResponse.json(
-      {error: 'Internal server error'},
-      {status: 500}
-    )
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
