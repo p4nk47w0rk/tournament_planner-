@@ -1,0 +1,132 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "schedule": "Spielplan",
+    "groups": "Gruppen",
+    "teams": "Mannschaften",
+    "info": "Infos",
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "logout": "Abmelden",
+    "edit": "Bearbeiten",
+    "nextMatch": "Nächstes Spiel",
+    "playoffs": "Playoffs"
+  },
+  "home": {
+    "title": "Bambini Cup 2026",
+    "tagline": "Kleines Feld. Große Schritte.",
+    "date": "5. Dezember 2026",
+    "time": "ab 09:00 Uhr",
+    "location": "Sporthalle Vilémov",
+    "countdown": {
+      "days": "Tage",
+      "hours": "Stunden",
+      "minutes": "Minuten",
+      "seconds": "Sekunden"
+    },
+    "nextMatch": "Nächstes Spiel",
+    "stats": {
+      "teams": "Mannschaften",
+      "matches": "Spiele",
+      "fields": "Felder",
+      "groups": "Gruppen"
+    },
+    "liveStatus": {
+      "preparing": "Vorbereitungen...",
+      "live": "LÄUFT! ⚽",
+      "finished": "Beendet",
+      "coming": "Kommt bald"
+    },
+    "fairplay": "Fairplay"
+  },
+  "schedule": {
+    "title": "Spielplan",
+    "all": "Alle",
+    "groupA": "Gruppe A",
+    "groupB": "Gruppe B",
+    "playoffs": "Playoffs",
+    "field": "Feld",
+    "home": "Heim",
+    "away": "Gast",
+    "score": "Ergebnis",
+    "time": "Zeit",
+    "noScore": "Noch nicht gespielt",
+    "editMode": "Edit-Modus",
+    "editModeOn": "An",
+    "editModeOff": "Aus",
+    "enterScore": "Ergebnis eingeben",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "filter": "Filter"
+  },
+  "standings": {
+    "title": "Gruppenstände",
+    "played": "Gespielt",
+    "won": "Gewonnen",
+    "drawn": "Unentschieden",
+    "lost": "Verloren",
+    "goalsFor": "Tore",
+    "goalsAgainst": "Gegentore",
+    "goalDifference": "TD",
+    "points": "Punkte",
+    "rank": "Platz",
+    "fairplay": "Fairplay"
+  },
+  "teams": {
+    "title": "Mannschaften",
+    "groupA": "Gruppe A",
+    "groupB": "Gruppe B",
+    "pitch": "Platz",
+    "matchDuration": "Spielzeit",
+    "minutes": "Minuten",
+    "referee": "Schiedsrichter",
+    "notes": "Hinweise"
+  },
+  "info": {
+    "title": "Turnier-Infos",
+    "rules": "Regeln",
+    "canteen": "Verpflegung",
+    "location": "Anfahrt",
+    "organizers": "Veranstalter",
+    "rulesItems": [
+      "Jedes Spiel pfeifen Leiter oder Trainer nach Vereinbarung",
+      "Gespielt wird nach den vereinfachten Regeln des Fußballs",
+      "Ergebnis des Spiels bitte anmelden bei den Schreibern",
+      "Preise, Diplome und Medaillen – 1. bis 3. Platz",
+      "Umziehen – in den markierten Umkleideräumen – ACHTUNG auf Wertsachen!",
+      "Duschen, Toiletten, Waschbecken – alles in Halle",
+      "Turniersteuerung – L. Sklenář"
+    ],
+    "canteenItems": [
+      "Langos",
+      "Würstchen in Brötchen",
+      "Pommes frites",
+      "Süßwaren",
+      "Große Auswahl an gekühlten Limonaden"
+    ]
+  },
+  "auth": {
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "forgotPassword": "Passwort vergessen?",
+    "noAccount": "Noch kein Konto?",
+    "hasAccount": "Bereits registriert?",
+    "createAccount": "Konto erstellen",
+    "welcomeBack": "Willkommen zurück",
+    "joinTournament": "Am Turnier teilnehmen"
+  },
+  "common": {
+    "fairplayBadge": "Fairplay 🤝",
+    "loading": "Laden...",
+    "error": "Fehler aufgetreten",
+    "success": "Erfolgreich gespeichert!",
+    "live": "Live",
+    "finished": "Beendet",
+    "upcoming": "Kommt",
+    "yourTeam": "Mein Team",
+    "filter": "Filter",
+    "clear": "Löschen"
+  }
+}

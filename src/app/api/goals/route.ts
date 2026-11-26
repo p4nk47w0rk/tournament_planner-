@@ -1,0 +1,137 @@
+/**
+ * API Route: Manage Goals
+ *
+ * GET    /api/goals?matchId=X     — Get goals for a match
+ * POST   /api/goals               — Add a goal
+ * DELETE /api/goals/:id           — Remove a goal
+ */
+
+import {NextResponse} from 'next/server'
+import {type NextRequest} from 'next/server'
+import {createClient} from '@/lib/supabase/server'
+import {TEAMS} from '@/lib/tournament-data'
+
+// Get all team names for validation
+const teamNames = new Set(TEAMS.map((t) => t.name))
+
+export async function GET(request: NextRequest) {
+  const {searchParams} = new URL(request.url)
+  const matchId = searchParams.get('matchId')
+
+  if (!matchId) {
+    return NextResponse.json(
+      {error: 'matchId parameter is required'},
+      {status: 400}
+    )
+  }
+
+  const supabase = await createClient()
+
+  const {data, error} = await supabase
+    .from('goals')
+    .select('*')
+    .eq('match_id', parseInt(matchId))
+    .order('created_at', {ascending: true})
+
+  if (error) {
+    console.error('Get goals error:', error)
+    return NextResponse.json(
+      {error: error.message},
+      {status: 500}
+    )
+  }
+
+  return NextResponse.json(data || [])
+}
+
+export async function POST(request: NextRequest) {
+  const supabase = await createClient()
+
+  // Check authentication
+  const {data: {user}} = await supabase.auth.getUser()
+  if (!user) {
+    return NextResponse.json(
+      {error: 'Unauthorized'},
+      {status: 401}
+    )
+  }
+
+  const body = await request.json()
+  const {matchId, team, minute, player} = body
+
+  // Validate required fields
+  if (!matchId || !team) {
+    return NextResponse.json(
+      {error: 'matchId and team are required'},
+      {status: 400}
+    )
+  }
+
+  // Validate team exists
+  if (!teamNames.has(team)) {
+    return NextResponse.json(
+      {error: `Invalid team name: ${team}`},
+      {status: 400}
+    )
+  }
+
+  // Validate matchId is a number
+  const matchIdNum = parseInt(matchId)
+  if (isNaN(matchIdNum)) {
+    return NextResponse.json(
+      {error: 'matchId must be a number'},
+      {status: 400}
+    )
+  }
+
+  const {data, error} = await supabase
+    .from('goals')
+    .insert({
+      match_id: matchIdNum,
+      team,
+      minute: minute || null,
+      player: player || null,
+    })
+    .select()
+    .single()
+
+  if (error) {
+    console.error('Add goal error:', error)
+    return NextResponse.json(
+      {error: error.message},
+      {status: 500}
+    )
+  }
+
+  return NextResponse.json(data, {status: 201})
+}
+
+export async function DELETE(request: NextRequest, {params}: {params: Promise<{id: string}>}) {
+  const supabase = await createClient()
+
+  // Check authentication
+  const {data: {user}} = await supabase.auth.getUser()
+  if (!user) {
+    return NextResponse.json(
+      {error: 'Unauthorized'},
+      {status: 401}
+    )
+  }
+
+  const {id} = await params
+
+  const {error} = await supabase
+    .from('goals')
+    .delete()
+    .eq('id', parseInt(id))
+
+  if (error) {
+    console.error('Delete goal error:', error)
+    return NextResponse.json(
+      {error: error.message},
+      {status: 500}
+    )
+  }
+
+  return NextResponse.json({success: true})
+}

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Pořadí zápasů ve skupinách.</title>
+  <style>
+    body { font-family: "Times New Roman", Times, serif; margin: 40px; color: #000; }
+    h1 { color: #ff0000; font-size: 32px; margin-bottom: 20px; }
+    table { border-collapse: collapse; width: 100%; max-width: 780px; font-weight: bold; font-size: 16px; }
+    td, th { padding: 5px 8px; text-align: left; border-bottom: 1px solid #eee; }
+    thead th { font-size: 12px; text-transform: uppercase; color: #555; border-bottom: 2px solid #000; }
+    .time { color: #ff0000; width: 70px; }
+    .pitch-a { color: #008080; }
+    .pitch-b { color: #800000; }
+    .score-cell { width: 80px; border-left: 1px solid #ccc; text-align: center; }
+    .footer-notes { margin-top: 24px; color: #0000ff; font-weight: bold; font-size: 18px; line-height: 1.8; }
+  </style>
+</head>
+<body>
+  <main data-document-type="group-schedule" data-tournament="Bambiny CUP 2026">
+    <h1>Pořadí zápasů ve skupinách.</h1>
+
+    <table id="group-matches-schedule">
+      <thead>
+        <tr>
+          <th>Čas / Zeit</th>
+          <th>Hřiště / Platz</th>
+          <th>Domácí / Heim</th>
+          <th></th>
+          <th>Hosté / Gast</th>
+          <th>Výsledek / Ergebnis</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-match-no="1" data-time="09:15" data-pitch="A" data-group="A" data-home="Varnsdorf" data-away="Vilémov">
+          <td class="time">9,15 -</td>
+          <td class="pitch-a">hřiště A</td>
+          <td class="pitch-a">Varnsdorf</td>
+          <td class="pitch-a">–</td>
+          <td class="pitch-a">Vilémov</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+        <tr data-match-no="2" data-time="09:15" data-pitch="B" data-group="B" data-home="SFA Jiřetín" data-away="Union Děčín">
+          <td class="time">9,15 -</td>
+          <td class="pitch-b">hřiště B</td>
+          <td class="pitch-b">SFA Jiřetín</td>
+          <td class="pitch-b">–</td>
+          <td class="pitch-b">Union Děčín</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+        <tr data-match-no="3" data-time="09:30" data-pitch="A" data-group="A" data-home="Šluknov B" data-away="Grossharthau">
+          <td class="time">9,30 -</td>
+          <td class="pitch-a">hřiště A</td>
+          <td class="pitch-a">Šluknov B</td>
+          <td class="pitch-a">–</td>
+          <td class="pitch-a">Grossharthau</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+        <tr data-match-no="4" data-time="09:30" data-pitch="B" data-group="B" data-home="Neusalza" data-away="Česká Lípa B">
+          <td class="time">9,30 -</td>
+          <td class="pitch-b">hřiště B</td>
+          <td class="pitch-b">Neusalza</td>
+          <td class="pitch-b">–</td>
+          <td class="pitch-b">Česká Lípa B</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+        <tr data-match-no="5" data-time="09:45" data-pitch="A" data-group="A" data-home="Varnsdorf" data-away="Česká Lípa A">
+          <td class="time">9,45 -</td>
+          <td class="pitch-a">hřiště A</td>
+          <td class="pitch-a">Varnsdorf</td>
+          <td class="pitch-a">–</td>
+          <td class="pitch-a">Česká Lípa A</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+        <tr data-match-no="6" data-time="09:45" data-pitch="B" data-group="B" data-home="SFA Jiřetín" data-away="Šluknov A">
+          <td class="time">9,45 -</td>
+          <td class="pitch-b">hřiště B</td>
+          <td class="pitch-b">SFA Jiřetín</td>
+          <td class="pitch-b">–</td>
+          <td class="pitch-b">Šluknov A</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+        <tr data-match-no="7" data-time="10:00" data-pitch="A" data-group="A" data-home="Šluknov B" data-away="Grossharthau">
+          <td class="time">10,00 -</td>
+          <td class="pitch-a">hřiště A</td>
+          <td class="pitch-a">Šluknov B</td>
+          <td class="pitch-a">–</td>
+          <td class="pitch-a">Grossharthau</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+        <tr data-match-no="8" data-time="10:00" data-pitch="B" data-group="B" data-home="Neusalza" data-away="Česká Lípa B">
+          <td class="time">10,00 -</td>
+          <td class="pitch-b">hřiště B</td>
+          <td class="pitch-b">Neusalza</td>
+          <td class="pitch-b">–</td>
+          <td class="pitch-b">Česká Lípa B</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+        <tr data-match-no="9" data-time="10:15" data-pitch="A" data-group="A" data-home="Česká Lípa A" data-away="Vilémov">
+          <td class="time">10,15 -</td>
+          <td class="pitch-a">hřiště A</td>
+          <td class="pitch-a">Česká Lípa A</td>
+          <td class="pitch-a">–</td>
+          <td class="pitch-a">Vilémov</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+        <tr data-match-no="10" data-time="10:15" data-pitch="B" data-group="B" data-home="Šluknov A" data-away="Union Děčín">
+          <td class="time">10,15 -</td>
+          <td class="pitch-b">hřiště B</td>
+          <td class="pitch-b">Šluknov A</td>
+          <td class="pitch-b">–</td>
+          <td class="pitch-b">Union Děčín</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+        <tr data-match-no="11" data-time="10:30" data-pitch="A" data-group="A" data-home="Varnsdorf" data-away="Šluknov B">
+          <td class="time">10,30 -</td>
+          <td class="pitch-a">hřiště A</td>
+          <td class="pitch-a">Varnsdorf</td>
+          <td class="pitch-a">–</td>
+          <td class="pitch-a">Šluknov B</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+        <tr data-match-no="12" data-time="10:30" data-pitch="B" data-group="B" data-home="SFA Jiřetín" data-away="Neusalza">
+          <td class="time">10,30 -</td>
+          <td class="pitch-b">hřiště B</td>
+          <td class="pitch-b">SFA Jiřetín</td>
+          <td class="pitch-b">–</td>
+          <td class="pitch-b">Neusalza</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+        <tr data-match-no="13" data-time="10:45" data-pitch="A" data-group="A" data-home="Česká Lípa A" data-away="Grossharthau">
+          <td class="time">10,45 -</td>
+          <td class="pitch-a">hřiště A</td>
+          <td class="pitch-a">Česká Lípa A</td>
+          <td class="pitch-a">–</td>
+          <td class="pitch-a">Grossharthau</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+        <tr data-match-no="14" data-time="10:45" data-pitch="B" data-group="B" data-home="Šluknov A" data-away="Česká Lípa B">
+          <td class="time">10,45 -</td>
+          <td class="pitch-b">hřiště B</td>
+          <td class="pitch-b">Šluknov A</td>
+          <td class="pitch-b">–</td>
+          <td class="pitch-b">Česká Lípa B</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+        <tr data-match-no="15" data-time="11:00" data-pitch="A" data-group="A" data-home="Šluknov B" data-away="Vilémov">
+          <td class="time">11,00 -</td>
+          <td class="pitch-a">hřiště A</td>
+          <td class="pitch-a">Šluknov B</td>
+          <td class="pitch-a">–</td>
+          <td class="pitch-a">Vilémov</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+        <tr data-match-no="16" data-time="11:00" data-pitch="B" data-group="B" data-home="Neusalza" data-away="Union Děčín">
+          <td class="time">11,00 -</td>
+          <td class="pitch-b">hřiště B</td>
+          <td class="pitch-b">Neusalza</td>
+          <td class="pitch-b">–</td>
+          <td class="pitch-b">Union Děčín</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+        <tr data-match-no="17" data-time="11:15" data-pitch="A" data-group="A" data-home="Varnsdorf" data-away="Grossharthau">
+          <td class="time">11,15 -</td>
+          <td class="pitch-a">hřiště A</td>
+          <td class="pitch-a">Varnsdorf</td>
+          <td class="pitch-a">–</td>
+          <td class="pitch-a">Grossharthau</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+        <tr data-match-no="18" data-time="11:15" data-pitch="B" data-group="B" data-home="SFA Jiřetín" data-away="Česká Lípa B">
+          <td class="time">11,15 -</td>
+          <td class="pitch-b">hřiště B</td>
+          <td class="pitch-b">SFA Jiřetín</td>
+          <td class="pitch-b">–</td>
+          <td class="pitch-b">Česká Lípa B</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+        <tr data-match-no="19" data-time="11:30" data-pitch="A" data-group="A" data-home="Vilémov" data-away="Česká Lípa A">
+          <td class="time">11,30 -</td>
+          <td class="pitch-a">hřiště A</td>
+          <td class="pitch-a">Vilémov</td>
+          <td class="pitch-a">–</td>
+          <td class="pitch-a">Česká Lípa A</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+        <tr data-match-no="20" data-time="11:30" data-pitch="B" data-group="B" data-home="Union Děčín" data-away="Šluknov A">
+          <td class="time">11,30 -</td>
+          <td class="pitch-b">hřiště B</td>
+          <td class="pitch-b">Union Děčín</td>
+          <td class="pitch-b">–</td>
+          <td class="pitch-b">Šluknov A</td>
+          <td class="score-cell" data-field="score"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <section class="footer-notes">
+      <p>Časy jsou orientační.</p>
+      <p>Přestávka do 12 hodin, pak začne Play off !!!</p>
+    </section>
+  </main>
+
+  <script type="application/json" id="structured-schedule-data">
+  {
+  "tournament": "Bambiny CUP 2026",
+  "break_until": "12:00",
+  "next_phase": "Play off",
+  "times_note": "Časy jsou orientační (Zeiten sind Richtwerte)",
+  "matches": [
+    {
+      "match_no": 1,
+      "time": "09:15",
+      "time_original": "9,15",
+      "pitch": "A",
+      "group": "A",
+      "home": "Varnsdorf",
+      "away": "Vilémov"
+    },
+    {
+      "match_no": 2,
+      "time": "09:15",
+      "time_original": "9,15",
+      "pitch": "B",
+      "group": "B",
+      "home": "SFA Jiřetín",
+      "away": "Union Děčín"
+    },
+    {
+      "match_no": 3,
+      "time": "09:30",
+      "time_original": "9,30",
+      "pitch": "A",
+      "group": "A",
+      "home": "Šluknov B",
+      "away": "Grossharthau"
+    },
+    {
+      "match_no": 4,
+      "time": "09:30",
+      "time_original": "9,30",
+      "pitch": "B",
+      "group": "B",
+      "home": "Neusalza",
+      "away": "Česká Lípa B"
+    },
+    {
+      "match_no": 5,
+      "time": "09:45",
+      "time_original": "9,45",
+      "pitch": "A",
+      "group": "A",
+      "home": "Varnsdorf",
+      "away": "Česká Lípa A"
+    },
+    {
+      "match_no": 6,
+      "time": "09:45",
+      "time_original": "9,45",
+      "pitch": "B",
+      "group": "B",
+      "home": "SFA Jiřetín",
+      "away": "Šluknov A"
+    },
+    {
+      "match_no": 7,
+      "time": "10:00",
+      "time_original": "10,00",
+      "pitch": "A",
+      "group": "A",
+      "home": "Šluknov B",
+      "away": "Grossharthau"
+    },
+    {
+      "match_no": 8,
+      "time": "10:00",
+      "time_original": "10,00",
+      "pitch": "B",
+      "group": "B",
+      "home": "Neusalza",
+      "away": "Česká Lípa B"
+    },
+    {
+      "match_no": 9,
+      "time": "10:15",
+      "time_original": "10,15",
+      "pitch": "A",
+      "group": "A",
+      "home": "Česká Lípa A",
+      "away": "Vilémov"
+    },
+    {
+      "match_no": 10,
+      "time": "10:15",
+      "time_original": "10,15",
+      "pitch": "B",
+      "group": "B",
+      "home": "Šluknov A",
+      "away": "Union Děčín"
+    },
+    {
+      "match_no": 11,
+      "time": "10:30",
+      "time_original": "10,30",
+      "pitch": "A",
+      "group": "A",
+      "home": "Varnsdorf",
+      "away": "Šluknov B"
+    },
+    {
+      "match_no": 12,
+      "time": "10:30",
+      "time_original": "10,30",
+      "pitch": "B",
+      "group": "B",
+      "home": "SFA Jiřetín",
+      "away": "Neusalza"
+    },
+    {
+      "match_no": 13,
+      "time": "10:45",
+      "time_original": "10,45",
+      "pitch": "A",
+      "group": "A",
+      "home": "Česká Lípa A",
+      "away": "Grossharthau"
+    },
+    {
+      "match_no": 14,
+      "time": "10:45",
+      "time_original": "10,45",
+      "pitch": "B",
+      "group": "B",
+      "home": "Šluknov A",
+      "away": "Česká Lípa B"
+    },
+    {
+      "match_no": 15,
+      "time": "11:00",
+      "time_original": "11,00",
+      "pitch": "A",
+      "group": "A",
+      "home": "Šluknov B",
+      "away": "Vilémov"
+    },
+    {
+      "match_no": 16,
+      "time": "11:00",
+      "time_original": "11,00",
+      "pitch": "B",
+      "group": "B",
+      "home": "Neusalza",
+      "away": "Union Děčín"
+    },
+    {
+      "match_no": 17,
+      "time": "11:15",
+      "time_original": "11,15",
+      "pitch": "A",
+      "group": "A",
+      "home": "Varnsdorf",
+      "away": "Grossharthau"
+    },
+    {
+      "match_no": 18,
+      "time": "11:15",
+      "time_original": "11,15",
+      "pitch": "B",
+      "group": "B",
+      "home": "SFA Jiřetín",
+      "away": "Česká Lípa B"
+    },
+    {
+      "match_no": 19,
+      "time": "11:30",
+      "time_original": "11,30",
+      "pitch": "A",
+      "group": "A",
+      "home": "Vilémov",
+      "away": "Česká Lípa A"
+    },
+    {
+      "match_no": 20,
+      "time": "11:30",
+      "time_original": "11,30",
+      "pitch": "B",
+      "group": "B",
+      "home": "Union Děčín",
+      "away": "Šluknov A"
+    }
+  ]
+}
+  </script>
+</body>
+</html>

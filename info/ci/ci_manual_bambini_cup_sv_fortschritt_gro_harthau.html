@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Manual v1.0 — Bambini-Cup SV Fortschritt Großharthau</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans (Display & Body) + JetBrains Mono (Metadaten & Spezifikationen) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        alabaster: '#F7F6F2',
+                        paper: '#FFFFFF',
+                        slate: {
+                            ink: '#181B1A',
+                            stone: '#5C6360',
+                            hairline: '#DEDCD5',
+                        },
+                        sage: {
+                            DEFAULT: '#3B5E4D',
+                            dark: '#284235',
+                            mist: '#E3EBE6',
+                        },
+                        terracotta: {
+                            DEFAULT: '#D97757',
+                            soft: '#F4E3DC',
+                        },
+                        ochre: {
+                            DEFAULT: '#E2B86B',
+                            soft: '#F8F0DF',
+                        }
+                    },
+                    letterSpacing: {
+                        tightest: '-0.035em',
+                        tighter: '-0.025em',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Architektur-Raster-Subtilität & saubere Typografie */
+        body {
+            background-color: #F7F6F2;
+            color: #181B1A;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .architectural-grid-bg {
+            background-size: 48px 48px;
+            background-image: 
+                linear-gradient(to right, rgba(24, 27, 26, 0.035) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(24, 27, 26, 0.035) 1px, transparent 1px);
+        }
+        .clearspace-grid {
+            background-size: 16px 16px;
+            background-image: 
+                linear-gradient(to right, rgba(59, 94, 77, 0.09) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(59, 94, 77, 0.09) 1px, transparent 1px);
+        }
+        /* Sanfte Übergänge für interaktive Karten */
+        .swatch-card {
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .swatch-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px -8px rgba(24, 27, 26, 0.08);
+        }
+    </style>
+</head>
+<body class="font-sans selection:bg-sage selection:text-white overflow-x-hidden">
+
+    <!-- Benachrichtigungs-Toast für Copy-to-Clipboard -->
+    <div id="copyToast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-slate-ink text-alabaster px-4 py-3 rounded-lg shadow-xl border border-white/10 flex items-center gap-3">
+            <span id="toastSwatch" class="w-3.5 h-3.5 rounded-full border border-white/30"></span>
+            <span class="font-mono text-xs tracking-wide" id="toastMessage">HEX-Code kopiert</span>
+        </div>
+    </div>
+
+    <!-- Sticky Architektur-Navigation -->
+    <header class="sticky top-0 z-40 bg-alabaster/90 backdrop-blur-md border-b border-slate-hairline">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between">
+            <!-- Links: Kompakte Brand-Kennung -->
+            <a href="#top" class="flex items-center gap-3 group">
+                <div class="w-8 h-8 rounded-md bg-sage flex items-center justify-center text-white transition-transform duration-300 group-hover:scale-105">
+                    <!-- Miniatur Turnier-Signet -->
+                    <svg class="w-5 h-5" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 25V11C6 8.23858 8.23858 6 11 6H21C23.7614 6 26 8.23858 26 11V25" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="16" cy="19" r="4.5" fill="#E2B86B"/>
+                    </svg>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xs font-semibold tracking-tight text-slate-ink uppercase">Bambini-Cup Großharthau</span>
+                    <span class="font-mono text-[10px] text-slate-stone">CI DESIGN SYSTEM // V1.0</span>
+                </div>
+            </a>
+
+            <!-- Rechts: Kapitel-Navigation -->
+            <nav class="hidden md:flex items-center gap-7 text-xs font-medium text-slate-stone">
+                <a href="#philosophie" class="hover:text-slate-ink transition-colors py-1">01 Philosophie</a>
+                <a href="#logos" class="hover:text-slate-ink transition-colors py-1">02 Markenzeichen</a>
+                <a href="#farben" class="hover:text-slate-ink transition-colors py-1">03 Farbsystem</a>
+                <a href="#typografie" class="hover:text-slate-ink transition-colors py-1">04 Typografie</a>
+                <a href="#grafik" class="hover:text-slate-ink transition-colors py-1">05 Spielfeld-Grafik</a>
+                <a href="#anwendungen" class="hover:text-slate-ink transition-colors py-1">06 Anwendungen</a>
+            </nav>
+
+            <!-- Status-Badge rechts -->
+            <div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-sage-mist border border-sage/20">
+                <span class="w-1.5 h-1.5 rounded-full bg-sage"></span>
+                <span class="font-mono text-[11px] text-sage-dark font-medium">SVF GROßHARTHAU</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- =====================================================================
+         HERO SECTION: ARCHITEKTONISCHE ERÖFFNUNG
+    ====================================================================== -->
+    <section id="top" class="relative border-b border-slate-hairline architectural-grid-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 pt-14 pb-20 lg:pt-24 lg:pb-28">
+            
+            <!-- Obere Metadaten-Leiste im Schweizer Raster -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pb-8 mb-12 border-b border-slate-hairline font-mono text-[11px] text-slate-stone uppercase tracking-wider">
+                <div>
+                    <span class="block text-[10px] opacity-60">Veranstalter</span>
+                    <span class="text-slate-ink font-medium">SV Fortschritt Großharthau e.V.</span>
+                </div>
+                <div>
+                    <span class="block text-[10px] opacity-60">Wettbewerbsklasse</span>
+                    <span class="text-slate-ink font-medium">G-Junioren // U7 Bambini</span>
+                </div>
+                <div>
+                    <span class="block text-[10px] opacity-60">Austragungsort</span>
+                    <span class="text-slate-ink font-medium">Sportplatz Großharthau, Sachsen</span>
+                </div>
+                <div class="md:text-right">
+                    <span class="block text-[10px] opacity-60">Dokument-Typ</span>
+                    <span class="text-sage font-medium">Corporate Identity Manual</span>
+                </div>
+            </div>
+
+            <!-- Haupt-Grid: Asymmetrisch 8 / 4 Spalten -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
+                <div class="lg:col-span-8 space-y-6">
+                    <div class="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-md bg-paper border border-slate-hairline shadow-xs">
+                        <span class="w-2 h-2 rounded-full bg-terracotta"></span>
+                        <span class="font-mono text-xs text-slate-stone">VISUELLE IDENTITÄT &amp; GESTALTUNGSRICHTLINIEN</span>
+                    </div>
+                    
+                    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-semibold tracking-tightest text-slate-ink leading-[1.04]">
+                        KLEINES FELD.<br>
+                        <span class="text-sage">GROSSE SCHRITTE.</span>
+                    </h1>
+                    
+                    <p class="text-lg sm:text-xl text-slate-stone max-w-2xl font-normal leading-relaxed">
+                        Ein zeitgemäßes, architektonisch klares Erscheinungsbild für den Bambini-Cup des <strong class="font-medium text-slate-ink">SV Fortschritt Großharthau</strong>. Reduziert im Aufbau, warm in der Farbwelt – gestaltet für den ersten großen Auftritt der kleinsten Kicker.
+                    </p>
+                </div>
+
+                <!-- Rechts: Architektonisches Co-Branding-Key-Visual -->
+                <div class="lg:col-span-4">
+                    <div class="bg-paper border border-slate-hairline rounded-2xl p-7 shadow-sm relative overflow-hidden">
+                        <!-- Feine Spielfeld-Vektor-Linie im Hintergrund -->
+                        <svg class="absolute -right-8 -bottom-8 w-44 h-44 text-sage/10 pointer-events-none" viewBox="0 0 160 160" fill="none">
+                            <circle cx="80" cy="80" r="64" stroke="currentColor" stroke-width="1.5"/>
+                            <circle cx="80" cy="80" r="4" fill="currentColor"/>
+                            <line x1="0" y1="80" x2="160" y2="80" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+
+                        <div class="flex items-center justify-between pb-6 mb-6 border-b border-slate-hairline">
+                            <span class="font-mono text-[11px] text-slate-stone">CO-BRANDING LOCKUP</span>
+                            <span class="font-mono text-[11px] px-2 py-0.5 rounded bg-ochre-soft text-slate-ink">EST. 1948 / U7</span>
+                        </div>
+
+                        <div class="flex items-center justify-around gap-4 py-4">
+                            <!-- Mini-Vereinswappen -->
+                            <div class="flex flex-col items-center gap-2">
+                                <svg class="w-16 h-20" viewBox="0 0 80 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8 10C8 7.79086 9.79086 6 12 6H68C70.2091 6 72 7.79086 72 10V48C72 71.5 40 88 40 88C40 88 8 71.5 8 48V10Z" fill="#3B5E4D"/>
+                                    <path d="M13 13H67V47C67 66.8 40 81.5 40 81.5C40 81.5 13 66.8 13 47V13Z" stroke="#E2B86B" stroke-width="1.25"/>
+                                    <!-- Dynamisches Fortschritt-F & Schärpe -->
+                                    <path d="M13 54L67 34V45L13 65V54Z" fill="#FFFFFF" fill-opacity="0.16"/>
+                                    <text x="40" y="32" text-anchor="middle" fill="#FFFFFF" font-family="Plus Jakarta Sans, sans-serif" font-weight="700" font-size="11" letter-spacing="1.5">SVF</text>
+                                    <!-- Stilisierter Traditionsball -->
+                                    <circle cx="40" cy="54" r="10" fill="#F7F6F2"/>
+                                    <path d="M40 44V64M30 54H50M33 47L47 61M47 47L33 61" stroke="#3B5E4D" stroke-width="1.2"/>
+                                </svg>
+                                <span class="font-mono text-[10px] text-slate-stone">VEREIN</span>
+                            </div>
+
+                            <div class="h-14 w-px bg-slate-hairline"></div>
+
+                            <!-- Mini-Turniersignet -->
+                            <div class="flex flex-col items-center gap-2">
+                                <svg class="w-16 h-20" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="6" y="6" width="68" height="68" rx="14" fill="#F7F6F2" stroke="#DEDCD5" stroke-width="1.2"/>
+                                    <!-- Torbogen / Spielfeld-Architektur -->
+                                    <path d="M22 58V34C22 24.0589 30.0589 16 40 16C49.9411 16 58 24.0589 58 34V58" stroke="#3B5E4D" stroke-width="2.5" stroke-linecap="round"/>
+                                    <path d="M29 58V37C29 30.9249 33.9249 26 40 26C46.0751 26 51 30.9249 51 37V58" stroke="#D97757" stroke-width="2" stroke-linecap="round"/>
+                                    <!-- Bambini Ball als Sonnenpunkt -->
+                                    <circle cx="40" cy="48" r="7.5" fill="#E2B86B"/>
+                                </svg>
+                                <span class="font-mono text-[10px] text-slate-stone">TURNIER</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 pt-4 border-t border-slate-hairline flex items-center justify-between text-xs text-slate-stone">
+                            <span>Farbgewichtung</span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-4 h-2 rounded-xs bg-alabaster border border-slate-hairline" title="70% Alabaster"></span>
+                                <span class="w-3 h-2 rounded-xs bg-sage" title="20% Salbeigrün"></span>
+                                <span class="w-2 h-2 rounded-xs bg-terracotta" title="6% Terrakotta"></span>
+                                <span class="w-1.5 h-2 rounded-xs bg-ochre" title="4% Sandgold"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         01. DESIGN-PHILOSOPHIE
+    ====================================================================== -->
+    <section id="philosophie" class="py-20 lg:py-28 border-b border-slate-hairline">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <!-- Kapitel-Kopf -->
+                <div class="lg:col-span-4 space-y-3">
+                    <span class="font-mono text-xs text-sage font-medium tracking-wider uppercase">01 // Leitgedanke</span>
+                    <h2 class="text-3xl font-semibold tracking-tight text-slate-ink">Architektur trifft Kinderspiel.</h2>
+                    <p class="text-sm text-slate-stone leading-relaxed">
+                        Warum wir bewusst auf überladene Cliparts, schrille Primärfarben und verspielte Comic-Schriften verzichten.
+                    </p>
+                </div>
+
+                <!-- 3 Prinzipien im klaren Raster -->
+                <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-paper border border-slate-hairline rounded-xl p-6 flex flex-col justify-between space-y-6">
+                        <div class="w-9 h-9 rounded-lg bg-sage-mist text-sage flex items-center justify-center font-mono text-xs font-semibold">01</div>
+                        <div>
+                            <h3 class="text-base font-semibold text-slate-ink mb-2">Ruhe als Bühne</h3>
+                            <p class="text-sm text-slate-stone leading-relaxed">
+                                Auf dem Platz herrschen Bewegung, Jubel und Emotion. Das Design bildet den ruhigen, strukturierten Rahmen – wie ein moderner Pavillon am Spielfeldrand.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-paper border border-slate-hairline rounded-xl p-6 flex flex-col justify-between space-y-6">
+                        <div class="w-9 h-9 rounded-lg bg-terracotta-soft text-terracotta flex items-center justify-center font-mono text-xs font-semibold">02</div>
+                        <div>
+                            <h3 class="text-base font-semibold text-slate-ink mb-2">Natürliche Wärme</h3>
+                            <p class="text-sm text-slate-stone leading-relaxed">
+                                Statt künstlichem Neon setzen wir auf sanftes Salbeigrün, warmes Terrakotta und weiches Papierweiß. Kinderfreundlich, einladend und hochwertig gedruckt.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-paper border border-slate-hairline rounded-xl p-6 flex flex-col justify-between space-y-6">
+                        <div class="w-9 h-9 rounded-lg bg-ochre-soft text-slate-ink flex items-center justify-center font-mono text-xs font-semibold">03</div>
+                        <div>
+                            <h3 class="text-base font-semibold text-slate-ink mb-2">Wertschätzung</h3>
+                            <p class="text-sm text-slate-stone leading-relaxed">
+                                Für fünf- und sechsjährige Kinder ist das erste Turnier ein Meilenstein. Urkunden und Medaillen sollen Erinnerungsstücke sein, die man gerne einrahmt.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         02. LOGOS & MARKENZEICHEN (VEREIN & TURNIER)
+    ====================================================================== -->
+    <section id="logos" class="py-20 lg:py-28 border-b border-slate-hairline bg-paper">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 space-y-16">
+            
+            <!-- Kapitel-Header -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-slate-hairline">
+                <div class="space-y-3 max-w-2xl">
+                    <span class="font-mono text-xs text-sage font-medium tracking-wider uppercase">02 // Markenzeichen &amp; Identität</span>
+                    <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-ink">Vereinswappen &amp; Turnier-Signet</h2>
+                    <p class="text-sm sm:text-base text-slate-stone">
+                        Das Erscheinungsbild verbindet die stolze Tradition des <strong class="text-slate-ink font-medium">SV Fortschritt Großharthau</strong> mit einer eigenständigen, geometrischen Wort-Bild-Marke für den Bambini-Cup.
+                    </p>
+                </div>
+                <div class="font-mono text-xs text-slate-stone bg-alabaster px-3.5 py-2 rounded-lg border border-slate-hairline">
+                    VEKTOR-BASIS // SVG &amp; PRINT READY
+                </div>
+            </div>
+
+            <!-- Teil A: Das Vereinslogo SV Fortschritt Großharthau -->
+            <div class="space-y-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-slate-ink">A. Gastgeber-Logo: SV Fortschritt Großharthau</h3>
+                    <span class="font-mono text-xs text-slate-stone">NEUINTERPRETATION IM CI-FARBRAUM</span>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Hauptdarstellung Vereinswappen + Wortmarke -->
+                    <div class="lg:col-span-7 bg-alabaster border border-slate-hairline rounded-2xl p-8 sm:p-12 flex flex-col sm:flex-row items-center justify-center gap-8">
+                        <!-- Detailliertes Vereinswappen SVG -->
+                        <svg class="w-32 h-40 shrink-0 drop-shadow-xs" viewBox="0 0 140 172" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vereinswappen SV Fortschritt Großharthau">
+                            <!-- Äußere Schildform -->
+                            <path d="M14 18C14 12.4772 18.4772 8 24 8H116C121.523 8 126 12.4772 126 18V86C126 128.5 70 162 70 162C70 162 14 128.5 14 86V18Z" fill="#3B5E4D"/>
+                            <!-- Feine Innenkontur in Sandgold -->
+                            <path d="M21 20C21 17.2386 23.2386 15 26 15H114C116.761 15 119 17.2386 119 20V85C119 122.4 70 152.5 70 152.5C70 152.5 21 122.4 21 85V20Z" stroke="#E2B86B" stroke-width="1.5"/>
+                            <!-- Diagonale Traditions-Schärpe -->
+                            <path d="M21 96L119 56V76L21 116V96Z" fill="#FFFFFF" fill-opacity="0.14"/>
+                            <!-- Oberes Typo-Band -->
+                            <text x="70" y="36" text-anchor="middle" fill="#E2B86B" font-family="JetBrains Mono, monospace" font-weight="600" font-size="9.5" letter-spacing="2">SEIT 1948</text>
+                            <text x="70" y="55" text-anchor="middle" fill="#FFFFFF" font-family="Plus Jakarta Sans, sans-serif" font-weight="700" font-size="18" letter-spacing="2">SVF</text>
+                            <!-- Klassischer Lederball-Emblem im Zentrum -->
+                            <circle cx="70" cy="94" r="20" fill="#F7F6F2" stroke="#181B1A" stroke-width="1.5"/>
+                            <!-- Fünfeck-Muster im Ball -->
+                            <polygon points="70,84 79,91 75,102 65,102 61,91" fill="#3B5E4D"/>
+                            <line x1="70" y1="74" x2="70" y2="84" stroke="#3B5E4D" stroke-width="1.5"/>
+                            <line x1="89" y1="88" x2="79" y2="91" stroke="#3B5E4D" stroke-width="1.5"/>
+                            <line x1="82" y1="110" x2="75" y2="102" stroke="#3B5E4D" stroke-width="1.5"/>
+                            <line x1="58" y1="110" x2="65" y2="102" stroke="#3B5E4D" stroke-width="1.5"/>
+                            <line x1="51" y1="88" x2="61" y2="91" stroke="#3B5E4D" stroke-width="1.5"/>
+                            <!-- Ort-Kürzel unten -->
+                            <text x="70" y="131" text-anchor="middle" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-weight="500" font-size="8.5" letter-spacing="1.8">GROßHARTHAU</text>
+                        </svg>
+
+                        <!-- Horizontale Vereins-Typografie -->
+                        <div class="text-center sm:text-left space-y-2">
+                            <div class="inline-block px-2.5 py-0.5 rounded bg-sage-mist text-sage-dark font-mono text-[10px] tracking-wider uppercase">
+                                Gastgebender Sportverein
+                            </div>
+                            <div class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-ink leading-tight">
+                                SV FORTSCHRITT<br>
+                                <span class="text-sage">GROßHARTHAU</span>
+                            </div>
+                            <p class="text-xs text-slate-stone max-w-xs leading-relaxed">
+                                Abteilung Fußball · Nachwuchsförderung Oberlausitz / Landkreis Bautzen. Harmoniert farblich nahtlos mit der Turnier-CI.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Varianten des Vereinslogos (Invertiert & Monochrom) -->
+                    <div class="lg:col-span-5 grid grid-cols-2 gap-4">
+                        <!-- Dunkelgrün Invertiert -->
+                        <div class="bg-sage-dark rounded-2xl p-6 flex flex-col items-center justify-between text-center">
+                            <span class="font-mono text-[10px] text-sage-mist/70 self-start">INVERTIERT // DARK</span>
+                            <svg class="w-16 h-20 my-4" viewBox="0 0 140 172" fill="none">
+                                <path d="M14 18C14 12.4772 18.4772 8 24 8H116C121.523 8 126 12.4772 126 18V86C126 128.5 70 162 70 162C70 162 14 128.5 14 86V18Z" fill="#F7F6F2"/>
+                                <path d="M21 20C21 17.2386 23.2386 15 26 15H114C116.761 15 119 17.2386 119 20V85C119 122.4 70 152.5 70 152.5C70 152.5 21 122.4 21 85V20Z" stroke="#3B5E4D" stroke-width="2"/>
+                                <text x="70" y="54" text-anchor="middle" fill="#181B1A" font-family="Plus Jakarta Sans, sans-serif" font-weight="700" font-size="20" letter-spacing="2">SVF</text>
+                                <circle cx="70" cy="94" r="19" fill="#3B5E4D"/>
+                                <polygon points="70,84 79,91 75,102 65,102 61,91" fill="#E2B86B"/>
+                                <text x="70" y="131" text-anchor="middle" fill="#181B1A" font-family="JetBrains Mono, monospace" font-weight="600" font-size="8.5" letter-spacing="1.5">GROßHARTHAU</text>
+                            </svg>
+                            <span class="font-mono text-[10px] text-white/80">Auf Salbei-Dunkel</span>
+                        </div>
+
+                        <!-- Monochrom / Stempel-Variante -->
+                        <div class="bg-alabaster border border-slate-hairline rounded-2xl p-6 flex flex-col items-center justify-between text-center">
+                            <span class="font-mono text-[10px] text-slate-stone self-start">MONOCHROM // INK</span>
+                            <svg class="w-16 h-20 my-4" viewBox="0 0 140 172" fill="none">
+                                <path d="M14 18C14 12.4772 18.4772 8 24 8H116C121.523 8 126 12.4772 126 18V86C126 128.5 70 162 70 162C70 162 14 128.5 14 86V18Z" stroke="#181B1A" stroke-width="3"/>
+                                <text x="70" y="54" text-anchor="middle" fill="#181B1A" font-family="Plus Jakarta Sans, sans-serif" font-weight="700" font-size="20" letter-spacing="2">SVF</text>
+                                <circle cx="70" cy="94" r="19" stroke="#181B1A" stroke-width="2.5"/>
+                                <polygon points="70,84 79,91 75,102 65,102 61,91" fill="#181B1A"/>
+                                <text x="70" y="131" text-anchor="middle" fill="#181B1A" font-family="JetBrains Mono, monospace" font-weight="600" font-size="8.5" letter-spacing="1.5">GROßHARTHAU</text>
+                            </svg>
+                            <span class="font-mono text-[10px] text-slate-stone">Gravur / Stempel</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teil B: Turnier-Wort-Bild-Marke & Schutzzone -->
+            <div class="space-y-6 pt-6 border-t border-slate-hairline">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-slate-ink">B. Turnier-Signet: Großharthau Bambini-Cup</h3>
+                    <span class="font-mono text-xs text-slate-stone">GEOMETRISCHE WORT-BILD-MARKE</span>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Primäre Wort-Bild-Marke -->
+                    <div class="lg:col-span-7 bg-alabaster border border-slate-hairline rounded-2xl p-8 sm:p-12 flex items-center justify-center">
+                        <div class="flex flex-col sm:flex-row items-center gap-6">
+                            <!-- Geometrisches Turnier-Emblem -->
+                            <svg class="w-24 h-24 shrink-0" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="4" y="4" width="88" height="88" rx="20" fill="#FFFFFF" stroke="#DEDCD5" stroke-width="1.5"/>
+                                <!-- Äußerer Torbogen (Salbeigrün) -->
+                                <path d="M26 70V42C26 29.8497 35.8497 20 48 20C60.1503 20 70 29.8497 70 42V70" stroke="#3B5E4D" stroke-width="3.5" stroke-linecap="round"/>
+                                <!-- Innerer Bewegungsbogen / Kleine Schritte (Terrakotta) -->
+                                <path d="M35 70V45C35 37.8203 40.8203 32 48 32C55.1797 32 61 37.8203 61 45V70" stroke="#D97757" stroke-width="2.5" stroke-linecap="round"/>
+                                <!-- Grundlinie Spielfeld -->
+                                <line x1="20" y1="70" x2="76" y2="70" stroke="#181B1A" stroke-width="2" stroke-linecap="round"/>
+                                <!-- Bambini-Ball / Sonne im Zentrum -->
+                                <circle cx="48" cy="56" r="8.5" fill="#E2B86B"/>
+                            </svg>
+
+                            <div class="text-center sm:text-left">
+                                <div class="font-mono text-xs tracking-[0.2em] text-terracotta font-semibold uppercase mb-1">
+                                    GROßHARTHAU
+                                </div>
+                                <div class="text-3xl sm:text-4xl font-bold tracking-tight text-slate-ink leading-none">
+                                    BAMBINI CUP
+                                </div>
+                                <div class="mt-2.5 flex items-center justify-center sm:justify-start gap-2 font-mono text-[11px] text-slate-stone">
+                                    <span>G-JUGEND</span>
+                                    <span>•</span>
+                                    <span>SV FORTSCHRITT</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Schutzzonen-Diagramm (Clearspace) -->
+                    <div class="lg:col-span-5 bg-alabaster border border-slate-hairline rounded-2xl p-6 flex flex-col justify-between clearspace-grid relative">
+                        <div class="flex items-center justify-between">
+                            <span class="font-mono text-[10px] bg-paper px-2 py-1 rounded border border-slate-hairline text-slate-ink">SCHUTZZONE // CLEARSPACE (X)</span>
+                            <span class="font-mono text-[10px] text-sage font-medium">MIN. 1X ABSTAND</span>
+                        </div>
+
+                        <div class="my-6 flex items-center justify-center">
+                            <!-- Schutzzonen-Rahmen -->
+                            <div class="relative p-6 border border-dashed border-terracotta bg-paper/80 rounded-xl">
+                                <!-- Eck-Marker X -->
+                                <span class="absolute top-1.5 left-2 font-mono text-[9px] text-terracotta font-semibold">X</span>
+                                <span class="absolute bottom-1.5 right-2 font-mono text-[9px] text-terracotta font-semibold">X</span>
+                                
+                                <div class="flex items-center gap-3">
+                                    <svg class="w-10 h-10" viewBox="0 0 96 96" fill="none">
+                                        <rect x="4" y="4" width="88" height="88" rx="20" fill="#3B5E4D"/>
+                                        <path d="M26 70V42C26 29.8497 35.8497 20 48 20C60.1503 20 70 29.8497 70 42V70" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+                                        <circle cx="48" cy="56" r="9" fill="#E2B86B"/>
+                                    </svg>
+                                    <div>
+                                        <div class="font-mono text-[9px] tracking-widest text-terracotta uppercase">GROßHARTHAU</div>
+                                        <div class="text-base font-bold tracking-tight text-slate-ink leading-none">BAMBINI CUP</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-slate-stone bg-paper/90 p-3 rounded-lg border border-slate-hairline">
+                            Die Schutzzone <span class="font-mono text-slate-ink">X</span> entspricht der Höhe des inneren Torbogens und muss zu anderen Elementen stets frei bleiben.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         03. FARBSYSTEM (INTERAKTIVE SWATCHES & GEWICHTUNG)
+    ====================================================================== -->
+    <section id="farben" class="py-20 lg:py-28 border-b border-slate-hairline">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 space-y-14">
+            
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div class="space-y-3 max-w-2xl">
+                    <span class="font-mono text-xs text-sage font-medium tracking-wider uppercase">03 // Farbarchitektur</span>
+                    <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-ink">Soft, natürlich &amp; kontrastreich.</h2>
+                    <p class="text-sm sm:text-base text-slate-stone">
+                        Inspiriert von morgendlichem Rasen, warmem Tonboden und Sonnenlicht. Klicken Sie auf eine Farbkarte, um den HEX-Wert direkt in die Zwischenablage zu kopieren.
+                    </p>
+                </div>
+
+                <!-- Farbgewichtung Balken -->
+                <div class="w-full md:w-80 bg-paper p-4 rounded-xl border border-slate-hairline space-y-2">
+                    <div class="flex justify-between font-mono text-[10px] text-slate-stone">
+                        <span>FLÄCHEN-VERTEILUNG</span>
+                        <span>70 / 20 / 10 REGEL</span>
+                    </div>
+                    <div class="h-3 w-full rounded-full overflow-hidden flex border border-slate-hairline">
+                        <div class="bg-alabaster h-full" style="width: 70%" title="70% Warm Alabaster"></div>
+                        <div class="bg-sage h-full" style="width: 20%" title="20% Salbei-Rasengrün"></div>
+                        <div class="bg-terracotta h-full" style="width: 6%" title="6% Warmes Terrakotta"></div>
+                        <div class="bg-ochre h-full" style="width: 4%" title="4% Sandgold"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Farbkarten-Raster -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Farbe 1: Warm Alabaster -->
+                <button type="button" onclick="copyHex('#F7F6F2', 'Warm Alabaster')" class="swatch-card text-left bg-paper border border-slate-hairline rounded-2xl overflow-hidden group focus:outline-none focus:ring-2 focus:ring-sage">
+                    <div class="h-36 bg-alabaster border-b border-slate-hairline p-5 flex flex-col justify-between">
+                        <div class="flex justify-between items-center">
+                            <span class="font-mono text-[10px] px-2 py-0.5 rounded bg-paper border border-slate-hairline text-slate-stone">PRIMÄR-FLÄCHE // 70%</span>
+                            <span class="font-mono text-[11px] text-slate-ink opacity-0 group-hover:opacity-100 transition-opacity">Kopieren ⎘</span>
+                        </div>
+                        <span class="font-mono text-xs text-slate-stone">AAA Kontrast mit #181B1A</span>
+                    </div>
+                    <div class="p-5 space-y-3">
+                        <div class="flex items-baseline justify-between">
+                            <h3 class="text-base font-semibold text-slate-ink">Warm Alabaster</h3>
+                            <span class="font-mono text-sm font-medium text-slate-ink">#F7F6F2</span>
+                        </div>
+                        <p class="text-xs text-slate-stone">Sanftes Off-White für Hintergründe, Programmhefte und Urkundenpapier. Blendfrei und warm.</p>
+                        <div class="pt-3 border-t border-slate-hairline grid grid-cols-2 font-mono text-[10px] text-slate-stone">
+                            <span>RGB: 247, 246, 242</span>
+                            <span class="text-right">CMYK: 2, 2, 4, 0</span>
+                        </div>
+                    </div>
+                </button>
+
+                <!-- Farbe 2: Salbei-Rasengrün -->
+                <button type="button" onclick="copyHex('#3B5E4D', 'Salbei-Rasengrün')" class="swatch-card text-left bg-paper border border-slate-hairline rounded-2xl overflow-hidden group focus:outline-none focus:ring-2 focus:ring-sage">
+                    <div class="h-36 bg-sage p-5 flex flex-col justify-between text-white">
+                        <div class="flex justify-between items-center">
+                            <span class="font-mono text-[10px] px-2 py-0.5 rounded bg-white/15 text-white">VEREIN &amp; HAUPTAKZEPT // 20%</span>
+                            <span class="font-mono text-[11px] text-white opacity-0 group-hover:opacity-100 transition-opacity">Kopieren ⎘</span>
+                        </div>
+                        <span class="font-mono text-xs text-white/80">AA+ Kontrast mit Weiß</span>
+                    </div>
+                    <div class="p-5 space-y-3">
+                        <div class="flex items-baseline justify-between">
+                            <h3 class="text-base font-semibold text-slate-ink">Salbei-Rasengrün</h3>
+                            <span class="font-mono text-sm font-medium text-sage">#3B5E4D</span>
+                        </div>
+                        <p class="text-xs text-slate-stone">Die Leitfarbe des SV Fortschritt Großharthau. Steht für Spielfeld, Ruhe, Struktur und Beständigkeit.</p>
+                        <div class="pt-3 border-t border-slate-hairline grid grid-cols-2 font-mono text-[10px] text-slate-stone">
+                            <span>RGB: 59, 94, 77</span>
+                            <span class="text-right">CMYK: 74, 42, 68, 28</span>
+                        </div>
+                    </div>
+                </button>
+
+                <!-- Farbe 3: Warmes Terrakotta -->
+                <button type="button" onclick="copyHex('#D97757', 'Warmes Terrakotta')" class="swatch-card text-left bg-paper border border-slate-hairline rounded-2xl overflow-hidden group focus:outline-none focus:ring-2 focus:ring-sage">
+                    <div class="h-36 bg-terracotta p-5 flex flex-col justify-between text-white">
+                        <div class="flex justify-between items-center">
+                            <span class="font-mono text-[10px] px-2 py-0.5 rounded bg-white/20 text-white">BAMBINI-WÄRME // 6%</span>
+                            <span class="font-mono text-[11px] text-white opacity-0 group-hover:opacity-100 transition-opacity">Kopieren ⎘</span>
+                        </div>
+                        <span class="font-mono text-xs text-white/90">Signalfarbe für Tore &amp; Energie</span>
+                    </div>
+                    <div class="p-5 space-y-3">
+                        <div class="flex items-baseline justify-between">
+                            <h3 class="text-base font-semibold text-slate-ink">Warmes Terrakotta</h3>
+                            <span class="font-mono text-sm font-medium text-terracotta">#D97757</span>
+                        </div>
+                        <p class="text-xs text-slate-stone">Freundliche, erdige Korallnuance. Bringt kindliche Lebensfreude ohne grelle Überreizung.</p>
+                        <div class="pt-3 border-t border-slate-hairline grid grid-cols-2 font-mono text-[10px] text-slate-stone">
+                            <span>RGB: 217, 119, 87</span>
+                            <span class="text-right">CMYK: 12, 62, 68, 1</span>
+                        </div>
+                    </div>
+                </button>
+
+                <!-- Farbe 4: Sanftes Sandgold / Ocker -->
+                <button type="button" onclick="copyHex('#E2B86B', 'Sanftes Sandgold')" class="swatch-card text-left bg-paper border border-slate-hairline rounded-2xl overflow-hidden group focus:outline-none focus:ring-2 focus:ring-sage">
+                    <div class="h-36 bg-ochre p-5 flex flex-col justify-between text-slate-ink">
+                        <div class="flex justify-between items-center">
+                            <span class="font-mono text-[10px] px-2 py-0.5 rounded bg-slate-ink/10 text-slate-ink">POKAL &amp; HIGHLIGHTS // 4%</span>
+                            <span class="font-mono text-[11px] text-slate-ink opacity-0 group-hover:opacity-100 transition-opacity">Kopieren ⎘</span>
+                        </div>
+                        <span class="font-mono text-xs text-slate-ink/80">Medaillen- &amp; Urkundenakzent</span>
+                    </div>
+                    <div class="p-5 space-y-3">
+                        <div class="flex items-baseline justify-between">
+                            <h3 class="text-base font-semibold text-slate-ink">Sanftes Sandgold</h3>
+                            <span class="font-mono text-sm font-medium text-slate-ink">#E2B86B</span>
+                        </div>
+                        <p class="text-xs text-slate-stone">Warmes Ocker-Gold für Sieger-Medaillen, Vereinswappen-Konturen und besondere Auszeichnungen.</p>
+                        <div class="pt-3 border-t border-slate-hairline grid grid-cols-2 font-mono text-[10px] text-slate-stone">
+                            <span>RGB: 226, 184, 107</span>
+                            <span class="text-right">CMYK: 12, 28, 65, 0</span>
+                        </div>
+                    </div>
+                </button>
+
+                <!-- Farbe 5: Nebelgrün -->
+                <button type="button" onclick="copyHex('#E3EBE6', 'Helles Nebelgrün')" class="swatch-card text-left bg-paper border border-slate-hairline rounded-2xl overflow-hidden group focus:outline-none focus:ring-2 focus:ring-sage">
+                    <div class="h-36 bg-sage-mist border-b border-slate-hairline p-5 flex flex-col justify-between text-slate-ink">
+                        <div class="flex justify-between items-center">
+                            <span class="font-mono text-[10px] px-2 py-0.5 rounded bg-paper text-sage-dark">SEKUNDÄR-FLÄCHE</span>
+                            <span class="font-mono text-[11px] text-sage-dark opacity-0 group-hover:opacity-100 transition-opacity">Kopieren ⎘</span>
+                        </div>
+                        <span class="font-mono text-xs text-sage-dark/80">Tabellen &amp; Spielplan-Zeilen</span>
+                    </div>
+                    <div class="p-5 space-y-3">
+                        <div class="flex items-baseline justify-between">
+                            <h3 class="text-base font-semibold text-slate-ink">Helles Nebelgrün</h3>
+                            <span class="font-mono text-sm font-medium text-sage-dark">#E3EBE6</span>
+                        </div>
+                        <p class="text-xs text-slate-stone">Subtile Tönung für Infoboxen, Zeitpläne und Wechselzeilen in Turnierübersichten.</p>
+                        <div class="pt-3 border-t border-slate-hairline grid grid-cols-2 font-mono text-[10px] text-slate-stone">
+                            <span>RGB: 227, 235, 230</span>
+                            <span class="text-right">CMYK: 11, 4, 9, 0</span>
+                        </div>
+                    </div>
+                </button>
+
+                <!-- Farbe 6: Schiefer-Anthrazit -->
+                <button type="button" onclick="copyHex('#181B1A', 'Schiefer-Anthrazit')" class="swatch-card text-left bg-paper border border-slate-hairline rounded-2xl overflow-hidden group focus:outline-none focus:ring-2 focus:ring-sage">
+                    <div class="h-36 bg-slate-ink p-5 flex flex-col justify-between text-white">
+                        <div class="flex justify-between items-center">
+                            <span class="font-mono text-[10px] px-2 py-0.5 rounded bg-white/15 text-white">TYPOGRAFIE &amp; STRUKTUR</span>
+                            <span class="font-mono text-[11px] text-white opacity-0 group-hover:opacity-100 transition-opacity">Kopieren ⎘</span>
+                        </div>
+                        <span class="font-mono text-xs text-white/75">Weicher als reines Schwarz</span>
+                    </div>
+                    <div class="p-5 space-y-3">
+                        <div class="flex items-baseline justify-between">
+                            <h3 class="text-base font-semibold text-slate-ink">Schiefer-Anthrazit</h3>
+                            <span class="font-mono text-sm font-medium text-slate-ink">#181B1A</span>
+                        </div>
+                        <p class="text-xs text-slate-stone">Tiefes, organisch abgetöntes Anthrazit für höchste Lesbarkeit ohne harte Kontrastkanten.</p>
+                        <div class="pt-3 border-t border-slate-hairline grid grid-cols-2 font-mono text-[10px] text-slate-stone">
+                            <span>RGB: 24, 27, 26</span>
+                            <span class="text-right">CMYK: 72, 64, 65, 76</span>
+                        </div>
+                    </div>
+                </button>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         04. TYPOGRAFIE-SYSTEM
+    ====================================================================== -->
+    <section id="typografie" class="py-20 lg:py-28 border-b border-slate-hairline bg-paper">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
+            
+            <div class="space-y-3 max-w-2xl">
+                <span class="font-mono text-xs text-sage font-medium tracking-wider uppercase">04 // Typografie</span>
+                <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-ink">Geometrische Klarheit &amp; technische Präzision.</h2>
+                <p class="text-sm sm:text-base text-slate-stone">
+                    Die Kombination aus <strong class="text-slate-ink font-medium">Plus Jakarta Sans</strong> (rundlich-freundliche Buchstabenformen mit architektonischer Strenge) und <strong class="text-slate-ink font-medium">JetBrains Mono</strong> (für Spielzeiten, Platznummern und Metadaten).
+                </p>
+            </div>
+
+            <!-- Schrift-Specimen Tabelle -->
+            <div class="border border-slate-hairline rounded-2xl overflow-hidden divide-y divide-slate-hairline bg-alabaster/50">
+                
+                <!-- H1 Display -->
+                <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    <div class="lg:col-span-3 font-mono text-xs text-slate-stone space-y-1">
+                        <div class="text-slate-ink font-semibold">H1 // DISPLAY HERO</div>
+                        <div>Plus Jakarta Sans SemiBold</div>
+                        <div>56px / LH 1.05 / LS -0.035em</div>
+                    </div>
+                    <div class="lg:col-span-9 text-3xl sm:text-5xl font-semibold tracking-tightest text-slate-ink">
+                        Großharthau Bambini-Cup
+                    </div>
+                </div>
+
+                <!-- H2 Sektion -->
+                <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    <div class="lg:col-span-3 font-mono text-xs text-slate-stone space-y-1">
+                        <div class="text-slate-ink font-semibold">H2 // SEKTION &amp; URKUNDE</div>
+                        <div>Plus Jakarta Sans SemiBold</div>
+                        <div>32px / LH 1.15 / LS -0.025em</div>
+                    </div>
+                    <div class="lg:col-span-9 text-2xl sm:text-3xl font-semibold tracking-tight text-slate-ink">
+                        Jedes Kind ein Gewinner auf dem Kleinfeld.
+                    </div>
+                </div>
+
+                <!-- Body Copy -->
+                <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    <div class="lg:col-span-3 font-mono text-xs text-slate-stone space-y-1">
+                        <div class="text-slate-ink font-semibold">BODY // FLIESSTEXT</div>
+                        <div>Plus Jakarta Sans Regular</div>
+                        <div>16px / LH 1.60 / LS 0em</div>
+                    </div>
+                    <div class="lg:col-span-9 text-base text-slate-stone max-w-2xl leading-relaxed">
+                        Beim Bambini-Fußball des SV Fortschritt Großharthau stehen Bewegungsfreude, Fairplay und das gemeinsame Erlebnis im Mittelpunkt. Gespielt wird im kinderfreundlichen 3-gegen-3-Modus auf vier Minitore.
+                    </div>
+                </div>
+
+                <!-- Monospace Metadata -->
+                <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center bg-paper">
+                    <div class="lg:col-span-3 font-mono text-xs text-slate-stone space-y-1">
+                        <div class="text-sage font-semibold">MONO // SPIELPLAN &amp; META</div>
+                        <div>JetBrains Mono Medium</div>
+                        <div>12px / LH 1.40 / LS +0.06em</div>
+                    </div>
+                    <div class="lg:col-span-9 font-mono text-xs sm:text-sm text-slate-ink flex flex-wrap gap-4">
+                        <span class="px-3 py-1.5 rounded bg-alabaster border border-slate-hairline">FELD 01 // 09:30 UHR</span>
+                        <span class="px-3 py-1.5 rounded bg-sage-mist text-sage-dark border border-sage/20">SPIELDAUER: 1 × 8 MIN</span>
+                        <span class="px-3 py-1.5 rounded bg-terracotta-soft text-terracotta">FAIRPLAY-MODUS</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         05. GRAFIK-SYSTEM & SPIELFELD-GEOMETRIE
+    ====================================================================== -->
+    <section id="grafik" class="py-20 lg:py-28 border-b border-slate-hairline">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
+            
+            <div class="space-y-3 max-w-2xl">
+                <span class="font-mono text-xs text-sage font-medium tracking-wider uppercase">05 // Visuelle Sprache</span>
+                <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-ink">Abstrahierte Spielfeld-Geometrie.</h2>
+                <p class="text-sm sm:text-base text-slate-stone">
+                    Statt illustrativer Comic-Figuren nutzen wir feine 1.5px Vektorlinien, die direkt von den Markierungen eines Kleinfeld-Fußballplatzes abgeleitet sind. Sie strukturieren Banden, Programmhefte und Urkunden.
+                </p>
+            </div>
+
+            <!-- 4 Grafische Module -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Modul 1: Mittelkreis -->
+                <div class="bg-paper border border-slate-hairline rounded-2xl p-6 flex flex-col justify-between space-y-6">
+                    <div class="h-44 rounded-xl bg-alabaster border border-slate-hairline flex items-center justify-center overflow-hidden">
+                        <svg class="w-full h-full" viewBox="0 0 240 160" fill="none">
+                            <line x1="120" y1="0" x2="120" y2="160" stroke="#3B5E4D" stroke-width="1.5"/>
+                            <circle cx="120" cy="80" r="44" stroke="#3B5E4D" stroke-width="1.5"/>
+                            <circle cx="120" cy="80" r="5" fill="#D97757"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="font-mono text-[10px] text-sage">MODUL 01 // ZENTRUM</span>
+                        <h3 class="text-sm font-semibold text-slate-ink mt-1">Anstoßkreis &amp; Mittellinie</h3>
+                        <p class="text-xs text-slate-stone mt-1">Für Cover-Gestaltungen und Trennseiten im Turnierheft.</p>
+                    </div>
+                </div>
+
+                <!-- Modul 2: Eckfahne / Viertelkreis -->
+                <div class="bg-paper border border-slate-hairline rounded-2xl p-6 flex flex-col justify-between space-y-6">
+                    <div class="h-44 rounded-xl bg-sage-dark flex items-center justify-center overflow-hidden">
+                        <svg class="w-full h-full" viewBox="0 0 240 160" fill="none">
+                            <path d="M36 160V28H240" stroke="#E3EBE6" stroke-opacity="0.4" stroke-width="1.5"/>
+                            <path d="M36 68C58.0914 68 76 50.0914 76 28" stroke="#E2B86B" stroke-width="2"/>
+                            <circle cx="36" cy="28" r="4" fill="#D97757"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="font-mono text-[10px] text-sage">MODUL 02 // ECKRAUM</span>
+                        <h3 class="text-sm font-semibold text-slate-ink mt-1">Eckstoß-Viertelkreis</h3>
+                        <p class="text-xs text-slate-stone mt-1">Architektonischer Rahmen für Urkunden-Ecken und Plakate.</p>
+                    </div>
+                </div>
+
+                <!-- Modul 3: Mini-Torbogen -->
+                <div class="bg-paper border border-slate-hairline rounded-2xl p-6 flex flex-col justify-between space-y-6">
+                    <div class="h-44 rounded-xl bg-alabaster border border-slate-hairline flex items-center justify-center overflow-hidden">
+                        <svg class="w-full h-full" viewBox="0 0 240 160" fill="none">
+                            <path d="M60 140V80C60 46.8629 86.8629 20 120 20C153.137 20 180 46.8629 180 80V140" stroke="#3B5E4D" stroke-width="1.5"/>
+                            <path d="M84 140V84C84 64.1177 100.118 48 120 48C139.882 48 156 64.1177 156 84V140" stroke="#D97757" stroke-width="1.5"/>
+                            <line x1="30" y1="140" x2="210" y2="140" stroke="#181B1A" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="font-mono text-[10px] text-sage">MODUL 03 // TORRAUM</span>
+                        <h3 class="text-sm font-semibold text-slate-ink mt-1">Konzentrische Torbögen</h3>
+                        <p class="text-xs text-slate-stone mt-1">Symbolisiert Schutz, Zielstrebigkeit und kleine Schritte.</p>
+                    </div>
+                </div>
+
+                <!-- Modul 4: Taktik-Passwege -->
+                <div class="bg-paper border border-slate-hairline rounded-2xl p-6 flex flex-col justify-between space-y-6">
+                    <div class="h-44 rounded-xl bg-sage-mist/60 border border-slate-hairline flex items-center justify-center overflow-hidden">
+                        <svg class="w-full h-full" viewBox="0 0 240 160" fill="none">
+                            <circle cx="52" cy="116" r="6" fill="#3B5E4D"/>
+                            <circle cx="124" cy="48" r="6" fill="#3B5E4D"/>
+                            <circle cx="188" cy="96" r="8" fill="#E2B86B" stroke="#181B1A" stroke-width="1.5"/>
+                            <path d="M58 110L118 54" stroke="#3B5E4D" stroke-width="1.5" stroke-dasharray="4 4"/>
+                            <path d="M130 52L180 90" stroke="#D97757" stroke-width="1.5" stroke-dasharray="4 4"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="font-mono text-[10px] text-sage">MODUL 04 // ZUSAMMENSPIEL</span>
+                        <h3 class="text-sm font-semibold text-slate-ink mt-1">Passlinien &amp; Teamgeist</h3>
+                        <p class="text-xs text-slate-stone mt-1">Für Wegweiser auf dem Sportgelände und Spielstationen.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         06. ANWENDUNGSBEISPIELE (MOCKUPS)
+    ====================================================================== -->
+    <section id="anwendungen" class="py-20 lg:py-28 bg-paper">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 space-y-14">
+            
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div class="space-y-3 max-w-2xl">
+                    <span class="font-mono text-xs text-sage font-medium tracking-wider uppercase">06 // Anwendungen im Einsatz</span>
+                    <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-ink">Vom Spielfeldrand bis ins Kinderzimmer.</h2>
+                    <p class="text-sm sm:text-base text-slate-stone">
+                        So wirkt das Corporate Design in der Praxis: hochwertige Teilnehmer-Urkunde auf Naturpapier, kompaktes Programmheft und die Sieger-Medaille.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                
+                <!-- Mockup 1: Teilnehmer-Urkunde (7 Spalten) -->
+                <div class="lg:col-span-7 bg-alabaster border border-slate-hairline rounded-2xl p-6 sm:p-10 flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="font-mono text-xs text-slate-stone">ANWENDUNG 01 // DIN A4 URKUNDE (300g NATURKARTON)</span>
+                        <span class="font-mono text-[10px] px-2.5 py-1 rounded bg-paper border border-slate-hairline text-sage">PRINT MOCKUP</span>
+                    </div>
+
+                    <!-- Urkunden-Blatt -->
+                    <div class="bg-paper border border-slate-hairline rounded-xl p-6 sm:p-10 shadow-md relative overflow-hidden">
+                        <!-- Architektonische Ecklinie -->
+                        <svg class="absolute top-0 right-0 w-36 h-36 text-sage/15 pointer-events-none" viewBox="0 0 120 120" fill="none">
+                            <path d="M120 80C75.8172 80 40 44.1828 40 0" stroke="currentColor" stroke-width="2"/>
+                            <path d="M120 50C92.3858 50 70 27.6142 70 0" stroke="#D97757" stroke-width="1.5"/>
+                        </svg>
+
+                        <!-- Kopfzeile Urkunde -->
+                        <div class="flex items-center justify-between pb-6 border-b border-slate-hairline">
+                            <div class="flex items-center gap-3">
+                                <svg class="w-9 h-9" viewBox="0 0 96 96" fill="none">
+                                    <rect x="4" y="4" width="88" height="88" rx="20" fill="#3B5E4D"/>
+                                    <path d="M26 70V42C26 29.8497 35.8497 20 48 20C60.1503 20 70 29.8497 70 42V70" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+                                    <circle cx="48" cy="56" r="9" fill="#E2B86B"/>
+                                </svg>
+                                <div>
+                                    <div class="font-mono text-[10px] tracking-widest text-terracotta uppercase">GROßHARTHAU</div>
+                                    <div class="text-sm font-bold text-slate-ink">BAMBINI CUP</div>
+                                </div>
+                            </div>
+                            <div class="text-right font-mono text-[10px] text-slate-stone">
+                                SV FORTSCHRITT GROßHARTHAU<br>
+                                G-JUNIOREN TURNIER
+                            </div>
+                        </div>
+
+                        <!-- Hauptteil Urkunde -->
+                        <div class="py-8 text-center space-y-4">
+                            <span class="inline-block px-3 py-1 rounded-full bg-ochre-soft text-slate-ink font-mono text-[11px] font-medium">
+                                EHRENURKUNDE // JEDES KIND EIN GEWINNER
+                            </span>
+                            <h3 class="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-ink">
+                                Toller Einsatz auf dem Platz!
+                            </h3>
+                            <p class="text-xs sm:text-sm text-slate-stone max-w-md mx-auto">
+                                Für großartigen Teamgeist, viele Ballkontakte und vorbildliches Fairplay beim Bambini-Cup in Großharthau überreichen wir diese Urkunde an:
+                            </p>
+                            <!-- Namenszeile -->
+                            <div class="pt-4 pb-2 max-w-sm mx-auto">
+                                <div class="text-xl font-semibold text-sage pb-1 border-b border-dashed border-slate-hairline">
+                                    Leo Lindner
+                                </div>
+                                <span class="font-mono text-[10px] text-slate-stone uppercase mt-1 block">SV Fortschritt Großharthau · Bambinis</span>
+                            </div>
+                        </div>
+
+                        <!-- Unterschriften-Fußzeile -->
+                        <div class="pt-6 border-t border-slate-hairline grid grid-cols-2 gap-6 font-mono text-[10px] text-slate-stone">
+                            <div>
+                                <div class="h-6 border-b border-slate-hairline mb-1"></div>
+                                <span>TURNIERLEITUNG SVF</span>
+                            </div>
+                            <div class="text-right">
+                                <div class="h-6 border-b border-slate-hairline mb-1"></div>
+                                <span>JUGENDLEITER FUßBALL</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rechte Spalte: Programmheft-Cover & Medaille (5 Spalten) -->
+                <div class="lg:col-span-5 flex flex-col gap-8">
+                    
+                    <!-- Mockup 2: Spielplan / Turnierheft -->
+                    <div class="bg-sage-dark text-white rounded-2xl p-6 sm:p-8 flex-1 flex flex-col justify-between relative overflow-hidden">
+                        <!-- Mittelkreis-Linie als Design-Element -->
+                        <svg class="absolute -right-12 -bottom-12 w-56 h-56 text-white/10 pointer-events-none" viewBox="0 0 200 200" fill="none">
+                            <circle cx="100" cy="100" r="85" stroke="currentColor" stroke-width="1.5"/>
+                            <line x1="100" y1="0" x2="100" y2="200" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+
+                        <div class="flex items-center justify-between font-mono text-[10px] text-sage-mist/70">
+                            <span>ANWENDUNG 02 // SPIELPLAN-HEFT</span>
+                            <span>DIN A5</span>
+                        </div>
+
+                        <div class="my-6 space-y-3 relative z-10">
+                            <span class="inline-block px-2.5 py-0.5 rounded bg-terracotta text-white font-mono text-[10px] uppercase">
+                                OFFIZIELLES PROGRAMM
+                            </span>
+                            <h3 class="text-2xl font-semibold tracking-tight leading-snug">
+                                Kleines Feld.<br>
+                                <span class="text-ochre">Große Schritte.</span>
+                            </h3>
+                            <p class="text-xs text-sage-mist/80 max-w-xs leading-relaxed">
+                                Alle Mannschaften, Feld-Übersicht, Fairplay-Regeln und Rahmenprogramm auf einen Blick.
+                            </p>
+                        </div>
+
+                        <div class="pt-4 border-t border-white/15 flex items-center justify-between font-mono text-[11px] text-sage-mist">
+                            <span>SPORTPLATZ GROßHARTHAU</span>
+                            <span class="text-ochre">BEGINN 09:30</span>
+                        </div>
+                    </div>
+
+                    <!-- Mockup 3: Teilnehmer-Medaille -->
+                    <div class="bg-alabaster border border-slate-hairline rounded-2xl p-6 flex items-center gap-6">
+                        <!-- Medaillen-Illustration SVG -->
+                        <svg class="w-24 h-28 shrink-0" viewBox="0 0 96 112" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Band in Salbeigrün & Terrakotta -->
+                            <path d="M30 4L44 38H52L38 4H30Z" fill="#3B5E4D"/>
+                            <path d="M66 4L52 38H44L58 4H66Z" fill="#D97757"/>
+                            <!-- Öse -->
+                            <circle cx="48" cy="40" r="4" stroke="#E2B86B" stroke-width="2"/>
+                            <!-- Medaillenkörper in mattem Sandgold -->
+                            <circle cx="48" cy="72" r="32" fill="#E2B86B"/>
+                            <circle cx="48" cy="72" r="27" stroke="#FFFFFF" stroke-opacity="0.6" stroke-width="1.2"/>
+                            <!-- Geprägtes Turnier-Signet -->
+                            <path d="M36 82V66C36 59.3726 41.3726 54 48 54C54.6274 54 60 59.3726 60 66V82" stroke="#181B1A" stroke-width="2.2" stroke-linecap="round"/>
+                            <circle cx="48" cy="74" r="5" fill="#3B5E4D"/>
+                        </svg>
+
+                        <div class="space-y-1.5">
+                            <span class="font-mono text-[10px] text-sage uppercase">ANWENDUNG 03 // AUSZEICHNUNG</span>
+                            <h4 class="text-base font-semibold text-slate-ink">Bambini-Finisher-Medaille</h4>
+                            <p class="text-xs text-slate-stone leading-relaxed">
+                                Gebürstetes Messing-Finish mit geprägtem Torbogen-Signet und zweifarbigem Textilband in Salbei &amp; Terrakotta.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         FOOTER
+    ====================================================================== -->
+    <footer class="py-12 bg-alabaster border-t border-slate-hairline">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-slate-stone">
+            <div class="flex items-center gap-3">
+                <span class="w-2.5 h-2.5 rounded-full bg-sage"></span>
+                <span>SV FORTSCHRITT GROßHARTHAU e.V. — BAMBINI-CUP CI</span>
+            </div>
+            <div>
+                DESIGN SYSTEM // ARCHITEKTUR &amp; NACHWUCHSFUßBALL
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interaktive Copy-Logik ohne alert() -->
+    <script>
+        let toastTimeout;
+
+        function copyHex(hexCode, colorName) {
+            // Hilfs-Textarea für zuverlässiges Kopieren auch in iFrames
+            const tempInput = document.createElement('textarea');
+            tempInput.value = hexCode;
+            tempInput.style.position = 'fixed';
+            tempInput.style.opacity = '0';
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast(`${colorName} (${hexCode}) kopiert`, hexCode);
+            } catch (err) {
+                showToast(`Farbwert: ${hexCode}`, hexCode);
+            } finally {
+                document.body.removeChild(tempInput);
+            }
+        }
+
+        function showToast(message, hexColor) {
+            const toast = document.getElementById('copyToast');
+            const toastMsg = document.getElementById('toastMessage');
+            const toastSwatch = document.getElementById('toastSwatch');
+
+            toastMsg.textContent = message;
+            toastSwatch.style.backgroundColor = hexColor;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2400);
+        }
+    </script>
+</body>
+</html>

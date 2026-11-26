@@ -1,0 +1,26 @@
+'use client'
+
+import {useTheme} from 'next-themes'
+import {useEffect, useState} from 'react'
+
+export default function ThemeToggle() {
+  const {theme, setTheme} = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => setMounted(true), [])
+
+  if (!mounted) {
+    return <div className="w-9 h-9" />
+  }
+
+  return (
+    <button
+      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+      className="w-9 h-9 rounded-lg flex items-center justify-center text-sm
+                 transition-colors duration-200 hover:bg-sage-mist/50 dark:hover:bg-dark-border"
+      aria-label="Theme umschalten"
+    >
+      {theme === 'dark' ? '☀️' : '🌙'}
+    </button>
+  )
+}

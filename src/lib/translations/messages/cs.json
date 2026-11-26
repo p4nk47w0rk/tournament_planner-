@@ -1,0 +1,132 @@
+{
+  "nav": {
+    "home": "Domů",
+    "schedule": "Rozlosování",
+    "groups": "Skupiny",
+    "teams": "Týmy",
+    "info": "Informace",
+    "login": "Přihlášení",
+    "register": "Registrace",
+    "logout": "Odhlásit",
+    "edit": "Upravit",
+    "nextMatch": "Další zápas",
+    "playoffs": "Playoff"
+  },
+  "home": {
+    "title": "Bambini Cup 2026",
+    "tagline": "Malé hřiště. Velké kroky.",
+    "date": "5. prosince 2026",
+    "time": "od 09:00",
+    "location": "Sál Vilémov",
+    "countdown": {
+      "days": "Dny",
+      "hours": "Hodiny",
+      "minutes": "Minuty",
+      "seconds": "Vteřiny"
+    },
+    "nextMatch": "Další zápas",
+    "stats": {
+      "teams": "Týmy",
+      "matches": "Zápasy",
+      "fields": "Hřiště",
+      "groups": "Skupiny"
+    },
+    "liveStatus": {
+      "preparing": "Příprava...",
+      "live": "BĚŽÍ! ⚽",
+      "finished": "Ukončeno",
+      "coming": "Brzy"
+    },
+    "fairplay": "Fair play"
+  },
+  "schedule": {
+    "title": "Rozlosování",
+    "all": "Vše",
+    "groupA": "Skupina A",
+    "groupB": "Skupina B",
+    "playoffs": "Playoff",
+    "field": "Hřiště",
+    "home": "Domácí",
+    "away": "Hosté",
+    "score": "Výsledek",
+    "time": "Čas",
+    "noScore": "Ještě nehráno",
+    "editMode": "Editační režim",
+    "editModeOn": "Zap",
+    "editModeOff": "Vyp",
+    "enterScore": "Zadat výsledek",
+    "save": "Uložit",
+    "cancel": "Zrušit",
+    "filter": "Filtr"
+  },
+  "standings": {
+    "title": "Žebříček",
+    "played": "Zápasy",
+    "won": "Výhry",
+    "drawn": "Remízy",
+    "lost": "Prohry",
+    "goalsFor": "Vstřelené",
+    "goalsAgainst": "Inkasované",
+    "goalDifference": "Skóre",
+    "points": "Body",
+    "rank": "Pořadí",
+    "fairplay": "Fair play"
+  },
+  "teams": {
+    "title": "Týmy",
+    "groupA": "Skupina A",
+    "groupB": "Skupina B",
+    "pitch": "Hřiště",
+    "matchDuration": "Délka zápasu",
+    "minutes": "minut",
+    "referee": "Rozhodčí",
+    "notes": "Poznámky"
+  },
+  "info": {
+    "title": "Informace o turnaji",
+    "rules": "Pravidla",
+    "canteen": "Stravování",
+    "location": "Jak se dostat",
+    "organizers": "Organizátoři",
+    "rulesItems": [
+      "Každý zápas hlídá vedoucí nebo trenér podle dohody",
+      "Hraje se podle zjednodušených pravidel kopané",
+      "Výsledek prosím nahlásit zapisovatelům",
+      "Ceny, diplomy a medaile – 1. až 3. místo",
+      "Převlékání – v označených šatnách – POZOR na cenné věci!",
+      "Sprchy, toalety, umyvadla – vše v hale",
+      "Řízení turnaje – L. Sklenář"
+    ],
+    "canteenItems": [
+      "Langos",
+      "Vínečko v housce",
+      "Lupínky",
+      "Sladkosti",
+      "Velký výběr studených limonád"
+    ]
+  },
+  "auth": {
+    "login": "Přihlášení",
+    "register": "Registrace",
+    "email": "E-mail",
+    "password": "Heslo",
+    "forgotPassword": "Zapomněli jste heslo?",
+    "noAccount": "Ještě nemáte účet?",
+    "hasAccount": "Již registrováni?",
+    "createAccount": "Vytvořit účet",
+    "welcomeBack": "Vítejte zpět",
+    "joinTournament": "Připojte se k turnaji"
+  },
+  "common": {
+    "fairplayBadge": "Fair play 🤝",
+    "loading": "Načítání...",
+    "error": "Došlo k chybě",
+    "success": "Uloženo úspěšně!",
+    "live": "Živě",
+    "finished": "Ukončeno",
+    "upcoming": "Přichází",
+    "yourTeam": "Můj tým",
+    "filter": "Filtr",
+    "clear": "Smazat"
+  }
+}

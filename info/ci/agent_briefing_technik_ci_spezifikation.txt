@@ -1,0 +1,146 @@
+================================================================================
+PROJEKT-BRIEFING & TECHNISCHE SPEZIFIKATION (AGENT HANDOFF)
+Projekt: Offizielle Turnier-Webseite "Bambini-Cup SV Fortschritt Großharthau"
+Ziel: Architektur-inspiriertes, hochästhetisches Web-Erlebnis ohne "Comic-Sans-Klischees"
+================================================================================
+
+1. ROLLE & QUALITÄTSANSPRUCH FÜR DEN AGENTEN
+--------------------------------------------------------------------------------
+Du baust die offizielle Web-Präsenz für den Bambini-Cup des SV Fortschritt
+Großharthau. Orientierungspunkt für Ästhetik und Layout sind moderne, preisgekrönte
+Architektur- und Editorial-Webseiten (Schweizer Raster, großzügiger Weißraum,
+feine 1px-Trennlinien), kombiniert mit einer warmen, kinderfreundlichen Farbwelt.
+
+WICHTIG: Vermeide zwingend typische Kinder-Website-Klischees (keine bunten
+Primärfarben, keine Comic-Schriften, keine überladenen Cliparts, keine harten
+Drop-Shadows). Alles muss ruhig, taktil, hochwertig und technisch auf höchstem
+Niveau umgesetzt sein.
+
+
+2. VERBINDLICHES DESIGN-SYSTEM (CI-TOKENS)
+--------------------------------------------------------------------------------
+Nutze ausschließlich diese definierten Design-Tokens (z.B. via Tailwind Config
+oder CSS Custom Properties):
+
+A) FARBPALETTE (70 / 20 / 10 GEWICHTUNG)
+- Primärfläche (70%):   Warm Alabaster      #F7F6F2  (Hintergrund, Papier-Optik)
+- Karten/Flächen:       Reinweiß            #FFFFFF  (Kontrastkarten auf Alabaster)
+- Leitfarbe (20%):      Salbei-Rasengrün    #3B5E4D  (Verein, Hauptakzente, Buttons)
+- Leitfarbe Dunkel:     Salbei-Dark         #284235  (Hover-States, Dark-Sektionen)
+- Sekundärfläche:       Helles Nebelgrün    #E3EBE6  (Tabellenzeilen, Badges)
+- Bambini-Wärme (6%):   Warmes Terrakotta   #D97757  (Highlights, aktive Zustände)
+- Terrakotta Soft:      Terrakotta-Tint     #F4E3DC  (Subtile Badges)
+- Pokal-Akzent (4%):    Sanftes Sandgold    #E2B86B  (Medaillen, Auszeichnungen)
+- Typografie Primär:    Schiefer-Anthrazit  #181B1A  (Weicher als #000000)
+- Typografie Sekundär:  Schiefer-Stein      #5C6360  (Fließtexte, Sublines)
+- Linien / Raster:      Hairline-Grau       #DEDCD5  (1px Struktur-Trennlinien)
+
+B) TYPOGRAFIE (GOOGLE FONTS)
+- Display & Body: "Plus Jakarta Sans" (Gewichte: 300, 400, 500, 600, 700)
+  -> Headlines mit engem Tracking (-0.035em bei H1, -0.025em bei H2).
+- Metadaten, Spielzeiten, Platz-Nummern: "JetBrains Mono" (400, 500, 600)
+  -> Immer in Großbuchstaben mit erhöhtem Letter-Spacing (+0.06em) für
+     Turnierdaten (z.B. "FELD 01 // 09:30 UHR").
+
+C) LOGOS & GRAFIKELEMENTE
+- Integriere die beiden definierten Vektor-Marken (SV Fortschritt Großharthau
+  Vereinswappen + Geometrisches Turnier-Signet mit Torbogen & Sandgold-Ball)
+  als gestochen scharfe Inline-SVGs.
+- Nutze feine 1.5px Spielfeld-Vektorlinien (Anstoßkreis, Eckfahnen-Viertelkreis,
+  konzentrische Torbögen) als subtile architektonische Hintergrund- und
+  Strukturelemente.
+
+
+3. MODERNE WEB- & ANIMATIONSTECHNIKEN (MANDATORY)
+--------------------------------------------------------------------------------
+Damit die Seite sich wie ein maßgeschneidertes High-End-Produkt anfühlt, setze
+folgende native Browser-APIs und moderne Frontend-Patterns sauber ein:
+
+1) NATIVE VIEW TRANSITIONS API (`document.startViewTransition`)
+   - Setze die View Transitions API für nahtlose Zustandswechsel ein (z.B. beim
+     Wechseln zwischen Turnier-Tabs: "Spielplan", "Teams", "Geländeplan",
+     "Infos" oder beim Öffnen von Team-Details / Modal-Ansichten).
+   - Vergib eindeutige `view-transition-name` Properties auf Karten, Überschriften
+     und das Turnier-Signet, sodass Elemente organisch morphen statt hart
+     umzuschalten.
+   - Baue zwingend einen sauberen Fallback ein:
+     `if (!document.startViewTransition) { updateDOM(); return; }`
+
+2) FLIP-PATTERN (First, Last, Invert, Play)
+   - Nutze das FLIP-Prinzip für interaktive Filterungen und Layout-Änderungen
+     (z.B. beim Filtern des Spielplans nach "Feld 1", "Feld 2" oder nach einer
+     bestimmten Gastmannschaft).
+   - Spiele-Karten sollen nicht einfach verschwinden/aufploppen, sondern weich
+     an ihre neue Rasterposition gleiten (`transform: translate(...)` mit
+     kubischer Bezier-Kurve `cubic-bezier(0.22, 1, 0.36, 1)`).
+
+3) NATIVES POPOVER API & `<dialog>` ELEMENT
+   - Nutze für Mannschafts-Steckbriefe, Turnierregeln oder Lageplan-Details das
+     native HTML `<dialog>` Element oder die `popover`-API statt schwerer
+     JS-Modal-Bibliotheken.
+   - Animiere das Öffnen/Schließen modern über CSS `@starting-style` und
+     `transition-behavior: allow-discrete` für sanftes Ein- und Ausblenden
+     inkl. `::backdrop` Blur-Effekt.
+
+4) CSS SCROLL-DRIVEN ANIMATIONS & INTERSECTION OBSERVER
+   - Nutze native CSS `animation-timeline: view()` (mit IntersectionObserver-
+     Fallback für ältere Safari-Versionen), um feine Spielfeld-Vektorlinien
+     (SVG `stroke-dashoffset`) beim Scrollen durch die Seite live zu zeichnen.
+   - Setze sanfte Staggered-Reveal-Animationen für Karten-Grids ein (nur
+     `transform` und `opacity` animieren -> 60fps GPU-Compositing!).
+
+5) MICRO-INTERACTIONS & HAPTISCHES GEFÜHL
+   - Subtile Hover-Zustände auf Karten (`translateY(-2px)`), magnetische oder
+     federnde Button-Übergänge und ein interaktives "Live-Spielplan"-Highlight.
+
+
+4. MOBILE-FIRST, RESPONSIVENESS & BARRIEREFREIHEIT (KRITISCH)
+--------------------------------------------------------------------------------
+Die Seite wird am Turniertag primär von Eltern, Trainern und Zuschauern auf
+Smartphones am Spielfeldrand (oft bei direktem Sonnenlicht!) genutzt.
+
+1) HOHER KONTRAST & LESBARKEIT BEI SONNENLICHT
+   - Der Kontrast von `#181B1A` auf `#F7F6F2` (Alabaster) entspricht AAA. Halte
+     diesen hohen Kontrast bei allen Spielplänen und Uhrzeiten strikt ein.
+
+2) MOBILE-FIRST ARCHITEKTUR & VIEWPORT-UNITS
+   - Nutze moderne Viewport-Einheiten (`100dvh`, `svh`) statt `100vh`, damit
+     mobile Browser-Adressleisten nichts abschneiden.
+   - Keine horizontalen Overflows (`overflow-x: clip` statt `hidden`, damit
+     `position: sticky` zuverlässig funktioniert).
+   - Spielplan-Tabellen müssen auf Mobilgeräten zu übersichtlichen, gestapelten
+     "Match-Cards" umbrechen (kein mühsames seitliches Scrollen in Tabellen!).
+
+3) TOUCH-ERGONOMIE & THUMB-ZONE
+   - Alle interaktiven Elemente (Filter-Tabs, Buttons, Team-Auswahl) müssen
+     mindestens `44x44px` Touch-Fläche bieten.
+   - Platziere wichtige Schnellnavigationen (z.B. "Nächstes Spiel" / "Mein Team")
+     leicht erreichbar für die Einhand-Bedienung auf Smartphones.
+   - Nutze `env(safe-area-inset-bottom)` für fixierte Elemente auf iPhones.
+
+4) FLUID TYPOGRAPHY & SPACING
+   - Nutze CSS `clamp()` für Überschriften und Abstände, damit das Schweizer
+     Raster von `320px` (kleines Smartphone) bis `1440px+` (Desktop) ohne
+     unschöne Zeilenumbrüche skaliert.
+
+5) PERFORMANCE & REDUCED MOTION
+   - Respektiere zwingend `@media (prefers-reduced-motion: reduce)` und deaktiviere
+     oder reduziere darin alle FLIP-, Scroll- und View-Transitions.
+   - Sauberes, semantisches HTML5 (`<header>`, `<main>`, `<section>`, `<nav>`,
+     `<article>`) sowie ARIA-Attribute für interaktive Filter und Tabs.
+
+
+5. EMPFOHLENE SEITENSTRUKTUR FÜR DIE TURNIER-WEBSEITE
+--------------------------------------------------------------------------------
+1. Hero-Sektion: Turniertitel ("Kleines Feld. Große Schritte."), Datum, Uhrzeit,
+   Austragungsort (Sportplatz Großharthau) + Co-Branding SVF & Bambini-Cup.
+2. Quick-Status-Bar: Live-Countdown / Turnierstatus, Anzahl Teams, Spielmodus
+   (3-gegen-3 / Fairplay-Liga).
+3. Interaktiver Spielplan (Herzstück mit FLIP-Filter nach Team & Feld +
+   View Transitions zwischen Vorrunde / Spielfest-Runden).
+4. Teilnehmende Mannschaften (Karten-Grid mit `<dialog>` Team-Details).
+5. Gelände- & Feldübersicht (Architektonische SVG-Karte der Kleinfelder,
+   Verpflegung, Parkplätze).
+6. Turnier-Infos & Fairplay-Kodex (Ruhiges Editorial-Layout für Eltern).
+7. Footer mit SV Fortschritt Großharthau Vereinsinfos & Kontakt.
+================================================================================

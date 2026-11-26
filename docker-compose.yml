@@ -1,0 +1,32 @@
+# Tournament Planner — Supabase Local Development
+# Start with: docker compose up -d
+# Then run: pnpm setup:local (or src/scripts/setup-local.ts)
+#
+# For full Supabase (Auth + REST + Realtime), use the Supabase CLI:
+#   npm i -g supabase
+#   supabase start
+#
+# This docker-compose just runs PostgreSQL for local schema testing.
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: tournament-planner-db
+    restart: unless-stopped
+    ports:
+      - "54321:5432"
+    environment:
+      POSTGRES_DB: tournament-planner
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - supabase-data:/var/lib/postgresql/data
+      - ./supabase/init.sql:/docker-entrypoint-initdb.d/01-init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  supabase-data:

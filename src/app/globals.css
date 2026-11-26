@@ -1,26 +1,387 @@
+/* Google Fonts — MUST be first */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ========================================
+   BAMBINI CUP 2026 – CI DESIGN SYSTEM
+   ======================================== */
+
+@theme {
+  /* -- Font families */
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* -- Light Mode Colors (CI Tokens) -- */
+  --color-alabaster: #F7F6F2;
+  --color-paper: #FFFFFF;
+  --color-slate-ink: #181B1A;
+  --color-slate-stone: #5C6360;
+  --color-slate-hairline: #DEDCD5;
+  --color-sage: #3B5E4D;
+  --color-sage-dark: #284235;
+  --color-sage-mist: #E3EBE6;
+  --color-terracotta: #D97757;
+  --color-terracotta-soft: #F4E3DC;
+  --color-ochre: #E2B86B;
+  --color-ochre-soft: #F8F0DF;
+
+  /* -- Letter spacing -- */
+  --letter-spacing-tightest: -0.035em;
+  --letter-spacing-tighter: -0.025em;
+  --letter-spacing-wide: 0.06em;
+
+  /* -- Dark Mode Colors (Calculated from CI) -- */
+  --color-dark-bg: #121514;
+  --color-dark-card: #1C211E;
+  --color-dark-primary: #5A8B72;
+  --color-dark-primary-dark: #3B5E4D;
+  --color-dark-secondary: #1A221F;
+  --color-dark-accent: #E8947A;
+  --color-dark-gold: #F0D296;
+  --color-dark-text: #E8E6E1;
+  --color-dark-text-secondary: #9DA3A0;
+  --color-dark-border: #2A302D;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ========================================
+   BASE STYLES
+   ======================================== */
+body {
+  background-color: var(--color-alabaster);
+  color: var(--color-slate-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Smooth transitions for theme switching */
+html {
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+/* ========================================
+   ARCHITECTURAL GRID BACKGROUND
+   ======================================== */
+.architectural-grid-bg {
+  background-size: 48px 48px;
+  background-image:
+    linear-gradient(to right, rgba(24, 27, 26, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(24, 27, 26, 0.035) 1px, transparent 1px);
+}
+
+.clearspace-grid {
+  background-size: 16px 16px;
+  background-image:
+    linear-gradient(to right, rgba(59, 94, 77, 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(59, 94, 77, 0.09) 1px, transparent 1px);
+}
+
+/* ========================================
+   SCROLL-DRIVEN ANIMATIONS
+   ======================================== */
+@supports (animation-timeline: view()) {
+  .animate-on-scroll {
+    animation: reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 40%;
+  }
+
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Intersection Observer fallback */
+@supports not (animation-timeline: view()) {
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   FLIP ANIMATIONS
+   ======================================== */
+.flip-animate {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.3s ease;
+}
+
+/* ========================================
+   CARD STYLES
+   ======================================== */
+.swatch-card {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.swatch-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -4px rgba(24, 27, 26, 0.1);
+}
+
+/* ========================================
+   MATCH CARD STYLES
+   ======================================== */
+.match-card {
+  @apply bg-paper border border-slate-hairline rounded-2xl p-4 sm:p-5;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease;
+}
+
+.match-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -8px rgba(24, 27, 26, 0.08);
+}
+
+/* Live match highlight */
+.match-card.is-live {
+  border-color: var(--color-terracotta);
+  animation: pulse-live 2s ease-in-out infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(217, 119, 87, 0.3); }
+  50% { box-shadow: 0 0 0 6px rgba(217, 119, 87, 0); }
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+.dark body {
+  background-color: var(--color-dark-bg);
+  color: var(--color-dark-text);
+}
+
+.dark .match-card {
+  background-color: var(--color-dark-card);
+  border-color: var(--color-dark-border);
+}
+
+.dark .swatch-card {
+  background-color: var(--color-dark-card);
+  border-color: var(--color-dark-border);
+}
+
+/* ========================================
+   NAVBAR STYLES
+   ======================================== */
+.navbar {
+  background-color: rgba(247, 246, 242, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-slate-hairline);
+}
+
+.dark .navbar {
+  background-color: rgba(18, 21, 20, 0.9);
+  border-bottom-color: var(--color-dark-border);
+}
+
+/* ========================================
+   BUTTON STYLES
+   ======================================== */
+.btn-primary {
+  @apply bg-sage text-white px-5 py-2.5 rounded-lg font-medium text-sm
+         transition-all duration-200 hover:bg-sage-dark
+         active:scale-[0.97] focus:outline-none focus:ring-2
+         focus:ring-sage focus:ring-offset-2;
+}
+
+.btn-accent {
+  @apply bg-terracotta text-white px-5 py-2.5 rounded-lg font-medium text-sm
+         transition-all duration-200 hover:bg-[#c96a4e]
+         active:scale-[0.97] focus:outline-none focus:ring-2
+         focus:ring-terracotta focus:ring-offset-2;
+}
+
+.btn-ghost {
+  @apply px-3 py-2 rounded-lg font-medium text-sm text-slate-stone
+         transition-colors duration-200 hover:text-slate-ink
+         hover:bg-slate-hairline/50;
+}
+
+.dark .btn-ghost {
+  @apply text-dark-text-secondary hover:text-dark-text hover:bg-dark-border;
+}
+
+/* ========================================
+   SCORE BUTTONS (Touch-friendly)
+   ======================================== */
+.score-btn {
+  @apply w-10 h-10 rounded-lg font-mono font-semibold text-lg
+         flex items-center justify-center
+         transition-all duration-150 active:scale-90;
+}
+
+.score-btn:active {
+  transform: scale(0.9);
+}
+
+/* ========================================
+   TABLE STYLES
+   ======================================== */
+.standings-table {
+  @apply w-full border-collapse;
+}
+
+.standings-table th {
+  @apply px-3 py-2.5 text-xs font-mono font-medium uppercase
+         tracking-wider text-slate-stone border-b border-slate-hairline;
+}
+
+.standings-table td {
+  @apply px-3 py-2.5 text-sm border-b border-slate-hairline;
+}
+
+.standings-table tr:nth-child(even) {
+  background-color: var(--color-sage-mist);
+}
+
+.dark .standings-table tr:nth-child(even) {
+  background-color: var(--color-dark-secondary);
+}
+
+/* ========================================
+   DIALOG / MODAL STYLES
+   ======================================== */
+dialog {
+  @apply bg-paper rounded-2xl shadow-xl border border-slate-hairline p-0;
+  &::backdrop {
+    @apply bg-black/30 backdrop-blur-sm;
+  }
+}
+
+dialog[open] {
+  animation: dialog-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .animate-on-scroll {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ========================================
+   VIEW TRANSITIONS
+   ======================================== */
+::view-transition-old(root) {
+  animation: none;
+}
+
+::view-transition-new(root) {
+  animation: none;
+}
+
+/* ========================================
+   SCROLLBAR STYLES
+   ======================================== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-hairline rounded-full;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-dark-border;
+}
+
+/* ========================================
+   SELECTION STYLES
+   ======================================== */
+::selection {
+  @apply bg-sage text-white;
+}
+
+/* ========================================
+   LOGO PLACEHOLDER STYLES
+   ======================================== */
+.logo-placeholder {
+  @apply w-12 h-12 rounded-xl flex items-center justify-center
+         font-bold text-sm font-mono tracking-wide;
+}
+
+/* ========================================
+   TOAST / NOTIFICATION
+   ======================================== */
+.toast-container {
+  @apply fixed bottom-6 right-6 z-50 flex flex-col gap-2;
+}
+
+.toast {
+  @apply bg-slate-ink text-alabaster px-4 py-3 rounded-lg shadow-xl
+         border border-white/10 flex items-center gap-3
+         animate-[slide-in_0.3s_ease-out];
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   CONFETTI ANIMATION
+   ======================================== */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-10px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100px) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.confetti {
+  animation: confetti-fall 1.5s ease-out forwards;
 }
