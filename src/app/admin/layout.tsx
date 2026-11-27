@@ -1,16 +1,21 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/supabase/hooks";
+import { useEffect } from "react";
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { isSuperAdmin, isLoading, user } = useAuth();
-  const pathname = usePathname();
+  const { isSuperAdmin, isLoading } = useAuth();
+
+  useEffect(() => {
+    if (!isLoading && !isSuperAdmin) {
+      window.location.href = "/login";
+    }
+  }, [isSuperAdmin, isLoading]);
 
   if (isLoading) {
     return (
@@ -25,39 +30,7 @@ export default function AdminLayout({
   }
 
   if (!isSuperAdmin) {
-    return (
-      <div className="min-h-screen bg-paper dark:bg-dark-bg flex items-center justify-center">
-        <div className="text-center max-w-md mx-auto px-4">
-          <div className="w-16 h-16 rounded-2xl bg-red-100 dark:bg-red-900/20 flex items-center justify-center mx-auto mb-6">
-            <svg
-              className="w-8 h-8 text-red-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={1.5}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
-              />
-            </svg>
-          </div>
-          <h1 className="text-2xl font-bold text-slate-ink dark:text-dark-text mb-2">
-            Zugriff verweigert
-          </h1>
-          <p className="text-slate-stone dark:text-dark-text-secondary mb-6">
-            Du hast keine Berechtigung, auf den Admin-Bereich zuzugreifen.
-          </p>
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-sage dark:bg-dark-primary text-white font-medium hover:bg-opacity-90 dark:hover:bg-opacity-90 transition-colors"
-          >
-            ← Zurück zur Startseite
-          </Link>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (
@@ -79,7 +52,7 @@ export default function AdminLayout({
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94"
+                      d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.342.196.74.272 1.13.272h1.348c.55 0 1.02.398 1.11.94"
                     />
                     <path
                       strokeLinecap="round"
@@ -96,7 +69,7 @@ export default function AdminLayout({
                 Aktivierungsanfragen verwalten
               </p>
             </div>
-            <Link
+            <a
               href="/"
               className="text-sm text-slate-stone hover:text-sage dark:hover:text-dark-primary inline-flex items-center gap-1"
             >
@@ -114,7 +87,7 @@ export default function AdminLayout({
                 />
               </svg>
               Zurück
-            </Link>
+            </a>
           </div>
         </div>
       </div>
