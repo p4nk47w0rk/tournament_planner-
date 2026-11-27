@@ -260,6 +260,30 @@
     "filter": "Filtr",
     "clear": "Smazat"
   },
+  "admin": {
+    "title": "Admin-dashboard",
+    "loading": "Načítání...",
+    "pending": "Čekající",
+    "approved": "Schváleno",
+    "rejected": "Odmítnuto",
+    "noPending": "Žádné čekající žádosti.",
+    "approve": "Schválit",
+    "reject": "Odmítnout"
+  },
+  "auth": {
+    "requestActivation": {
+      "title": "Vyžádat si účet správce",
+      "subtitle": "Zadejte svou e-mailovou adresu. Obdržíte odkaz pro nastavení hesla.",
+      "emailLabel": "E-mailová adresa",
+      "emailPlaceholder": "admin@tournament-planner.com",
+      "submit": "Poslat e-mail",
+      "submitting": "Odesílání...",
+      "successTitle": "E-mail odeslán!",
+      "successMessage": "Za chvilku obdržíte e-mail s odkazem pro nastavení hesla. Zkontrolujte také složku se spamem.",
+      "backToLogin": "← Zpět na přihlášení",
+      "successBackToLogin": "← Zpět na přihlášení"
+    }
+  },
   "legal": {
     "imprintTitle": "Impressum",
     "imprintSubtitle": "Udaje podle § 5 DDG",

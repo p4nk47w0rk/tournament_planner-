@@ -1,7 +1,10 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export default function RequestActivationPage() {
+  const t = useTranslations("auth.requestActivation");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +30,7 @@ export default function RequestActivationPage() {
       }
 
       setSuccess(true);
-    } catch (err: unknown) {
+    } catch (err) {
       const message =
         err instanceof Error
           ? err.message
@@ -40,110 +43,84 @@ export default function RequestActivationPage() {
 
   if (success) {
     return (
-      <div
-        style={{
-          maxWidth: "400px",
-          margin: "100px auto",
-          padding: "24px",
-          textAlign: "center",
-        }}
-      >
-        <h2>✅ Email gesendet!</h2>
-        <p style={{ color: "#666", marginTop: "16px" }}>
-          Du erhältst in Kürze eine Email mit dem Link, um dein Passwort zu
-          setzen. Bitte überprüfe auch deinen Spam-Ordner.
+      <div className="max-w-md mx-auto px-4 py-16 text-center">
+        <div className="w-16 h-16 rounded-2xl bg-green-100 dark:bg-green-900/20 flex items-center justify-center mx-auto mb-6">
+          <svg
+            className="w-8 h-8 text-green-600 dark:text-green-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </div>
+        <h2 className="text-xl font-bold text-slate-ink dark:text-dark-text mb-2">
+          {t("successTitle")}
+        </h2>
+        <p className="text-slate-stone dark:text-dark-text-secondary mb-6">
+          {t("successMessage")}
         </p>
-        <a
+        <Link
           href="/login"
-          style={{
-            display: "inline-block",
-            marginTop: "24px",
-            color: "#D97757",
-            textDecoration: "none",
-          }}
+          className="inline-flex items-center gap-2 text-sm text-sage dark:text-dark-primary hover:underline font-medium"
         >
-          ← Zurück zum Login
-        </a>
+          {t("successBackToLogin")}
+        </Link>
       </div>
     );
   }
 
   return (
-    <div
-      style={{
-        maxWidth: "400px",
-        margin: "100px auto",
-        padding: "24px",
-      }}
-    >
-      <h2>Admin-Account anfordern</h2>
-      <p style={{ color: "#666", marginBottom: "24px" }}>
-        Gib deine Email-Adresse ein. Du erhältst einen Link, um dein Passwort zu
-        setzen.
+    <div className="max-w-md mx-auto px-4 py-16">
+      <h2 className="text-xl font-bold text-slate-ink dark:text-dark-text mb-2">
+        {t("title")}
+      </h2>
+      <p className="text-slate-stone dark:text-dark-text-secondary mb-6">
+        {t("subtitle")}
       </p>
 
       {error && (
-        <div
-          style={{
-            padding: "12px",
-            marginBottom: "16px",
-            backgroundColor: "#fee2e2",
-            color: "#dc2626",
-            borderRadius: "8px",
-            fontSize: "14px",
-          }}
-        >
+        <div className="p-4 mb-6 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl text-sm border border-red-200 dark:border-red-800">
           {error}
         </div>
       )}
 
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "16px" }}>
-          <label
-            style={{ display: "block", marginBottom: "4px", fontWeight: 500 }}
-          >
-            Email-Adresse
+        <div className="mb-6">
+          <label className="block mb-2 text-sm font-medium text-slate-ink dark:text-dark-text">
+            {t("emailLabel")}
           </label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            style={{
-              width: "100%",
-              padding: "10px 12px",
-              border: "1px solid #d1d5db",
-              borderRadius: "8px",
-              fontSize: "16px",
-              boxSizing: "border-box",
-            }}
-            placeholder="admin@tournament-planner.com"
+            placeholder={t("emailPlaceholder")}
+            className="w-full px-4 py-3 border border-slate-300 dark:border-dark-border rounded-xl text-sm bg-paper dark:bg-dark-bg text-slate-ink dark:text-dark-text focus:outline-none focus:ring-2 focus:ring-sage dark:focus:ring-dark-primary focus:border-transparent transition-colors"
           />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          style={{
-            width: "100%",
-            padding: "12px",
-            backgroundColor: "#D97757",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            fontSize: "16px",
-            fontWeight: 600,
-            cursor: loading ? "not-allowed" : "pointer",
-          }}
+          className="w-full py-3 bg-sage dark:bg-dark-primary text-white rounded-xl font-medium hover:bg-opacity-90 dark:hover:bg-opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? "Wird gesendet..." : "Email senden"}
+          {loading ? t("submitting") : t("submit")}
         </button>
       </form>
 
-      <p style={{ textAlign: "center", marginTop: "16px", fontSize: "14px" }}>
-        <a href="/login" style={{ color: "#D97757", textDecoration: "none" }}>
-          ← Zurück zum Login
-        </a>
+      <p className="text-center mt-6">
+        <Link
+          href="/login"
+          className="text-sm text-sage dark:text-dark-primary hover:underline font-medium"
+        >
+          {t("backToLogin")}
+        </Link>
       </p>
     </div>
   );

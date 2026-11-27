@@ -124,12 +124,21 @@ export function useAuth() {
 
   const isLoading = sessionLoading || userLoading;
 
+  const isAuthenticated = !!session;
+
+  const role = user?.user_metadata?.role as
+    "super_admin" | "admin" | "user" | undefined;
+
+  const isSuperAdmin = role === "super_admin";
+
   return {
     session,
     user,
     isLoading,
-    isAuthenticated: !!session,
+    isAuthenticated,
     signIn,
     signOut,
+    role,
+    isSuperAdmin,
   };
 }

@@ -260,6 +260,30 @@
     "filter": "Filter",
     "clear": "Löschen"
   },
+  "admin": {
+    "title": "Admin-Dashboard",
+    "loading": "Laden...",
+    "pending": "Ausstehend",
+    "approved": "Genehmigt",
+    "rejected": "Abgelehnt",
+    "noPending": "Keine ausstehenden Anfragen.",
+    "approve": "Genehmigen",
+    "reject": "Ablehnen"
+  },
+  "auth": {
+    "requestActivation": {
+      "title": "Admin-Account anfordern",
+      "subtitle": "Gib deine E-Mail-Adresse ein. Du erhältst einen Link, um dein Passwort zu setzen.",
+      "emailLabel": "E-Mail-Adresse",
+      "emailPlaceholder": "admin@tournament-planner.com",
+      "submit": "Email senden",
+      "submitting": "Wird gesendet...",
+      "successTitle": "Email gesendet!",
+      "successMessage": "Du erhältst in Kürze eine Email mit dem Link, um dein Passwort zu setzen. Bitte überprüfe auch deinen Spam-Ordner.",
+      "backToLogin": "← Zurück zum Login",
+      "successBackToLogin": "← Zurück zum Login"
+    }
+  },
   "legal": {
     "imprintTitle": "Impressum",
     "imprintSubtitle": "Angaben gemäß § 5 DDG",

@@ -2,20 +2,26 @@
  * API Route: List Activation Requests (Admin Only)
  *
  * GET /api/admin/activation-requests
- *
- * Returns all activation requests with their status.
  */
 
 import { NextResponse, type NextRequest } from "next/server";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/server";
 import { getSession } from "@/lib/supabase/server";
 
 export async function GET(request: NextRequest) {
   try {
-    // Check if user is authenticated
     const session = await getSession();
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Check if user is super_admin
+    const role = (session.user?.user_metadata?.role ??
+      session.user?.user_metadata?.role ??
+      "user") as string;
+
+    if (role !== "super_admin") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const supabase = createAdminClient();

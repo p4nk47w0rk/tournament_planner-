@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import ThemeToggle from "../Shared/ThemeToggle";
@@ -9,12 +9,47 @@ import { useAuth } from "@/lib/supabase/hooks";
 import { TPIcon } from "../Shared/BrandSVGs";
 import { isLocalDevAuth } from "@/lib/supabase/client";
 
+function ChevronDownIcon({ open }: { open: boolean }) {
+  const rotation = open ? "rotate-180" : "";
+  return (
+    <svg
+      className={`w-4 h-4 transition-transform duration-200 ${rotation}`}
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M19 9l-7 7-7-7"
+      />
+    </svg>
+  );
+}
+
 export default function Navbar() {
-  const { user, isAuthenticated, isLoading, signOut } = useAuth();
+  const { user, isAuthenticated, isLoading, signOut, isSuperAdmin } = useAuth();
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href;
   const [editMode, setEditMode] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Measure scrollbar width and reserve space for consistent layout across pages
   useEffect(() => {
@@ -59,9 +94,12 @@ export default function Navbar() {
   };
 
   const handleLogout = async () => {
+    setDropdownOpen(false);
     await signOut();
     setEditMode(false);
     localStorage.removeItem("edit-mode");
+    // Force page refresh after logout so auth state updates everywhere
+    window.location.href = "/";
   };
 
   return (
@@ -83,6 +121,9 @@ export default function Navbar() {
               <>
                 <NavItem href="/turniere" label="Meine Turniere" />
                 <NavItem href="/neues-turnier" label="Neues Turnier" />
+                {isSuperAdmin && (
+                  <NavItem href="/admin/activation-requests" label="Admin" />
+                )}
               </>
             )}
           </div>
@@ -93,10 +134,14 @@ export default function Navbar() {
               isLoading={isLoading}
               isAuthenticated={isAuthenticated}
               user={user}
+              isSuperAdmin={isSuperAdmin}
               editMode={editMode}
               toggleEditMode={toggleEditMode}
               handleLogout={handleLogout}
               isLocalDev={isLocalDevAuth()}
+              dropdownRef={dropdownRef}
+              dropdownOpen={dropdownOpen}
+              setDropdownOpen={setDropdownOpen}
             />
             <LocaleSwitcher />
             <ThemeToggle />
@@ -112,7 +157,12 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu */}
-        {mobileMenuOpen && <MobileMenu isAuthenticated={isAuthenticated} />}
+        {mobileMenuOpen && (
+          <MobileMenu
+            isAuthenticated={isAuthenticated}
+            isSuperAdmin={isSuperAdmin}
+          />
+        )}
       </div>
     </nav>
   );
@@ -126,18 +176,26 @@ function AuthSection({
   isLoading,
   isAuthenticated,
   user,
+  isSuperAdmin,
   editMode,
   toggleEditMode,
   handleLogout,
   isLocalDev,
+  dropdownRef,
+  dropdownOpen,
+  setDropdownOpen,
 }: {
   isLoading: boolean;
   isAuthenticated: boolean;
   user: unknown;
+  isSuperAdmin: boolean;
   editMode: boolean;
   toggleEditMode: () => void;
   handleLogout: () => Promise<void>;
   isLocalDev: boolean;
+  dropdownRef: React.RefObject<HTMLDivElement | null>;
+  dropdownOpen: boolean;
+  setDropdownOpen: (open: boolean) => void;
 }) {
   if (isLoading) {
     return (
@@ -146,29 +204,43 @@ function AuthSection({
   }
 
   if (isAuthenticated && user) {
+    const email = (user as { email?: string })?.email?.split("@")[0] ?? "User";
+
     return (
-      <>
-        <span className="hidden sm:inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
-          Admin
-        </span>
+      <div className="relative" ref={dropdownRef}>
         <button
-          onClick={toggleEditMode}
-          className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
-            editMode
-              ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
-              : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
-          }`}
-          title={editMode ? "Edit-Mode: AN" : "Edit-Mode: AUS"}
+          onClick={() => setDropdownOpen(!dropdownOpen)}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-sage-mist/50 dark:hover:bg-muted transition-colors"
         >
-          {editMode ? "✏️ Edit" : "👁 View"}
+          <div className="w-7 h-7 rounded-full bg-sage/20 dark:bg-dark-primary/30 flex items-center justify-center text-xs font-bold text-sage dark:text-dark-primary">
+            {email.charAt(0).toUpperCase()}
+          </div>
+          <span className="hidden sm:inline truncate max-w-[120px]">
+            {email}
+          </span>
+          <ChevronDownIcon open={dropdownOpen} />
         </button>
-        <button
-          onClick={handleLogout}
-          className="px-3 py-2 rounded-lg text-sm font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
-        >
-          Logout
-        </button>
-      </>
+
+        {dropdownOpen && (
+          <div className="absolute right-0 mt-1 w-48 bg-paper dark:bg-dark-bg border border-slate-hairline dark:border-dark-border rounded-xl shadow-lg py-1 z-50">
+            {isSuperAdmin && (
+              <Link
+                href="/admin/activation-requests"
+                onClick={() => setDropdownOpen(false)}
+                className="block px-4 py-2 text-sm text-slate-ink dark:text-dark-text hover:bg-sage-mist/50 dark:hover:bg-muted"
+              >
+                ⚙️ Admin-Dashboard
+              </Link>
+            )}
+            <button
+              onClick={handleLogout}
+              className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+            >
+              Abmelden
+            </button>
+          </div>
+        )}
+      </div>
     );
   }
 
@@ -214,7 +286,13 @@ function MenuIcon({ open }: { open: boolean }) {
   );
 }
 
-function MobileMenu({ isAuthenticated }: { isAuthenticated: boolean }) {
+function MobileMenu({
+  isAuthenticated,
+  isSuperAdmin,
+}: {
+  isAuthenticated: boolean;
+  isSuperAdmin: boolean;
+}) {
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href;
 
@@ -236,6 +314,14 @@ function MobileMenu({ isAuthenticated }: { isAuthenticated: boolean }) {
               mobile
               active={isActive("/neues-turnier")}
             />
+            {isSuperAdmin && (
+              <NavItem
+                href="/admin/activation-requests"
+                label="Admin-Dashboard"
+                mobile
+                active={isActive("/admin/activation-requests")}
+              />
+            )}
           </>
         )}
       </div>
