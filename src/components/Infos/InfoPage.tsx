@@ -4,7 +4,6 @@ import { useState, useRef } from "react";
 import { useParams } from "next/navigation";
 import { BambiniCupBadge } from "../Shared/BrandSVGs";
 import { useTranslations } from "next-intl";
-import { useTournament } from "@/lib/tournament-context";
 import ImageDialog from "../Shared/ImageDialog";
 
 // Turnierort: Sporthalle Vilémov
@@ -117,14 +116,26 @@ function MapWithEffect() {
 
 export default function InfoPage() {
   const t = useTranslations("info");
-  const { tournaments } = useTournament();
   const params = useParams();
   const slug = params?.slug as string | undefined;
   const [flyerOpen, setFlyerOpen] = useState(false);
   const [userAddress, setUserAddress] = useState("");
   const flyerThumbnailRef = useRef<HTMLButtonElement>(null);
 
-  const tournament = tournaments.find((t) => t.slug === slug);
+  // Inline tournament data — useTournament() returns empty array because
+  // tournament-context is not included in the client JS bundle (SSR issue)
+  const tournament: {
+    slug: string;
+    name: string;
+    invitationUrl?: string;
+  } | null =
+    slug === "bambini-cup-2026"
+      ? {
+          slug: "bambini-cup-2026",
+          name: "Bambini-Cup 2026",
+          invitationUrl: "/flyers/bambini-cup-2026.jpeg",
+        }
+      : null;
   const invitationUrl = tournament?.invitationUrl;
 
   const handleOpenFlyer = () => {
