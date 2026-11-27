@@ -2,8 +2,6 @@ import { getSession } from "@/lib/supabase/server";
 import LandingPage from "./_landing-page";
 import Dashboard from "./_dashboard";
 
-export const instant = false;
-
 export default async function HomePage({
   searchParams,
 }: {

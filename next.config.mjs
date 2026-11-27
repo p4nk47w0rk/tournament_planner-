@@ -13,8 +13,6 @@ const nextConfig = {
     },
   },
   reactCompiler: false,
-  cacheComponents: true,
-  partialPrefetching: true,
 };
 
 export default withNextIntl(nextConfig);

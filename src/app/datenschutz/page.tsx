@@ -8,8 +8,6 @@ export const metadata = {
   description: "Informationen zur Datenverarbeitung",
 };
 
-export const instant = false;
-
 export default function DatenschutzPage() {
   return (
     <div className="max-w-4xl mx-auto">
