@@ -16,8 +16,8 @@ export interface Tournament {
   invitationUrl?: string;
 }
 
-// Static tournament data — exported so it's reliably included in the client bundle
-export const TOURNAMENTS: Tournament[] = [
+/** @internal — static tournament list, provided to the context */
+const TOURNAMENTS: Tournament[] = [
   {
     id: "bambini-cup-2026",
     name: "Bambini-Cup 2026",
