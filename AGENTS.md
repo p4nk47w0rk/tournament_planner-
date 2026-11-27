@@ -42,3 +42,36 @@ Spec → Tickets → Implement → TDD → Code-Review → Merge
 - `/tdd` — Test-Driven Development
 - `/code-review` — Qualitätssicherung (Standards + Spec)
 - `/diagnose` — Fehler debugging
+
+## Arbeitsbereich: Branch-Convention
+
+**WICHTIG — Nie direkt auf `main` arbeiten!**
+
+Alle Änderungen erfolgen auf Feature-/Fix-Branches. Main ist nur für Merge-Commits offen.
+
+**Branch-Namenskonvention:**
+
+- `feat/kurzbeschreibung` — Neue Features
+- `fix/kurzbeschreibung` — Bugfixes
+- `chore/kurzbeschreibung` — Wartung/Infrastruktur (Dependencies, CI, Config)
+- `docs/kurzbeschreibung` — Dokumentationsänderungen
+
+**Beispiele:**
+
+- `fix/pnpm-action-setup-node-24`
+- `feat/admin-dashboard`
+- `chore/update-eslint-config`
+
+**Workflow:**
+
+1. Branch erstellen: `git checkout -b feat/mein-feature main`
+2. Commits auf dem Branch machen
+3. Push: `git push origin feat/mein-feature`
+4. PR auf main erstellen und mergen
+5. Branch nach Merge löschen: `git branch -d feat/mein-feature`
+
+**Regeln:**
+
+- Auf `main` nur Merge-Commits durch PRs
+- Branch-Namen kleingeschrieben, Bindestriche statt Unterstriche
+- Beschreibung im Branch-Namen knapp und prägnant
