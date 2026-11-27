@@ -16,14 +16,18 @@ export interface Tournament {
   invitationUrl?: string;
 }
 
-/** @internal — static tournament list, provided to the context */
-const TOURNAMENTS: Tournament[] = [
-  {
+export const TOURNAMENT_SLUGS = ["bambini-cup-2026"] as const;
+export type TournamentSlug = (typeof TOURNAMENT_SLUGS)[number];
+
+export const TOURNAMENT_METADATA: Record<
+  TournamentSlug,
+  Omit<Tournament, "slug">
+> = {
+  "bambini-cup-2026": {
     id: "bambini-cup-2026",
     name: "Bambini-Cup 2026",
     shortName: "Bambini-Cup",
-    slug: "bambini-cup-2026",
-    status: "upcoming",
+    status: "upcoming" as const,
     date: "5. Dezember 2026",
     location: "Sporthalle Vilémov",
     teamCount: 10,
@@ -31,7 +35,11 @@ const TOURNAMENTS: Tournament[] = [
     groupCount: 2,
     invitationUrl: "/flyers/bambini-cup-2026.jpeg",
   },
-];
+};
+
+function getTournaments(slugs: readonly TournamentSlug[]): Tournament[] {
+  return slugs.map((slug) => ({ ...TOURNAMENT_METADATA[slug], slug }));
+}
 
 interface TournamentContextValue {
   tournaments: Tournament[];
@@ -60,13 +68,14 @@ export function TournamentProvider({
 
   const activeTournament =
     activeSlug && typeof window !== "undefined"
-      ? (TOURNAMENTS.find((t) => t.slug === activeSlug) ?? null)
+      ? (getTournaments(TOURNAMENT_SLUGS).find((t) => t.slug === activeSlug) ??
+        null)
       : null;
 
   return (
     <TournamentContext.Provider
       value={{
-        tournaments: TOURNAMENTS,
+        tournaments: getTournaments(TOURNAMENT_SLUGS),
         activeTournament,
         setActiveTournament,
         activeSlug,
