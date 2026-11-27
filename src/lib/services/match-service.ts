@@ -6,50 +6,8 @@
  */
 
 import { createClient } from "@/lib/supabase/client";
-import type { Match } from "@/lib/types";
+import type { Match, MatchDbRow } from "@/lib/types";
 import { INITIAL_MATCHES } from "@/lib/tournament-data";
-
-interface SupabaseMatchRow {
-  id: number;
-  match_no: number;
-  time: string;
-  pitch: string;
-  group_name: string;
-  phase: string;
-  home_team: string;
-  away_team: string;
-  home_score: number | null;
-  away_score: number | null;
-  status: string;
-  fairplay: boolean;
-  created_at?: string;
-  updated_at?: string;
-}
-
-const TIMEOUT = 2000; // ms
-
-/**
- * Wrap a thenable (Supabase builder) with a timeout.
- * The thenable is awaited; if it doesn't resolve within ms, rejects.
- */
-function withTimeout<T>(thenable: PromiseLike<T>, ms: number): Promise<T> {
-  return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => {
-      reject(new Error("Request timed out after 2s"));
-    }, ms);
-
-    thenable.then(
-      (value) => {
-        clearTimeout(timer);
-        resolve(value);
-      },
-      (reason) => {
-        clearTimeout(timer);
-        reject(reason);
-      }
-    );
-  });
-}
 
 export class MatchService {
   /**
@@ -58,20 +16,15 @@ export class MatchService {
   static async getAllMatches(): Promise<Match[]> {
     try {
       const supabase = createClient();
-      const builder = supabase
+      const { data, error } = await supabase
         .from("matches")
         .select("*")
         .order("match_no", { ascending: true });
 
-      const result = await withTimeout(
-        builder as unknown as PromiseLike<{ data: unknown; error: unknown }>,
-        TIMEOUT
-      );
+      if (error) throw error;
 
-      if (result.error) throw result.error;
-      const data = result.data as Match[] | null;
       if (data && data.length > 0) {
-        return data;
+        return data.map((row) => this.mapToMatch(row));
       }
     } catch (err) {
       console.warn(
@@ -80,6 +33,7 @@ export class MatchService {
       );
     }
 
+    // Fallback to static data
     return INITIAL_MATCHES;
   }
 
@@ -93,55 +47,50 @@ export class MatchService {
   ): Promise<Match> {
     const supabase = createClient();
 
-    let status: "scheduled" | "live" | "finished" = "scheduled";
-    if (homeScore > 0 && awayScore > 0) {
-      status = "finished";
+    // Determine status based on scores
+    let status: "scheduled" | "live" | "finished";
+    if (homeScore === null && awayScore === null) {
+      status = "scheduled";
     } else if (homeScore > 0 || awayScore > 0) {
       status = "live";
+    } else {
+      // Both scores are 0 or explicitly set to 0:0
+      status = "finished";
     }
 
-    const builder = supabase
+    const { data, error } = await supabase
       .from("matches")
       .update({ home_score: homeScore, away_score: awayScore, status })
       .eq("id", matchId)
       .select()
       .single();
 
-    const result = await withTimeout(
-      builder as unknown as PromiseLike<{ data: unknown; error: unknown }>,
-      TIMEOUT
-    );
-
-    if (result.error) throw result.error;
-    const data = result.data as Match | null;
+    if (error) throw error;
     if (!data) throw new Error("Match not found");
 
-    return data;
+    return this.mapToMatch(data);
   }
 
   /**
    * Subscribe to all match changes (realtime)
-   * Uses unique channel name to avoid Supabase channel pooling issues
-   * in React Strict Mode (double-mount).
    */
   static subscribeToAll(callback: () => void) {
     const supabase = createClient();
 
-    const channelName = `all-matches-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-
-    const channel = supabase.channel(channelName);
-    channel.on(
-      "postgres_changes",
-      {
-        event: "UPDATE",
-        schema: "public",
-        table: "matches",
-      },
-      () => {
-        callback();
-      }
-    );
-    channel.subscribe();
+    const channel = supabase
+      .channel("all-matches")
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "matches",
+        },
+        () => {
+          callback();
+        }
+      )
+      .subscribe();
 
     return () => {
       channel.unsubscribe();
@@ -151,19 +100,19 @@ export class MatchService {
   /**
    * Map Supabase row to Match interface
    */
-  private static mapToMatch(row: SupabaseMatchRow): Match {
+  private static mapToMatch(row: MatchDbRow): Match {
     return {
       id: row.id,
       matchNo: row.match_no,
       time: row.time,
-      pitch: row.pitch as "A" | "B",
-      group: row.group_name as "A" | "B",
-      phase: row.phase as Match["phase"],
+      pitch: row.pitch,
+      group: row.group_name,
+      phase: row.phase,
       homeTeam: row.home_team,
       awayTeam: row.away_team,
       homeScore: row.home_score,
       awayScore: row.away_score,
-      status: row.status as Match["status"],
+      status: row.status,
       fairplay: row.fairplay,
       createdAt: row.created_at,
       updatedAt: row.updated_at,

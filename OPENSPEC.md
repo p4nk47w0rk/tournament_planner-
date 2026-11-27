@@ -1,5 +1,10 @@
 # OpenSpec — Tournament Planner Workflow
 
+Dieses Dokument definiert den einzigen Workflow für das Projekt.
+Jeder Agent (menschlich oder KI) folgt diesem Ablauf — keine Ausnahmen.
+
+---
+
 ## Harte Regel: EIN Repository
 
 **ALLE Arbeit findet NUR auf `p4nk47w0rk/tournament_planner-` statt.**
@@ -266,7 +271,7 @@ Alle Skills liegen unter `.agents/skills/`:
 6. **Commit Messages** — Conventional Commits (`feat:`, `fix:`, `refactor:`)
 7. **Spek zuerst** — Keine Implementierung ohne Spec
 8. **Ticket zuerst** — Keine Implementierung ohne Ticket
-9. **Dependenz-Kette** — Tickets in Dependency-Order abarbeiten
+9. **Dependenz-Kette** — T02 erst wenn T01 closed ist
 10. **Single Repo** — NUR `p4nk47w0rk/tournament_planner-`
 
 ---

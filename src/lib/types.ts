@@ -91,3 +91,33 @@ export interface AuthState {
   isLoading: boolean;
   isAuthenticated: boolean;
 }
+
+// ============================================
+// DB Row Types (for type-safe Supabase mapping)
+// ============================================
+
+export interface GoalDbRow {
+  id: number;
+  match_id: number;
+  team: string;
+  minute: string | null;
+  player: string | null;
+  created_at: string;
+}
+
+export interface MatchDbRow {
+  id: number;
+  match_no: number;
+  time: string;
+  pitch: "A" | "B";
+  group_name: "A" | "B";
+  phase: MatchPhase;
+  home_team: string;
+  away_team: string;
+  home_score: number | null;
+  away_score: number | null;
+  status: MatchStatus;
+  fairplay: boolean;
+  created_at: string;
+  updated_at: string;
+}
