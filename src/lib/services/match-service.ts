@@ -11,6 +11,40 @@ import { INITIAL_MATCHES } from "@/lib/tournament-data";
 
 export class MatchService {
   /**
+   * Map Supabase row to Match interface — pure function
+   */
+  static mapToMatch(row: MatchDbRow): Match {
+    return {
+      id: row.id,
+      matchNo: row.match_no,
+      time: row.time,
+      pitch: row.pitch,
+      group: row.group_name,
+      phase: row.phase,
+      homeTeam: row.home_team,
+      awayTeam: row.away_team,
+      homeScore: row.home_score,
+      awayScore: row.away_score,
+      status: row.status,
+      fairplay: row.fairplay,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at,
+    };
+  }
+
+  /**
+   * Determine match status from scores — pure function
+   */
+  static determineStatus(
+    homeScore: number | null,
+    awayScore: number | null
+  ): "scheduled" | "live" | "finished" {
+    if (homeScore === null && awayScore === null) return "scheduled";
+    if ((homeScore ?? 0) > 0 || (awayScore ?? 0) > 0) return "live";
+    return "finished";
+  }
+
+  /**
    * Get all matches from Supabase (or fallback to static data)
    */
   static async getAllMatches(): Promise<Match[]> {
@@ -46,17 +80,7 @@ export class MatchService {
     awayScore: number
   ): Promise<Match> {
     const supabase = createClient();
-
-    // Determine status based on scores
-    let status: "scheduled" | "live" | "finished";
-    if (homeScore === null && awayScore === null) {
-      status = "scheduled";
-    } else if (homeScore > 0 || awayScore > 0) {
-      status = "live";
-    } else {
-      // Both scores are 0 or explicitly set to 0:0
-      status = "finished";
-    }
+    const status = this.determineStatus(homeScore, awayScore);
 
     const { data, error } = await supabase
       .from("matches")
@@ -94,28 +118,6 @@ export class MatchService {
 
     return () => {
       channel.unsubscribe();
-    };
-  }
-
-  /**
-   * Map Supabase row to Match interface
-   */
-  private static mapToMatch(row: MatchDbRow): Match {
-    return {
-      id: row.id,
-      matchNo: row.match_no,
-      time: row.time,
-      pitch: row.pitch,
-      group: row.group_name,
-      phase: row.phase,
-      homeTeam: row.home_team,
-      awayTeam: row.away_team,
-      homeScore: row.home_score,
-      awayScore: row.away_score,
-      status: row.status,
-      fairplay: row.fairplay,
-      createdAt: row.created_at,
-      updatedAt: row.updated_at,
     };
   }
 }
