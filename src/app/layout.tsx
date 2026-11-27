@@ -25,6 +25,12 @@ export const metadata: Metadata = {
     "Allgemeine Turnierplattform für Fußballturniere. Spielplan, Gruppenstände und Live-Ergebnisse in Echtzeit.",
 };
 
+/**
+ * Disable instant prerender — cookies() and getLocale() in this layout
+ * would block static prerendering in Next.js 16.
+ */
+export const instant = false;
+
 export default async function RootLayout({
   children,
 }: {

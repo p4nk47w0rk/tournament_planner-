@@ -9,6 +9,8 @@ export const metadata = {
   description: "Angaben gemäß § 5 DDG",
 };
 
+export const instant = false;
+
 export default function ImpressumPage() {
   return (
     <div className="max-w-4xl mx-auto">
