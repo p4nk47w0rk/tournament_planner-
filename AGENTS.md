@@ -28,7 +28,12 @@ Spec → Tickets → Implement → TDD → Code-Review → Merge
 
 **Regeln (nie ignorieren):**
 
-1. **Tests zuerst** — Kein Code ohne Test (immer `/tdd` Skill laden)
+1. **TDD — Test First (immer!)** — Für JEDE Aufgabe (Feature und Bugfix):
+   - **Phase Rot**: Erster Schritt IMMER ein schreibender Test (`vi`).
+   - **Phase Grün**: Nur genug Code schreiben, damit der Test grün wird.
+   - **Phase Refactor**: Aufräumen ohne Test-Änderungen.
+   - Kein Produktivcode schreiben ohne vorherigen failing Test.
+   - Immer `/tdd` Skill laden bevor Arbeit beginnt.
 2. **Review vor Merge** — Immer `/code-review` Skill nutzen
 3. **TypeScript Strict** — Keine `any`, `pnpm lint` muss clean durchlaufen
 4. **Ticket zuerst** — Keine Implementierung ohne Ticket
