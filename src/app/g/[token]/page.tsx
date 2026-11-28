@@ -139,11 +139,5 @@ export default async function GuestViewPage({ params }: PageProps) {
     return notFound();
   }
 
-  return (
-    <GuestViewClient
-      token={token}
-      slug={tournamentSlug}
-      isArchived={isArchived}
-    />
-  );
+  return <GuestViewClient slug={tournamentSlug} isArchived={isArchived} />;
 }

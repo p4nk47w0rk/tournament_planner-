@@ -22,16 +22,16 @@ const eslintConfig = defineConfig([
       // Max nesting depth — beyond 3 levels, extract a function
       "max-depth": ["error", 3],
 
-      // Max lines per function — warn (JSX-Componenten sind natürlicht länger)
+      // Max lines per function — error (JSX max ~80 Zeilen)
       "max-lines-per-function": [
-        "warn",
+        "error",
         { max: 80, skipComments: true, skipBlankLines: true },
       ],
 
-      // Max lines per file — error
+      // Max lines per file — error (nach Refactoring max ~300)
       "max-lines": [
         "error",
-        { max: 700, skipComments: true, skipBlankLines: true },
+        { max: 300, skipComments: true, skipBlankLines: true },
       ],
 
       // Max statement complexity per line — keep branches simple
@@ -223,10 +223,12 @@ const eslintConfig = defineConfig([
       "src/components/Infos/InfoPage.tsx",
       "src/components/Shared/BrandSVGs.tsx",
       "src/components/Layout/Navbar.tsx",
+      "src/lib/tournament-data.ts",
     ],
     rules: {
       "sonarjs/cognitive-complexity": "off",
       "max-lines-per-function": "off",
+      "max-lines": "off",
     },
   },
 
