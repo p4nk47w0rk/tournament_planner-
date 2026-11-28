@@ -1,6 +1,6 @@
 "use client";
 
-import type { PrivacySection } from "@/app/admin/settings/page";
+import type { PrivacySection } from "@/app/admin/settings/types";
 
 /* ============================================
  * PrivacyEditor

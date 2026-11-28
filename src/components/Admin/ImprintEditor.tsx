@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { ImprintSettings } from "@/app/admin/settings/page";
+import type { ImprintSettings } from "@/app/admin/settings/types";
 
 /* ============================================
  * Formular-Felder für Impressum

@@ -93,6 +93,25 @@ export interface AuthState {
 }
 
 // ============================================
+// Guest Token Types (für Guest View / QR Sharing)
+// ============================================
+
+export interface GuestToken {
+  id: number;
+  token: string;
+  tournamentSlug: string;
+  createdAt: string;
+}
+
+export interface GuestTokenDbRow {
+  id: number;
+  token: string;
+  tournament_slug: string;
+  created_at: string;
+  archived: boolean;
+}
+
+// ============================================
 // DB Row Types (for type-safe Supabase mapping)
 // ============================================
 
