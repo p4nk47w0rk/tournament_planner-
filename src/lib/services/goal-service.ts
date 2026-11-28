@@ -10,6 +10,47 @@ import type { Goal, GoalDbRow } from "@/lib/types";
 
 export class GoalService {
   /**
+   * Normalize goal input data — pure function
+   */
+  static normalizeGoalData(
+    matchId: number,
+    team: string,
+    minute: string | null | undefined,
+    player: string | null | undefined
+  ) {
+    return {
+      match_id: matchId,
+      team,
+      minute: minute || null,
+      player: player || null,
+    };
+  }
+
+  /**
+   * Map Supabase row to Goal interface — pure function
+   */
+  static mapToGoal(row: GoalDbRow): Goal {
+    return {
+      id: row.id,
+      matchId: row.match_id,
+      team: row.team,
+      minute: row.minute,
+      player: row.player,
+      createdAt: row.created_at,
+    };
+  }
+
+  /**
+   * Sort goals by creation time — pure function
+   */
+  static sortGoalsByTime(goals: Goal[]): Goal[] {
+    return [...goals].sort(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    );
+  }
+
+  /**
    * Add a goal to a match
    */
   static async addGoal(
@@ -19,29 +60,18 @@ export class GoalService {
     player?: string | null
   ): Promise<Goal> {
     const supabase = createClient();
+    const data = this.normalizeGoalData(matchId, team, minute, player);
 
-    const { data, error } = await supabase
+    const { data: result, error } = await supabase
       .from("goals")
-      .insert({
-        match_id: matchId,
-        team,
-        minute: minute || null,
-        player: player || null,
-      })
+      .insert(data)
       .select()
       .single();
 
     if (error) throw error;
-    if (!data) throw new Error("Goal created but no data returned");
+    if (!result) throw new Error("Goal created but no data returned");
 
-    return {
-      id: data.id,
-      matchId: data.match_id,
-      team: data.team,
-      minute: data.minute,
-      player: data.player,
-      createdAt: data.created_at,
-    };
+    return this.mapToGoal(result);
   }
 
   /**
@@ -59,14 +89,7 @@ export class GoalService {
     if (error) throw error;
     if (!data) return [];
 
-    return data.map((row: GoalDbRow) => ({
-      id: row.id,
-      matchId: row.match_id,
-      team: row.team,
-      minute: row.minute,
-      player: row.player,
-      createdAt: row.created_at,
-    }));
+    return this.sortGoalsByTime(data.map((row) => this.mapToGoal(row)));
   }
 
   /**
@@ -98,14 +121,7 @@ export class GoalService {
         },
         (payload) => {
           const data = payload.new as GoalDbRow;
-          callback({
-            id: data.id,
-            matchId: data.match_id,
-            team: data.team,
-            minute: data.minute,
-            player: data.player,
-            createdAt: data.created_at,
-          });
+          callback(this.mapToGoal(data));
         }
       )
       .subscribe();
