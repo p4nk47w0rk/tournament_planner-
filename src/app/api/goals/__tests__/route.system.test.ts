@@ -37,6 +37,10 @@ vi.mock("@/lib/supabase/server", () => ({
   createClient: async () => mockSupabase,
 }));
 
+const baseApiUrl = "http://localhost/api/goals";
+const created_at = "2024-01-15T10:42:00Z";
+const testMatchId = 5;
+
 // eslint-disable-next-line max-lines-per-function
 describe("API /api/goals — System Tests", () => {
   beforeEach(() => {
@@ -46,7 +50,7 @@ describe("API /api/goals — System Tests", () => {
   // ── GET ──────────────────────────────────────────────────────────
 
   it("GET should return 400 when matchId is missing", async () => {
-    const response = await GET(createRequest("http://localhost/api/goals"));
+    const response = await GET(createRequest(baseApiUrl));
 
     expect(response.status).toBe(400);
     const body = await response.json();
@@ -61,7 +65,7 @@ describe("API /api/goals — System Tests", () => {
         team: "Varnsdorf",
         minute: "42",
         player: "Kuba",
-        created_at: "2024-01-15T10:42:00Z",
+        created_at,
       },
       {
         id: 2,
@@ -77,7 +81,7 @@ describe("API /api/goals — System Tests", () => {
     mockSupabase.from.mockReturnValueOnce(queryChain(mockGoals));
 
     const response = await GET(
-      createRequest("http://localhost/api/goals?matchId=5")
+      createRequest(`${baseApiUrl}?matchId=${testMatchId}`)
     );
 
     expect(response.status).toBe(200);
@@ -104,7 +108,7 @@ describe("API /api/goals — System Tests", () => {
     );
 
     const response = await GET(
-      createRequest("http://localhost/api/goals?matchId=5")
+      createRequest(`${baseApiUrl}?matchId=${testMatchId}`)
     );
 
     expect(response.status).toBe(500);
@@ -118,9 +122,9 @@ describe("API /api/goals — System Tests", () => {
     mockSupabase.auth.getUser.mockResolvedValueOnce(unauthResponse);
 
     const response = await POST(
-      createRequest("http://localhost/api/goals", {
+      createRequest(baseApiUrl, {
         method: "POST",
-        body: { matchId: 5, team: "Varnsdorf" },
+        body: { matchId: testMatchId, team: "Varnsdorf" },
       })
     );
 
@@ -133,7 +137,7 @@ describe("API /api/goals — System Tests", () => {
     mockSupabase.auth.getUser.mockResolvedValueOnce(authResponse);
 
     const response = await POST(
-      createRequest("http://localhost/api/goals", {
+      createRequest(baseApiUrl, {
         method: "POST",
         body: { team: "Varnsdorf" },
       })
@@ -148,9 +152,9 @@ describe("API /api/goals — System Tests", () => {
     mockSupabase.auth.getUser.mockResolvedValueOnce(authResponse);
 
     const response = await POST(
-      createRequest("http://localhost/api/goals", {
+      createRequest(baseApiUrl, {
         method: "POST",
-        body: { matchId: 5, team: "InvalidTeamX" },
+        body: { matchId: testMatchId, team: "InvalidTeamX" },
       })
     );
 
@@ -163,7 +167,7 @@ describe("API /api/goals — System Tests", () => {
     mockSupabase.auth.getUser.mockResolvedValueOnce(authResponse);
 
     const response = await POST(
-      createRequest("http://localhost/api/goals", {
+      createRequest(baseApiUrl, {
         method: "POST",
         body: { matchId: "abc", team: "Varnsdorf" },
       })
@@ -183,7 +187,7 @@ describe("API /api/goals — System Tests", () => {
       team: "Varnsdorf",
       minute: "42",
       player: "Kuba",
-      created_at: "2024-01-15T10:42:00Z",
+      created_at,
     };
 
     setupQuery({ data: insertedGoal, error: null }, insertedGoal, "single");
@@ -192,9 +196,14 @@ describe("API /api/goals — System Tests", () => {
     );
 
     const response = await POST(
-      createRequest("http://localhost/api/goals", {
+      createRequest(baseApiUrl, {
         method: "POST",
-        body: { matchId: 5, team: "Varnsdorf", minute: "42", player: "Kuba" },
+        body: {
+          matchId: testMatchId,
+          team: "Varnsdorf",
+          minute: "42",
+          player: "Kuba",
+        },
       })
     );
 
@@ -221,9 +230,9 @@ describe("API /api/goals — System Tests", () => {
     );
 
     const response = await POST(
-      createRequest("http://localhost/api/goals", {
+      createRequest(baseApiUrl, {
         method: "POST",
-        body: { matchId: 5, team: "SFA Jiřetín" },
+        body: { matchId: testMatchId, team: "SFA Jiřetín" },
       })
     );
 
@@ -238,9 +247,9 @@ describe("API /api/goals — System Tests", () => {
     );
 
     const response = await POST(
-      createRequest("http://localhost/api/goals", {
+      createRequest(baseApiUrl, {
         method: "POST",
-        body: { matchId: 5, team: "Varnsdorf" },
+        body: { matchId: testMatchId, team: "Varnsdorf" },
       })
     );
 
@@ -272,7 +281,7 @@ describe("API /api/goals — System Tests", () => {
         team,
         minute: "42",
         player: "Test",
-        created_at: "2024-01-15T10:42:00Z",
+        created_at,
       };
 
       mockSupabase.from.mockReturnValueOnce(
@@ -280,9 +289,9 @@ describe("API /api/goals — System Tests", () => {
       );
 
       const response = await POST(
-        createRequest("http://localhost/api/goals", {
+        createRequest(baseApiUrl, {
           method: "POST",
-          body: { matchId: 5, team, minute: "42", player: "Test" },
+          body: { matchId: testMatchId, team, minute: "42", player: "Test" },
         })
       );
 
