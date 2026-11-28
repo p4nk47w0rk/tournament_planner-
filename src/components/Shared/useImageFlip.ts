@@ -29,14 +29,7 @@ export function useImageFlip({ onClose, thumbnailRef }: UseImageFlipOptions) {
     [handleClose]
   );
 
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === "Escape") handleClose();
-    },
-    [handleClose]
-  );
-
-  // Open: FLIP animation
+  // FLIP open animation
   useLayoutEffect(() => {
     const thumbImg = thumbnailRef?.current?.querySelector(
       "img"
@@ -64,7 +57,7 @@ export function useImageFlip({ onClose, thumbnailRef }: UseImageFlipOptions) {
     return () => clearTimeout(timer);
   }, [thumbnailRef]);
 
-  // Close: FLIP back
+  // FLIP close animation
   useEffect(() => {
     if (!isClosing || !imgRef.current) return;
     const thumbImg = thumbnailRef?.current?.querySelector(
@@ -84,7 +77,23 @@ export function useImageFlip({ onClose, thumbnailRef }: UseImageFlipOptions) {
   }, [isClosing, onClose, thumbnailRef]);
 
   // Keyboard + scroll lock
+  useLockDocument(handleClose);
+
+  return {
+    isAnimating,
+    isClosing,
+    overlayRef,
+    imgRef,
+    handleClose,
+    handleBackdropClick,
+  };
+}
+
+function useLockDocument(onClose: () => void) {
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
     document.addEventListener("keydown", handleKeyDown);
     const scrollY = window.scrollY;
     const scrollbarWidth =
@@ -97,16 +106,7 @@ export function useImageFlip({ onClose, thumbnailRef }: UseImageFlipOptions) {
       document.body.style.paddingRight = "";
       window.scrollTo(0, scrollY);
     };
-  }, [handleKeyDown]);
-
-  return {
-    isAnimating,
-    isClosing,
-    overlayRef,
-    imgRef,
-    handleClose,
-    handleBackdropClick,
-  };
+  }, [onClose]);
 }
 
 function setInitialPosition(img: HTMLImageElement, rect: DOMRect) {
