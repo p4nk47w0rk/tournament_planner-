@@ -6,7 +6,8 @@ import Link from "next/link";
 import { useTournament } from "@/lib/tournament-context";
 import MatchCard from "@/components/Spielplan/MatchCard";
 import { INITIAL_MATCHES, TEAMS } from "@/lib/tournament-data";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
+import GuestShareDialog from "@/components/Guest/GuestShareDialog";
 
 function ClipboardIcon({ className }: { className?: string }) {
   return (
@@ -195,6 +196,9 @@ export default function TournamentLanding() {
         />
       </div>
 
+      {/* Guest Link & QR */}
+      <GuestLinkSection slug={tournament.slug} name={tournament.name} />
+
       {/* Preview sections */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <Suspense fallback={<div className="text-slate-stone">Laden...</div>}>
@@ -319,5 +323,59 @@ function QuickLink({
         {label}
       </span>
     </Link>
+  );
+}
+
+// ============================================
+// Guest Link Section (T05)
+// ============================================
+
+function GuestLinkSection({ slug, name }: { slug: string; name: string }) {
+  const [showDialog, setShowDialog] = useState(false);
+
+  return (
+    <>
+      <div className="mb-10">
+        <div className="bg-paper dark:bg-paper border border-slate-hairline dark:border-slate-hairline rounded-2xl p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <svg
+              className="w-6 h-6 text-sage"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              aria-hidden="true"
+            >
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+              <rect x="14" y="14" width="3" height="3" rx="0.5" />
+              <path d="M21 14h-4v4" strokeLinecap="round" />
+              <path d="M18 21v-4h4" strokeLinecap="round" />
+            </svg>
+            <h2 className="text-lg font-bold text-slate-ink dark:text-dark-text">
+              Gast-Link &amp; QR-Code
+            </h2>
+          </div>
+          <p className="text-sm text-slate-stone dark:text-dark-text-secondary mb-4">
+            Erstelle einen QR-Code und einen öffentlichen Link, mit dem Gäste
+            den Spielplan, Live-Ergebnisse und Tabellenstände in Echtzeit sehen
+            können.
+          </p>
+          <button
+            type="button"
+            onClick={() => setShowDialog(true)}
+            className="px-4 py-2 rounded-xl bg-sage text-white font-medium text-sm
+                       hover:bg-sage/90 active:bg-sage/80
+                       dark:bg-dark-primary dark:hover:bg-dark-primary/90 dark:active:bg-dark-primary/80
+                       transition-colors duration-200"
+          >
+            Gast-Link &amp; QR-Code erstellen
+          </button>
+        </div>
+      </div>
+
+      {showDialog && <GuestShareDialog slug={slug} tournamentName={name} />}
+    </>
   );
 }
