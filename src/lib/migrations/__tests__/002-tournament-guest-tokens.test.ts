@@ -46,9 +46,8 @@ describe("Migration: 002_create_tournament_guest_tokens", () => {
     );
   });
 
-  it("has UNIQUE index on token", () => {
-    expect(sql).toMatch(/CREATE\s+UNIQUE\s+INDEX/i);
-    expect(sql).toMatch(/idx_guest_token_token/i);
+  it("has UNIQUE index on token (via column constraint)", () => {
+    expect(sql).toMatch(/token\s+TEXT\s+UNIQUE/i);
   });
 
   it("enables RLS on the table", () => {

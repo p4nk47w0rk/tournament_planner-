@@ -8,28 +8,28 @@
  */
 
 import type { GuestToken, GuestTokenDbRow } from "@/lib/types";
+import type { PostgrestSingleResponse } from "@supabase/supabase-js";
 
 /**
- * Minimal Supabase client interface — nur was wir brauchen.
+ * Minimal Supabase client interface — typ-sicher über PostgrestSingleResponse.
  * Ermöglicht Mocking in Tests.
  */
 interface SupabaseClient {
-  from(table: string): {
+  from<T>(table: string): {
     insert(data: Record<string, unknown>): {
-      select(): Promise<{ data: unknown[] | null; error: unknown }>;
+      select(): Promise<PostgrestSingleResponse<T[] | null>>;
     };
     eq(
       column: string,
       value: unknown
-    ): Promise<{
-      data: unknown | null;
-      error: unknown;
-    }>;
+    ): Promise<PostgrestSingleResponse<T | null>>;
   };
 }
 
+const MAX_RETRIES = 5;
+
 /**
- * Generiert einen 16-stelligen hex-Token.
+ * Generiert einen 16-stelligen hex-Token mit krypto-sicherem Zufall.
  */
 function generateHexToken(): string {
   const bytes = new Uint8Array(8);
@@ -42,24 +42,45 @@ function generateHexToken(): string {
 export class GuestTokenService {
   /**
    * Generiert einen neuen Gast-Token für ein Turnier.
-   * Prüft UNIQUE constraint — bei Kollision wird geworfen.
+   * Bei UNIQUE-Verstoß wird bis zu MAX_RETRIES Mal neu generiert.
+   * Wirft bei anhaltendem Konflikt.
    */
   static async generateToken(
     slug: string,
     supabase: SupabaseClient
   ): Promise<GuestToken> {
-    const token = generateHexToken();
+    let lastError: unknown;
 
-    const { data, error } = (await supabase
-      .from("tournament_guest_tokens")
-      .insert({ token, tournament_slug: slug })
-      .select()) as { data: (GuestTokenDbRow | null)[] | null; error: unknown };
+    for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+      const token = generateHexToken();
 
-    if (error) throw error;
-    if (!data?.[0]) throw new Error("Failed to create guest token");
+      const { data, error } = await supabase
+        .from("tournament_guest_tokens")
+        .insert({ token, tournament_slug: slug })
+        .select();
 
-    const row = data[0];
-    return this.mapToGuestToken(row);
+      if (error) {
+        lastError = error;
+        // UNIQUE-Verstoß → Retry mit neuem Token
+        if (
+          typeof error === "object" &&
+          error !== null &&
+          "code" in error &&
+          (error as { code?: string }).code === "23505"
+        ) {
+          continue;
+        }
+        throw error;
+      }
+
+      if (!data?.[0]) {
+        throw new Error("Token konnte nicht erstellt werden");
+      }
+
+      return this.mapToGuestToken(data[0] as GuestTokenDbRow);
+    }
+
+    throw lastError;
   }
 
   /**
@@ -80,11 +101,12 @@ export class GuestTokenService {
     token: string,
     supabase: SupabaseClient
   ): Promise<boolean> {
-    const { data } = (await supabase
+    const { data, error } = await supabase
       .from("tournament_guest_tokens")
-      .eq("token", token)) as { data: GuestTokenDbRow | null; error: unknown };
+      .eq("token", token);
 
-    return data !== null && data !== undefined;
+    if (error) throw error;
+    return data !== null;
   }
 
   /**
@@ -95,15 +117,14 @@ export class GuestTokenService {
     token: string,
     supabase: SupabaseClient
   ): Promise<GuestToken | null> {
-    const { data } = (await supabase
+    const { data, error } = await supabase
       .from("tournament_guest_tokens")
-      .eq("token", token)) as {
-      data: GuestTokenDbRow | null;
-      error: unknown;
-    };
+      .eq("token", token);
 
+    if (error) throw error;
     if (!data) return null;
-    return this.mapToGuestToken(data);
+
+    return this.mapToGuestToken(data as GuestTokenDbRow);
   }
 
   /**
