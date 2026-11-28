@@ -23,6 +23,12 @@ interface SupabaseClient {
       column: string,
       value: unknown
     ): Promise<PostgrestSingleResponse<T | null>>;
+    update(data: Record<string, unknown>): {
+      eq(
+        column: string,
+        value: unknown
+      ): Promise<PostgrestSingleResponse<T | null>>;
+    };
   };
 }
 
@@ -137,5 +143,37 @@ export class GuestTokenService {
       tournamentSlug: row.tournament_slug,
       createdAt: row.created_at,
     };
+  }
+
+  /**
+   * Archiviert einen Token: Setzt archived = true.
+   * Nach Archivierung zeigt die Gast-View die Finale-Zusammenfassung.
+   */
+  static async archiveToken(
+    token: string,
+    supabase: SupabaseClient
+  ): Promise<boolean> {
+    const { data, error } = await supabase
+      .from("tournament_guest_tokens")
+      .update({ archived: true })
+      .eq("token", token);
+
+    if (error) throw error;
+    return !!data;
+  }
+
+  /**
+   * Prüft ob ein Token archiviert ist.
+   */
+  static async isTokenArchived(
+    token: string,
+    supabase: SupabaseClient
+  ): Promise<boolean> {
+    const { data } = (await supabase
+      .from("tournament_guest_tokens")
+      .eq("token", token)) as { data: GuestTokenDbRow | null; error: unknown };
+
+    if (!data) return false;
+    return data.archived === true;
   }
 }

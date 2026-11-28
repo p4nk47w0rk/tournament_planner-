@@ -70,6 +70,7 @@ describe("GuestToken type", () => {
       token: "bc4a8f2e3d71b9c0",
       tournament_slug: "bambini-cup-2026",
       created_at: "2026-11-28T00:00:00.000Z",
+      archived: false,
     };
 
     expect(dbRow.id).toBeTypeOf("number");

@@ -108,6 +108,7 @@ export interface GuestTokenDbRow {
   token: string;
   tournament_slug: string;
   created_at: string;
+  archived: boolean;
 }
 
 // ============================================

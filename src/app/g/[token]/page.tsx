@@ -6,9 +6,10 @@
  * nur die essentiellen Turnierinfos, mobil-optimiert.
  *
  * T03: Guest-View Route mit OG-Tags
+ * T06: Archiv-Zustand + Finale-Zusammenfassung
  */
 
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { GuestTokenService } from "@/lib/services/guest-token-service";
 import { createAdminClient } from "@/lib/supabase/server";
 import {
@@ -24,7 +25,6 @@ interface PageProps {
 
 /**
  * Dynamische OG-Tags basierend auf dem Tournament.
- * Wird von Next.js im Server-Kontext aufgerufen.
  */
 export async function generateMetadata({
   params,
@@ -52,24 +52,42 @@ export async function generateMetadata({
   const tournament =
     TOURNAMENT_METADATA[tournamentSlug as keyof typeof TOURNAMENT_METADATA];
 
+  // Check if archived
+  const isArchived = await GuestTokenService.isTokenArchived(
+    token,
+    supabase as any
+  );
+
   return {
-    title: `${tournament.name} — Live Ergebnisse`,
-    description: "Spielplan, Ergebnisse & Tabellenstand in Echtzeit",
+    title: isArchived
+      ? `${tournament.name} — Ergebnisse`
+      : `${tournament.name} — Live Ergebnisse`,
+    description: isArchived
+      ? "Finale Ergebnisse und Endtabelle"
+      : "Spielplan, Ergebnisse & Tabellenstand in Echtzeit",
     openGraph: {
-      title: `${tournament.name} — Live Ergebnisse`,
-      description: "Spielplan, Ergebnisse & Tabellenstand in Echtzeit",
+      title: isArchived
+        ? `${tournament.name} — Ergebnisse`
+        : `${tournament.name} — Live Ergebnisse`,
+      description: isArchived
+        ? "Finale Ergebnisse und Endtabelle"
+        : "Spielplan, Ergebnisse & Tabellenstand in Echtzeit",
       type: "website",
     },
     twitter: {
       card: "summary",
-      title: `${tournament.name} — Live Ergebnisse`,
-      description: "Spielplan, Ergebnisse & Tabellenstand in Echtzeit",
+      title: isArchived
+        ? `${tournament.name} — Ergebnisse`
+        : `${tournament.name} — Live Ergebnisse`,
+      description: isArchived
+        ? "Finale Ergebnisse und Endtabelle"
+        : "Spielplan, Ergebnisse & Tabellenstand in Echtzeit",
     },
   };
 }
 
 /**
- * Server Component: Validiert Token und rendert GuestViewClient.
+ * Server Component: Validiert Token, prüft Archiv-Status, rendert GuestViewClient.
  */
 export default async function GuestViewPage({ params }: PageProps) {
   const { token } = await params;
@@ -82,11 +100,9 @@ export default async function GuestViewPage({ params }: PageProps) {
   );
 
   if (!guestToken) {
-    // Token existiert nicht
     return notFound();
   }
 
-  // Tournament-Slug aus Token
   const tournamentSlug =
     guestToken.tournamentSlug as (typeof TOURNAMENT_SLUGS)[number];
   const tournament = TOURNAMENT_METADATA[tournamentSlug];
@@ -95,6 +111,17 @@ export default async function GuestViewPage({ params }: PageProps) {
     return notFound();
   }
 
-  // Client-Component hydratisieren
-  return <GuestViewClient token={token} slug={tournamentSlug} />;
+  // Archiv-Status prüfen
+  const isArchived = await GuestTokenService.isTokenArchived(
+    token,
+    supabase as any
+  );
+
+  return (
+    <GuestViewClient
+      token={token}
+      slug={tournamentSlug}
+      isArchived={isArchived}
+    />
+  );
 }
