@@ -232,6 +232,16 @@ const eslintConfig = defineConfig([
     },
   },
 
+  // ============================================
+  // Test files — long describe/it blocks are expected and normal
+  // ============================================
+  {
+    files: ["src/**/__tests__/**"],
+    rules: {
+      "max-lines-per-function": "off",
+    },
+  },
+
   // API routes — allow unused request param
   {
     files: ["src/app/api/**/*.ts"],

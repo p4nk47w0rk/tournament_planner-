@@ -1,11 +1,10 @@
-"use client";
-
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { type Match } from "@/lib/types";
 
 interface GoalEntryProps {
   match: Match;
-  onGoalAdd?: (
+  onGoalAdd: (
     matchId: number,
     team: string,
     minute?: string,
@@ -14,85 +13,53 @@ interface GoalEntryProps {
   onGoalRemove?: (goalId: number) => void;
 }
 
-export function GoalEntry({
-  match,
-  onGoalAdd,
-  onGoalRemove: _onGoalRemove,
-}: GoalEntryProps) {
+export default function GoalEntry({ match, onGoalAdd }: GoalEntryProps) {
+  const t = useTranslations("schedule");
   const [minute, setMinute] = useState("");
   const [player, setPlayer] = useState("");
+  const teams = [match.homeTeam, match.awayTeam];
 
   return (
-    <div className="mt-3 pt-3 border-t border-slate-hairline">
-      <p className="text-xs font-medium text-dark-text-tertiary mb-2">
-        Tor erfassen
+    <div className="mt-3 pt-3 border-t border-slate-100 dark:border-dark-border">
+      <p className="text-xs font-medium text-slate-500 dark:text-dark-text-secondary mb-2">
+        {t("goalEntryTitle")}
       </p>
       <div className="flex flex-wrap gap-2">
-        {([match.homeTeam, match.awayTeam] as string[]).map((team) => (
-          <GoalTeamButton
+        {teams.map((team) => (
+          <button
             key={team}
-            team={team}
-            matchId={match.id}
-            onGoalAdd={onGoalAdd}
-            minute={minute}
-            player={player}
-            setMinute={setMinute}
-            setPlayer={setPlayer}
-          />
+            onClick={() => {
+              onGoalAdd(
+                match.id,
+                team,
+                minute || undefined,
+                player || undefined
+              );
+              setMinute("");
+              setPlayer("");
+            }}
+            className="flex-1 min-w-[120px] min-h-[44px] px-3 py-2 rounded-lg text-sm font-medium bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/50 transition-colors"
+          >
+            ⚽ {team}
+          </button>
         ))}
       </div>
       <div className="flex gap-2 mt-2">
         <input
           type="text"
-          placeholder="Minute (optional, z.B. 12')"
+          placeholder={t("minutePlaceholder")}
           value={minute}
           onChange={(e) => setMinute(e.target.value)}
-          className="flex-1 px-3 py-2 text-sm border border-slate-hairline rounded-lg bg-paper text-slate-ink focus:outline-none focus:ring-2 focus:ring-sage"
+          className="flex-1 px-3 py-2 text-sm border border-slate-200 dark:border-dark-border rounded-lg bg-white dark:bg-dark-card text-slate-900 dark:text-dark-text focus:outline-none focus:ring-2 focus:ring-sage/50"
         />
         <input
           type="text"
-          placeholder="Spieler (optional)"
+          placeholder={t("playerPlaceholder")}
           value={player}
           onChange={(e) => setPlayer(e.target.value)}
-          className="flex-1 px-3 py-2 text-sm border border-slate-hairline rounded-lg bg-paper text-slate-ink focus:outline-none focus:ring-2 focus:ring-sage"
+          className="flex-1 px-3 py-2 text-sm border border-slate-200 dark:border-dark-border rounded-lg bg-white dark:bg-dark-card text-slate-900 dark:text-dark-text focus:outline-none focus:ring-2 focus:ring-sage/50"
         />
       </div>
     </div>
-  );
-}
-
-function GoalTeamButton({
-  team,
-  matchId,
-  onGoalAdd,
-  minute,
-  player,
-  setMinute,
-  setPlayer,
-}: {
-  team: string;
-  matchId: number;
-  onGoalAdd?: (
-    matchId: number,
-    team: string,
-    minute?: string,
-    player?: string
-  ) => void;
-  minute: string;
-  player: string;
-  setMinute: (v: string) => void;
-  setPlayer: (v: string) => void;
-}) {
-  return (
-    <button
-      onClick={() => {
-        onGoalAdd?.(matchId, team, minute || undefined, player || undefined);
-        setMinute("");
-        setPlayer("");
-      }}
-      className="flex-1 min-w-[120px] min-h-[44px] px-3 py-2 rounded-lg text-sm font-medium bg-highlight text-sage hover:bg-highlight transition-colors"
-    >
-      ⚽ {team}
-    </button>
   );
 }
