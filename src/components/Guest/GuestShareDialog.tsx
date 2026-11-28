@@ -28,11 +28,6 @@ export default function GuestShareDialog({
 
   const guestUrl = token ? `/g/${token}` : null;
 
-  // Load existing token on mount
-  useEffect(() => {
-    loadExistingToken();
-  }, [slug]);
-
   const loadExistingToken = useCallback(async () => {
     try {
       const res = await fetch(`/api/guest-token?slug=${slug}`);
@@ -46,6 +41,11 @@ export default function GuestShareDialog({
       // No existing token
     }
   }, [slug]);
+
+  // Load existing token on mount
+  useEffect(() => {
+    loadExistingToken();
+  }, [loadExistingToken]);
 
   const handleCreate = useCallback(async () => {
     setLoading(true);
