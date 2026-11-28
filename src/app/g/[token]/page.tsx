@@ -25,18 +25,35 @@ interface PageProps {
 
 /**
  * Dynamische OG-Tags basierend auf dem Tournament.
+ * Defensiv: Falls DB-Tabelle noch nicht existiert,
+ * gibt es ein sicheres Fallback.
  */
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { token } = await params;
-  const supabase = createAdminClient();
 
-  const guestToken = await GuestTokenService.getTokenByToken(
-    token,
-    supabase as any
-  );
-  const tournamentSlug = guestToken?.tournamentSlug;
+  let tournamentSlug: string | undefined;
+  let isArchived = false;
+
+  try {
+    const supabase = createAdminClient();
+    const guestToken = await GuestTokenService.getTokenByToken(
+      token,
+      supabase as any
+    );
+    tournamentSlug = guestToken?.tournamentSlug;
+
+    if (tournamentSlug) {
+      isArchived = await GuestTokenService.isTokenArchived(
+        token,
+        supabase as any
+      );
+    }
+  } catch {
+    // Table existiert noch nicht oder DB-Zugriff fehlgeschlagen
+    // → Fallback OG-Tags
+  }
 
   if (
     !tournamentSlug ||
@@ -51,12 +68,6 @@ export async function generateMetadata({
 
   const tournament =
     TOURNAMENT_METADATA[tournamentSlug as keyof typeof TOURNAMENT_METADATA];
-
-  // Check if archived
-  const isArchived = await GuestTokenService.isTokenArchived(
-    token,
-    supabase as any
-  );
 
   return {
     title: isArchived
@@ -88,16 +99,33 @@ export async function generateMetadata({
 
 /**
  * Server Component: Validiert Token, prüft Archiv-Status, rendert GuestViewClient.
+ * Defensiv: Falls DB-Tabelle noch nicht existiert (Migration pending),
+ * wird eine harmlose "nicht gefunden"-Seite gerendert statt 500er.
  */
 export default async function GuestViewPage({ params }: PageProps) {
   const { token } = await params;
-  const supabase = createAdminClient();
 
-  // Token validieren
-  const guestToken = await GuestTokenService.getTokenByToken(
-    token,
-    supabase as any
-  );
+  let guestToken: Awaited<
+    ReturnType<typeof GuestTokenService.getTokenByToken>
+  > = null;
+  let isArchived = false;
+
+  try {
+    const supabase = createAdminClient();
+    guestToken = await GuestTokenService.getTokenByToken(
+      token,
+      supabase as any
+    );
+    if (guestToken) {
+      isArchived = await GuestTokenService.isTokenArchived(
+        token,
+        supabase as any
+      );
+    }
+  } catch {
+    // Table existiert noch nicht oder DB-Zugriff fehlgeschlagen
+    // → harmlose "nicht gefunden"-Seite
+  }
 
   if (!guestToken) {
     return notFound();
@@ -110,12 +138,6 @@ export default async function GuestViewPage({ params }: PageProps) {
   if (!tournament) {
     return notFound();
   }
-
-  // Archiv-Status prüfen
-  const isArchived = await GuestTokenService.isTokenArchived(
-    token,
-    supabase as any
-  );
 
   return (
     <GuestViewClient

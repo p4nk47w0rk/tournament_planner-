@@ -349,7 +349,16 @@ function GuestLinkSection({ slug, name }: { slug: string; name: string }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ slug }),
       });
-      if (res.ok) setIsArchived(true);
+      if (res.ok) {
+        setIsArchived(true);
+      } else if (res.status === 503) {
+        // Migration pending — Table existiert noch nicht
+        alert(
+          "Archiv-Funktion nicht verfügbar — Migration noch nicht deployed."
+        );
+      }
+    } catch {
+      alert("Archivierung fehlgeschlagen.");
     } finally {
       setIsArchiving(false);
     }

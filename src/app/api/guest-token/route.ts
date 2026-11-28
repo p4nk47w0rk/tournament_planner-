@@ -63,10 +63,19 @@ export async function GET(request: Request) {
 export async function POST(request: NextRequest) {
   const supabase = createAdminClient();
 
-  // Auth check
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Auth check — defensiv gegen fehlende Session
+  let user;
+  try {
+    const {
+      data: { user: authUser },
+    } = await supabase.auth.getUser();
+    user = authUser;
+  } catch {
+    return NextResponse.json(
+      { error: "Auth service nicht verfügbar" },
+      { status: 503 }
+    );
+  }
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -98,9 +107,12 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Guest token error:", error);
+    // Defensive: Falls DB-Tabelle noch nicht existiert,
+    // geben wir 503 (Service Unavailable) statt 500 (Internal Error).
+    // Kein Error-Message nach außen (Security).
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Unknown error" },
-      { status: 500 }
+      { error: "Token service nicht verfügbar" },
+      { status: 503 }
     );
   }
 }

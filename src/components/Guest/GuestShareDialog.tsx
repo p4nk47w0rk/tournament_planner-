@@ -59,6 +59,8 @@ export default function GuestShareDialog({
       const data = await res.json();
       if (res.ok && data.token) {
         setToken(data.token);
+      } else if (res.status === 503) {
+        setError("Token-Service nicht verfügbar");
       } else {
         setError(data.error || "Fehler beim Erstellen");
       }

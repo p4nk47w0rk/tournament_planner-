@@ -13,10 +13,20 @@ import { GuestTokenService } from "@/lib/services/guest-token-service";
 export async function POST(request: NextRequest) {
   const supabase = createAdminClient();
 
-  // Auth check
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Auth check — defensiv gegen fehlende Session
+  let user;
+  try {
+    const {
+      data: { user: authUser },
+    } = await supabase.auth.getUser();
+    user = authUser;
+  } catch {
+    // Keine Session oder Supabase nicht erreichbar → safe fallback
+    return NextResponse.json(
+      { error: "Auth service nicht verfügbar" },
+      { status: 503 }
+    );
+  }
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -61,9 +71,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Archive error:", error);
+    // Defensive: Falls DB-Tabelle noch nicht existiert,
+    // geben wir 503 statt 500. Kein Error-Message nach außen.
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Unknown error" },
-      { status: 500 }
+      { error: "Archive service nicht verfügbar" },
+      { status: 503 }
     );
   }
 }
